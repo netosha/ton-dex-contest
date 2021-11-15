@@ -1,0 +1,12 @@
+{
+    "extends": [
+        "stylelint-config-recommended-scss",
+        "stylelint-config-recess-order",
+        "stylelint-prettier/recommended"
+    ],
+    "plugins": ["stylelint-order"],
+    "rules": {
+        "rule-empty-line-before": ["always", { "ignore": "first-nested" }],
+        "prettier/prettier": [true, { "endOfLine": "auto" }]
+    }
+}
