@@ -1,0 +1,16 @@
+@import "variables";
+@import url("https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: Mulish, --apple-system, Roboto, Ubuntu, sans-serif;
+  line-height: normal;
+  color: var(--dark);
+  background: var(--background);
+}

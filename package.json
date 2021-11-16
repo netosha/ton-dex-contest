@@ -14,7 +14,8 @@
     "next": "12.0.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-redux": "^7.2.6"
+    "react-redux": "^7.2.6",
+    "sass": "^1.43.4"
   },
   "devDependencies": {
     "@types/node": "16.11.7",
@@ -22,6 +23,7 @@
     "@types/react-redux": "^7.1.20",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.3.1",
+    "autoprefixer": "^10.4.0",
     "eslint": "^8.2.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^15.0.0",
@@ -35,13 +37,16 @@
     "eslint-plugin-unused-imports": "^2.0.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.0.2",
+    "postcss": "^8.3.11",
     "prettier": "^2.4.1",
-    "stylelint": "^14.1.0",
+    "stylelint": "13.13.1",
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-recess-order": "^3.0.0",
-    "stylelint-config-recommended-scss": "^5.0.1",
+    "stylelint-config-recommended-scss": "4.3.0",
     "stylelint-order": "^5.0.0",
     "stylelint-prettier": "^2.0.0",
+    "stylelint-scss": "^4.0.0",
+    "tailwindcss": "^2.2.19",
     "typescript": "4.4.4"
   }
 }

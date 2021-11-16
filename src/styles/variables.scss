@@ -1,0 +1,12 @@
+:root {
+  /* Colors */
+  --blue-1: #0088cc;
+  --blue-2: #303757;
+  --blue-3: #1b243d;
+
+  /* Light theme (default) */
+  --primary: var(--blue-1);
+  --secondary: var(--blue-2);
+  --dark: var(--blue-3);
+  --background: #fff;
+}

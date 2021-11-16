@@ -6,7 +6,7 @@ import useDispatch from '@hooks/useDispatch';
 import useSelector from '@hooks/useSelector';
 import { selectWallet, connectWallet } from '@store/wallet';
 
-import styles from '../styles/Home.module.css';
+import styles from '../styles/Home.module.scss';
 
 const Home: NextPage = () => {
   const wallet = useSelector(selectWallet);
