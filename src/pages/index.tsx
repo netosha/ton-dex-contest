@@ -2,14 +2,10 @@ import React from 'react';
 
 import type { NextPage } from 'next';
 
-import { Header } from '@components/Header';
+import Layout from '@components/Layout';
 
 const Index: NextPage = () => {
-  return (
-    <div>
-      <Header />
-    </div>
-  );
+  return <Layout />;
 };
 
 export default Index;

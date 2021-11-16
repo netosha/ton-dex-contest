@@ -1,6 +1,6 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
-import delay from '@src/utils/delay';
+import { sleep } from '@src/utils';
 
 /**
  * Connect wallet mock
@@ -8,7 +8,14 @@ import delay from '@src/utils/delay';
 export const connectWallet = createAsyncThunk(
   'wallet/connectWallet',
   async (address: string) => {
-    await delay(1000);
+    await sleep(1000);
     return { address };
   }
 );
+
+/**
+ * Resets wallet store to initial value
+ */
+export const resetWallet = createAction('wallet/resetWallet', () => {
+  return { payload: null };
+});

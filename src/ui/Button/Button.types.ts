@@ -1,3 +1,6 @@
-import { HTMLAttributes } from 'react';
+import React from 'react';
 
-export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {}
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  outline?: boolean;
+}

@@ -35,7 +35,9 @@
       "@hooks/*": ["hooks/*"],
       "@pages/*": ["pages/*"],
       "@components/*": ["components/*"],
-      "@src/*": ["./*"]
+      "@types/*": ["types/*"],
+      "@src/*": ["./*"],
+
     },
     "incremental": true
   },
