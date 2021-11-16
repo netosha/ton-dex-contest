@@ -2,8 +2,7 @@ import React from 'react';
 
 import type { NextPage } from 'next';
 
-import useDispatch from '@hooks/useDispatch';
-import useSelector from '@hooks/useSelector';
+import { useDispatch, useSelector } from '@src/hooks';
 import { selectWallet, connectWallet } from '@store/wallet';
 
 import styles from '../styles/Home.module.scss';

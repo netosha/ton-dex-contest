@@ -18,9 +18,10 @@ module.exports = {
     },
     extend: {
       colors: {
-        primary: 'var(--primary)',
-        secondary: 'var(--secondary)',
+        blue: 'var(--blue)',
         dark: 'var(--dark)',
+        control: `var(--control)`,
+        overlay: `rgba(0,0,0, 0.5)`,
       },
     },
   },

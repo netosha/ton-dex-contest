@@ -2,6 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import delay from '@src/utils/delay';
 
+/**
+ * Connect wallet mock
+ */
 export const connectWallet = createAsyncThunk(
   'wallet/connectWallet',
   async (address: string) => {
