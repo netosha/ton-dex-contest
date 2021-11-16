@@ -31,10 +31,10 @@
     "isolatedModules": true,
     "baseUrl": "./src",
     "paths": {
-      "@components/*": ["components/*"],
       "@store/*": ["store/*"],
       "@hooks/*": ["hooks/*"],
       "@pages/*": ["pages/*"],
+      "@components/*": ["components/*"],
       "@src/*": ["./*"]
     },
     "incremental": true

@@ -4,7 +4,7 @@ import type { NextPage } from 'next';
 
 import { Header } from '@components/Header';
 
-const Home: NextPage = () => {
+const Index: NextPage = () => {
   return (
     <div>
       <Header />
@@ -12,4 +12,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Index;
