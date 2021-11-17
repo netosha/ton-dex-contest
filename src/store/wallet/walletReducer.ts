@@ -16,6 +16,7 @@ export const initialState: WalletState = {
 
 export const walletReducer = createReducer(initialState, (builder) =>
   builder
+    /* Wallet connection flow  */
     .addCase(actions.connectWallet.pending, (state) => {
       state.status = 'connecting';
     })
@@ -27,4 +28,7 @@ export const walletReducer = createReducer(initialState, (builder) =>
       state.status = 'error';
       state.error = { message: 'Sample unexpected error' };
     })
+
+    /* Wallet reset flow */
+    .addCase(actions.resetWallet, () => initialState)
 );

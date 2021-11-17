@@ -1,48 +1,41 @@
 import React from 'react';
 
+import cn from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import useDispatch from '@hooks/useDispatch';
-import useSelector from '@hooks/useSelector';
-import { connectWallet, selectWallet } from '@store/wallet';
+import Wallet from '@components/Wallet/Wallet';
 import logo from 'assets/logo.svg';
 
-export const Header: React.FC = () => {
-  const wallet = useSelector(selectWallet);
-  const dispatch = useDispatch();
-
-  const handleConnect = () => {
-    dispatch(connectWallet('EQCP_Es4UsKIQdU2Hid4HVFA3f5YKls9tMzxQTJz9r7l3_nO'));
-  };
-
+const Header: React.FC = () => {
   return (
-    <header className="flex justify-between items-center text-primary mt-3 mb-6">
-      <Image src={logo} alt="logo" />
-      <div className="flex-1 ml-16 font-extrabold">
+    <header className="flex justify-between items-center py-2 w-full text-primary">
+      <Image
+        className="transition-all hover:rotate-[120deg] tr"
+        src={logo}
+        alt="logo"
+      />
+      <div
+        className={cn(
+          'flex flex-1 gap-2 mx-4 font-extrabold text-violet',
+          'md:gap-8 md:ml-16'
+        )}
+      >
         <Link href="/">
-          <a className="mr-8">Swap</a>
+          <a className="transition-colors hover:text-blue">Swap</a>
         </Link>
-        <Link href="/">
-          <a className="mr-8">Pools</a>
+        <Link href="/pools">
+          <a className="transition-colors hover:text-blue">Pools</a>
         </Link>
-        <Link href="/">
-          <a>About</a>
+        <Link href="/tokens">
+          <a className="transition-colors hover:text-blue">Tokens</a>
         </Link>
       </div>
-      {wallet.status === 'connected' ? (
-        <button className="border-primary border-2 rounded px-4 py-2 font-extrabold">
-          {`${wallet.address?.slice(0, 4)} ... ${wallet.address?.slice(-4)}`}
-        </button>
-      ) : (
-        <button
-          disabled={wallet.status === 'connecting'}
-          onClick={handleConnect}
-          className="bg-primary text-white rounded px-4 py-2 font-extrabold"
-        >
-          Connect wallet
-        </button>
-      )}
+      <div className="ml-auto">
+        <Wallet />
+      </div>
     </header>
   );
 };
+
+export default Header;

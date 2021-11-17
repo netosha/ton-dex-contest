@@ -1,4 +1,4 @@
-import delay from './delay';
+import sleep from './sleep';
 import useOutsideClick from './useOutsideClick';
 
-export { delay, useOutsideClick };
+export { sleep, useOutsideClick };

@@ -1,7 +1,16 @@
+const withOpacity = (color) => {
+  return Array.from({ length: 9 }).reduce(
+    (prev, _cur, i) => ({
+      ...prev,
+      [(i + 1) * 10]: `var(--${color}-${(i + 1) * 10})`,
+    }),
+    {}
+  );
+};
+
 module.exports = {
   mode: process.env.NODE_ENV && 'jit',
   purge: ['./src/**/*.{js,ts,jsx,tsx}'],
-  important: true,
   darkMode: false,
   theme: {
     fontSize: {
@@ -16,10 +25,55 @@ module.exports = {
       '5xl': '3rem',
       '6xl': '4rem',
     },
+
     extend: {
+      // Inset borders ensure that component have same dimensions
+      boxShadow: {
+        border: `inset 0 0 0 2px var(--blue);`,
+      },
+      keyframes: {
+        shine: {
+          '0%': {
+            backgroundPosition: 0,
+            backgroundImage:
+              'linear-gradient(90deg, #dddddd 0px, #e8e8e8 40px, #dddddd 80px)',
+            backgroundSize: '400px',
+          },
+          '100%': {
+            backgroundPosition: '400px',
+            backgroundImage:
+              'linear-gradient(90deg, #dddddd 0px, #e8e8e8 40px, #dddddd 80px)',
+            backgroundSize: '400px',
+          },
+        },
+      },
+      animation: {
+        shine: 'shine 2.4s infinite linear',
+      },
       colors: {
-        blue: 'var(--blue)',
-        dark: 'var(--dark)',
+        blue: {
+          DEFAULT: `var(--blue)`,
+          ...withOpacity('blue'),
+        },
+        dark: {
+          DEFAULT: 'var(--dark)',
+          ...withOpacity('dark'),
+        },
+        violet: {
+          DEFAULT: 'var(--violet)',
+          ...withOpacity('violet'),
+        },
+        red: {
+          DEFAULT: 'var(--red)',
+          ...withOpacity('red'),
+        },
+        green: {
+          DEFAULT: 'var(--green)',
+          ...withOpacity('green'),
+        },
+
+        gray: 'var(--gray)',
+
         control: `var(--control)`,
         overlay: `rgba(0,0,0, 0.5)`,
       },
