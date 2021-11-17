@@ -4,6 +4,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
 
 import { TableProps } from './Table.types';
 
+// TODO: Make row as independent component
 const Table: React.VFC<TableProps> = (props) => {
   const {
     rows,

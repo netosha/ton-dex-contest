@@ -1,5 +1,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 
+import { poolReducer } from './pool/poolReducer';
 import { tokenReducer } from './token/tokenReducer';
 import { walletReducer } from './wallet/walletReducer';
 
@@ -9,6 +10,7 @@ export type AppDispatch = typeof store.dispatch;
 const rootReducer = combineReducers({
   wallet: walletReducer,
   token: tokenReducer,
+  pool: poolReducer,
 });
 
 const store = configureStore({

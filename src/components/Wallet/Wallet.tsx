@@ -22,7 +22,11 @@ const Wallet: React.VFC = () => {
 
   if (status === 'connected')
     return (
-      <Button onClick={handleReset} outline className="!text-blue">
+      <Button
+        onClick={handleReset}
+        outline
+        className="!text-blue whitespace-nowrap "
+      >
         {`${wallet.address?.slice(0, 4)} ... ${wallet.address?.slice(-4)}`}
       </Button>
     );
@@ -38,7 +42,11 @@ const Wallet: React.VFC = () => {
     );
   }
 
-  return <Button onClick={handleConnect}>Connect wallet</Button>;
+  return (
+    <Button className="whitespace-nowrap" onClick={handleConnect}>
+      Connect wallet
+    </Button>
+  );
 };
 
 export default Wallet;

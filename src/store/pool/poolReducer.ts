@@ -1,22 +1,34 @@
-export type Pool = {
-  id: string;
-  fee: number;
-  /**
-   * Array of 2 addresses of tokens
-   *
-   * Note: it's simplified model of pair. It could significantly change in future
-   */
-  pair: [string, string];
-};
+import { createReducer } from '@reduxjs/toolkit';
+
+import { Pool } from '@src/types';
+
+import * as actions from './poolActions';
 
 export type PoolState = {
-  userPools: Pool[];
+  pools: {
+    items: Pool[];
+    isLoading: boolean;
+  };
 };
 
 export const initialState: PoolState = {
-  userPools: [],
+  pools: {
+    items: [],
+    isLoading: false,
+  },
 };
 
-// export const Reducer = createReducer(initialState, (builder) =>
-//   builder.addCase()
-// );
+export const poolReducer = createReducer(initialState, (builder) =>
+  /* Get pools list flow */
+  builder
+    .addCase(actions.getPools.pending, (state) => {
+      state.pools.isLoading = true;
+    })
+    .addCase(actions.getPools.fulfilled, (state, action) => {
+      state.pools.isLoading = false;
+      state.pools.items = action.payload;
+    })
+    .addCase(actions.getPools.rejected, (state) => {
+      state.pools.isLoading = false;
+    })
+);

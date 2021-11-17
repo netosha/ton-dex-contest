@@ -41,9 +41,4 @@ export type Token = {
    * Amount of all trades over the past 24h
    */
   tradingVolume: number;
-
-  /**
-   * Amount of all fees over the past 24h
-   */
-  fees: number;
 };

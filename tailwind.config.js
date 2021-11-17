@@ -25,30 +25,31 @@ module.exports = {
       '5xl': '3rem',
       '6xl': '4rem',
     },
-    // Inset borders ensure that component have same dimensions
-    boxShadow: {
-      border: `inset 0 0 0 2px var(--blue);`,
-    },
-    keyframes: {
-      shine: {
-        '0%': {
-          backgroundPosition: 0,
-          backgroundImage:
-            'linear-gradient(90deg, #dddddd 0px, #e8e8e8 40px, #dddddd 80px)',
-          backgroundSize: '400px',
-        },
-        '100%': {
-          backgroundPosition: '400px',
-          backgroundImage:
-            'linear-gradient(90deg, #dddddd 0px, #e8e8e8 40px, #dddddd 80px)',
-          backgroundSize: '400px',
+
+    extend: {
+      // Inset borders ensure that component have same dimensions
+      boxShadow: {
+        border: `inset 0 0 0 2px var(--blue);`,
+      },
+      keyframes: {
+        shine: {
+          '0%': {
+            backgroundPosition: 0,
+            backgroundImage:
+              'linear-gradient(90deg, #dddddd 0px, #e8e8e8 40px, #dddddd 80px)',
+            backgroundSize: '400px',
+          },
+          '100%': {
+            backgroundPosition: '400px',
+            backgroundImage:
+              'linear-gradient(90deg, #dddddd 0px, #e8e8e8 40px, #dddddd 80px)',
+            backgroundSize: '400px',
+          },
         },
       },
-    },
-    animation: {
-      shine: 'shine 2.4s infinite linear',
-    },
-    extend: {
+      animation: {
+        shine: 'shine 2.4s infinite linear',
+      },
       colors: {
         blue: {
           DEFAULT: `var(--blue)`,

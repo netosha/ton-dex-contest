@@ -19,7 +19,7 @@ const PriceChange: React.VFC<{
       ) : (
         <ArrowUpIcon className="h-4 w-4" />
       )}
-      <span>{value}%</span>
+      <span>{value.toFixed(2)}%</span>
     </div>
   );
 };
