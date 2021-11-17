@@ -18,7 +18,7 @@ const Table: React.VFC<TableProps> = (props) => {
   if (isLoading) {
     return (
       <div className="flex flex-col gap-2 w-full">
-        <div className="h-6 animate-shine bg-control w-full rounded-lg" />
+        <div className="h-9 animate-shine bg-control w-full rounded-lg" />
         {Array.from({ length: 3 }).map((_r, i) => (
           <div
             key={i}

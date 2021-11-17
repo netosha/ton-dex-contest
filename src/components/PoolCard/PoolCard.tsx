@@ -11,14 +11,14 @@ const PoolCard: React.VFC = () => {
       )}
     >
       <div className="flex gap-2">
-        <span className="text-2xl font-black text-violet group-hover:text-white">
+        <span className="text-2xl transition-colors font-black text-violet group-hover:text-white">
           WBTC
         </span>
-        <span className="text-2xl font-black text-gray text-gray group-hover:text-white">
+        <span className="text-2xl transition-colors font-black text-gray text-gray group-hover:text-white">
           /
         </span>
       </div>
-      <span className="text-2xl font-black text-violet group-hover:text-white">
+      <span className="text-2xl transition-colors font-black text-violet group-hover:text-white">
         USDT
       </span>
       <div className="flex gap-2 mt-auto group-hover:text-white">
