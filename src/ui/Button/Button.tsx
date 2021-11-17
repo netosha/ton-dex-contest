@@ -11,9 +11,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          'py-2 px-4 font-extrabold transition-colors leading-none bg-blue text-white rounded-md hover:bg-blue-80',
-          outline && 'bg-transparent shadow-border hover:bg-transparent',
-          disabled && 'bg-blue-60 cursor-not-allowed',
+          'py-2 px-4 font-extrabold transition-colors leading-none bg-blue text-white rounded-md hover:bg-darkblue',
+          outline &&
+            'bg-transparent !text-blue shadow-border-blue hover:bg-transparent hover:shadow-border-darkblue hover:!text-darkblue',
+          disabled && 'bg-gray hover:bg-gray cursor-not-allowed',
           className
         )}
         disabled={disabled}

@@ -23,7 +23,7 @@ const Pools: NextPage = () => {
   const { items: pools, isLoading } = useSelector(selectPools);
   const dispatch = useDispatch();
 
-  console.log(pools);
+  // console.log(pools);
 
   // TODO: Make it as separate function
   const rows = isLoading
@@ -41,7 +41,10 @@ const Pools: NextPage = () => {
       }));
 
   React.useEffect(() => {
-    dispatch(getPools({}));
+    // Todo: Replace with properly check of cached values
+    if (!Object.entries(pools).length) {
+      dispatch(getPools({}));
+    }
   }, []);
 
   return (

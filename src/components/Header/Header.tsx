@@ -21,7 +21,7 @@ const Header: React.FC = () => {
           'md:gap-8 md:ml-16'
         )}
       >
-        <Link href="/">
+        <Link href="/swap">
           <a className="transition-colors hover:text-blue">Swap</a>
         </Link>
         <Link href="/pools">

@@ -31,8 +31,8 @@ const Tokens: NextPage = () => {
         id: t.address,
         position: i + 1,
         name: (
-          <span>
-            {t.name} <span className="ml-1 text-violet-50">{t.ticker}</span>
+          <span className="flex gap-1">
+            {t.name} <span className="text-violet-50">{t.ticker}</span>
           </span>
         ),
         price: <span>${t.price}</span>,
@@ -55,7 +55,10 @@ const Tokens: NextPage = () => {
   };
 
   React.useEffect(() => {
-    dispatch(getTokensList({}));
+    // Todo: Replace with properly check of cached values
+    if (!Object.entries(tokens).length) {
+      dispatch(getTokensList({}));
+    }
   }, []);
 
   return (
