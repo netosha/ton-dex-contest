@@ -1,4 +1,6 @@
 /* eslint-disable */
+
+import styles from './style.module.scss'
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -92,8 +94,8 @@ export default function TChart(container) {
   const canvas = createElement(container, 'canvas');
 
   var context = canvas.getContext('2d');
-  var checksContainer = createElement(container, 'div', 'checks');
-  var popup = createElement(container, 'div', 'popup');
+  var checksContainer = createElement(container, 'div', styles.checks);
+  var popup = createElement(container, 'div', styles.popup);
   popup.style.display = 'none';
   var popupTitle = null;
 
@@ -293,7 +295,7 @@ export default function TChart(container) {
 
     removeAllChild(checksContainer);
     removeAllChild(popup);
-    popupTitle = createElement(popup, 'div', 'title');
+    popupTitle = createElement(popup, 'div', styles.title);
 
     if (newData.columns.length < 2 || newData.columns[0].length < 3) {
       data = null;
@@ -314,7 +316,6 @@ export default function TChart(container) {
         alpha: createAnimation(1, SCALE_DURATION),
         previewAlpha: createAnimation(1, SCALE_DURATION / 2)
       };
-
       if (name === nameOfX) {
         column.min = columnData[1];
         column.max = columnData[columnData.length - 1];
@@ -330,7 +331,7 @@ export default function TChart(container) {
         // create checkbox
 
         if (data.columns.length > 2) {
-          var label = createElement(checksContainer, 'label', 'checkbox');
+          var label = createElement(checksContainer, 'label', styles.checkbox);
           label.innerText = data.names[name];
 
           var input = createElement(label, 'input');
@@ -354,22 +355,22 @@ export default function TChart(container) {
             updateMainRangeY();
           });
 
-          var span = createElement(label, 'span', 'circle');
+          var span = createElement(label, 'span', styles.circle);
           span.style.borderColor = data.colors[name];
 
-          span = createElement(label, 'span', 'symbol');
+          span = createElement(label, 'span', styles.symbol);
         }
 
         // create popup column
 
-        var popupColumn = createElement(popup, 'div', 'column');
+        var popupColumn = createElement(popup, 'div', styles.column);
         popupColumn.style.color = data.colors[name];
         popupColumns.push(popupColumn);
 
-        var popupValue = createElement(popupColumn, 'div', 'value');
+        var popupValue = createElement(popupColumn, 'div', styles.value);
         popupValues.push(popupValue);
 
-        var popupLabel = createElement(popupColumn, 'div', 'label');
+        var popupLabel = createElement(popupColumn, 'div', styles.label);
         popupLabel.innerText = data.names[name];
       }
     }
@@ -384,7 +385,7 @@ export default function TChart(container) {
 
     setMainMinMax(previewMaxX - previewRangeX / 4, previewMaxX);
     mainRangeY.value = mainRangeY.toValue;
-
+    updateMainRangeY();
     needRedrawMain = needRedrawPreview = true;
   };
 
@@ -560,8 +561,6 @@ export default function TChart(container) {
       needRedrawMain = needRedrawPreview = true;
     }
   }
-
-  // Make canvas visible from onResize
 
   function render(t) {
     if (destroyed) return;

@@ -1,7 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+
+import { Button } from '@src/ui';
 
 import styles from './Chart.module.scss';
-import data from './fakeData';
+import { firstData, secondData } from './fakeData';
 // @ts-ignore
 // eslint-disable-next-line import/extensions
 import TChart from './graph.js';
@@ -21,15 +23,29 @@ const LIGHT_COLORS = {
 const Chart: React.VFC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<any>(null);
+  const [data, setData] = useState(firstData);
 
   useEffect(() => {
     const chart = new TChart(containerRef.current);
     chartRef.current = chart;
     chart.setColors(LIGHT_COLORS);
-    chart.setData(data);
   }, []);
 
-  return <div ref={containerRef} className={styles.tchart} />;
+  useEffect(() => {
+    chartRef.current.setData(data);
+  }, [data]);
+
+  return (
+    <div>
+      <div ref={containerRef} className={styles.chart} />
+      <div>
+        <Button onClick={() => setData(firstData)} className="mr-1">
+          First data
+        </Button>
+        <Button onClick={() => setData(secondData)}>Second Data</Button>
+      </div>
+    </div>
+  );
 };
 
 export default Chart;
