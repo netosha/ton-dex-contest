@@ -1,8 +1,5 @@
 import React from 'react';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { Property } from 'csstype';
-
 export interface Column {
   label: string;
   key: string;
@@ -44,11 +41,13 @@ export interface TableProps {
   isLoading?: boolean;
 
   /**
-   * Custom column layout
+   * Column layout from grid-template-columns
    *
    * Default: repeat(1fr, rows.length)
+   *
+   * @see{Property.GridTemplateColumns<string | number>}
    */
-  layout?: Property.GridTemplateColumns<string | number>;
+  layout?: string;
 
   onColumnClick?: (column: Column) => void;
 

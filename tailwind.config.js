@@ -1,3 +1,8 @@
+/**
+ * Creates different opacity variants for provided color
+ *
+ * @param color CSS Variable name without double dash
+ */
 const withOpacity = (color) => {
   return Array.from({ length: 9 }).reduce(
     (prev, _cur, i) => ({
@@ -27,9 +32,11 @@ module.exports = {
     },
 
     extend: {
-      // Inset borders ensure that component have same dimensions
+      // Inset borders using to ensure that component have same dimensions
       boxShadow: {
-        border: `inset 0 0 0 2px var(--blue);`,
+        'border-blue': `inset 0 0 0 2px var(--blue);`,
+        'border-darkblue': `inset 0 0 0 2px var(--darkblue);`,
+        'border-red': `inset 0 0 0 2px var(--red);`,
       },
       keyframes: {
         shine: {
@@ -53,7 +60,9 @@ module.exports = {
       colors: {
         blue: {
           DEFAULT: `var(--blue)`,
-          ...withOpacity('blue'),
+        },
+        darkblue: {
+          DEFAULT: 'var(--darkblue)',
         },
         dark: {
           DEFAULT: 'var(--dark)',
@@ -65,11 +74,9 @@ module.exports = {
         },
         red: {
           DEFAULT: 'var(--red)',
-          ...withOpacity('red'),
         },
         green: {
           DEFAULT: 'var(--green)',
-          ...withOpacity('green'),
         },
 
         gray: 'var(--gray)',

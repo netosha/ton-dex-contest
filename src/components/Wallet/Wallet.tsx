@@ -13,7 +13,7 @@ const Wallet: React.VFC = () => {
   const { status } = wallet;
 
   const handleConnect = () => {
-    dispatch(connectWallet('EQCP_Es4UsKIQdU2Hid4HVFA3f5YKls9tMzxQTJz9r7l3_nO'));
+    dispatch(connectWallet());
   };
 
   const handleReset = () => {
@@ -25,7 +25,7 @@ const Wallet: React.VFC = () => {
       <Button
         onClick={handleReset}
         outline
-        className="!text-blue whitespace-nowrap "
+        className="w-[9rem] h-[2rem] whitespace-nowrap "
       >
         {`${wallet.address?.slice(0, 4)} ... ${wallet.address?.slice(-4)}`}
       </Button>
@@ -35,7 +35,7 @@ const Wallet: React.VFC = () => {
     return (
       <Button
         disabled
-        className="!min-w-[9rem] !h-[2rem] !flex !justify-center !items-center"
+        className="w-[9rem] h-[2rem] !bg-darkblue flex justify-center items-center"
       >
         <Loader />
       </Button>
@@ -43,7 +43,10 @@ const Wallet: React.VFC = () => {
   }
 
   return (
-    <Button className="whitespace-nowrap" onClick={handleConnect}>
+    <Button
+      className="w-[9rem]  h-[2rem] flex justify-center whitespace-nowrap"
+      onClick={handleConnect}
+    >
       Connect wallet
     </Button>
   );
