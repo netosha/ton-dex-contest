@@ -1,9 +1,11 @@
-import { HTMLAttributes, MouseEventHandler } from 'react';
+import { HTMLAttributes, ReactNode } from 'react';
 
 export interface ModalProps extends HTMLAttributes<HTMLDivElement> {
   isOpen: boolean;
-  onClose?: MouseEventHandler<SVGElement>;
-  onOutsideClick?: MouseEventHandler<HTMLDivElement>;
+  onClose?: () => void;
+  onOutsideClick?: () => void;
+
+  heading?: ReactNode;
 
   overlayProps?: HTMLAttributes<HTMLDivElement>;
 }
