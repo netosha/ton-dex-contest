@@ -1,51 +1,42 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Button } from '@src/ui';
-
 import styles from './Chart.module.scss';
-import { firstData, secondData } from './fakeData';
 // @ts-ignore
 // eslint-disable-next-line import/extensions
-import TChart from './graph.js';
+import Graph from './graph';
+import { GraphProps } from './Graph.types';
 
-const LIGHT_COLORS = {
+const colors = {
   circleFill: '#ffffff',
-  line: '#f2f4f5',
+  line: '#f0f0f0',
   zeroLine: '#ecf0f3',
   selectLine: '#dfe6eb',
   text: '#96a2aa',
-  preview: '#eef2f5',
-  previewAlpha: 0.8,
-  previewBorder: '#b6cfe1',
-  previewBorderAlpha: 0.5,
 };
 
-const Chart: React.VFC = () => {
+const Chart: React.VFC<GraphProps> = ({ data }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<any>(null);
-  const [data, setData] = useState(firstData);
 
   useEffect(() => {
-    const chart = new TChart(containerRef.current);
+    const chart = new Graph(containerRef.current);
     chartRef.current = chart;
-    chart.setColors(LIGHT_COLORS);
+    chart.setColors(colors);
   }, []);
 
   useEffect(() => {
-    chartRef.current.setData(data);
+    if (data) {
+      chartRef.current.setData(data);
+      setIsLoading(false);
+    } else {
+      setIsLoading(true);
+    }
   }, [data]);
 
-  return (
-    <div>
-      <div ref={containerRef} className={styles.chart} />
-      <div>
-        <Button onClick={() => setData(firstData)} className="mr-1">
-          First data
-        </Button>
-        <Button onClick={() => setData(secondData)}>Second Data</Button>
-      </div>
-    </div>
-  );
+  if (isLoading) return <h1>Loading...</h1>;
+
+  return <div ref={containerRef} className={styles.wrapper} />;
 };
 
 export default Chart;
