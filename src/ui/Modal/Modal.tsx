@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { XIcon } from '@heroicons/react/solid';
 import ReactDOM from 'react-dom';
 
 import { useOutsideClick } from '@src/utils';
@@ -12,7 +13,7 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref) => {
   // https://github.com/reactjs/react-modal/issues/580
 
   const modalRef = React.useRef<HTMLDivElement>(null);
-  const { children, isOpen, onClose, onOutsideClick } = props;
+  const { children, isOpen, onClose, onOutsideClick, heading } = props;
   useOutsideClick(modalRef, onOutsideClick ?? onClose);
 
   if (typeof window === 'undefined') {
@@ -36,9 +37,15 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref) => {
     >
       <div
         ref={modalRef}
-        className="flex min-h-[20rem] min-w-[30rem] bg-white rounded-lg"
+        className="flex p-6 flex-col min-h-[20rem] min-w-[30rem] max-h-[80vh] overflow-y-auto bg-white rounded-lg relative"
       >
+        {heading && (
+          <p className="text-2xl mb-2 font-extrabold text-violet">{heading}</p>
+        )}
         {children}
+        <button className="absolute right-7 top-7" onClick={onClose}>
+          <XIcon className="w-6 h-6" />
+        </button>
       </div>
     </div>,
     document.getElementById('modal-root')!
