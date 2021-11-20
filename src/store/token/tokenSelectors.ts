@@ -1,5 +1,3 @@
-import { createSelector } from '@reduxjs/toolkit';
-
 import { RootState } from '@store/store';
 
 /**
@@ -14,4 +12,5 @@ export const selectToken = ({ token }: RootState) => token;
 /**
  * Selects loaded tokens (including user's provided)
  */
-export const selectTokens = createSelector(selectToken, ({ tokens }) => tokens);
+// export const selectTokens = createSelector(selectToken, ({ tokens }) => tokens);
+export const selectTokens = ({ token }: RootState) => token.tokens;

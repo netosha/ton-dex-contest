@@ -6,6 +6,8 @@ import { Token } from '@src/types';
 
 /**
  * Fetch tokens list
+ *
+ * Probably will be replaced with https://redux-toolkit.js.org/rtk-query/overview
  */
 export const getTokensPrice = createAsyncThunk(
   'token/getTokensList',
@@ -15,10 +17,10 @@ export const getTokensPrice = createAsyncThunk(
 );
 
 /**
- * Fetch tokens list
+ * Adds token by address
  */
-export const addUnknownToken = createAsyncThunk(
-  'token/addUnknownToken',
+export const addNewToken = createAsyncThunk(
+  'token/addNewToken',
   async (address: string) => {
     const contract = new TONRC20(address, 'provider');
     const symbol = contract.symbol();

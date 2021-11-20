@@ -42,7 +42,7 @@ export const tokenReducer = createReducer(initialState, (builder) =>
     })
 
     /* Add unknown token */
-    .addCase(actions.addUnknownToken.fulfilled, (state, action) => {
+    .addCase(actions.addNewToken.fulfilled, (state, action) => {
       const { name, symbol, shardChainId, address } = action.payload;
       state.tokens[address] = {
         name,

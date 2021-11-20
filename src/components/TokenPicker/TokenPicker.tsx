@@ -6,13 +6,14 @@ import {
   ClockIcon,
   CogIcon,
 } from '@heroicons/react/solid';
+import cn from 'clsx';
 
 import Loader from '@components/Loader';
 import { useDispatch, useSelector } from '@src/hooks';
 import { Token } from '@src/types';
 import { Button, Input, Modal, Tooltip } from '@src/ui';
 import parseFriendlyAddress from '@src/utils/parseFriendlyAddress';
-import { addUnknownToken, selectTokens } from '@store/token';
+import { addNewToken, selectTokens } from '@store/token';
 import {
   getTokenBalance,
   selectTokenBalances,
@@ -98,13 +99,16 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
     // For ex: 1BNB = 1.51ETH, 7BTC = 10,57DAI and etc.
     // Not a production-ready solution
     const otherIndex = index === 0 ? 1 : 0;
-    const otherItem = newTokens[otherIndex]!;
+    const otherItem = newTokens[otherIndex];
 
     newTokens.splice(index, 1, { ...changedItem, amount: parsedAmount });
-    newTokens.splice(otherIndex, 1, {
-      ...otherItem,
-      amount: parsedAmount * 1.51,
-    });
+
+    if (otherItem?.address) {
+      newTokens.splice(otherIndex, 1, {
+        ...otherItem,
+        amount: otherIndex === 0 ? parsedAmount / 1.51 : parsedAmount * 1.51,
+      });
+    }
 
     onChange?.(newTokens);
   };
@@ -112,18 +116,49 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
   const handleTokenChange = (index: number, token: Token) => {
     const newTokens = [...tokens] as PickedTokens;
     const changedItem = newTokens[index]!;
+
+    // For testing purposes convertion rate are fixed
+    // Every firstToken gives 1.51 secondTokens
+    // For ex: 1BNB = 1.51ETH, 7BTC = 10,57DAI and etc.
+    // Not a production-ready solution
+    const otherIndex = index === 0 ? 1 : 0;
+    const otherItem = newTokens[otherIndex];
+
     newTokens.splice(index, 1, {
       ...changedItem,
       ...token,
     });
+
+    if (Number(otherItem?.amount) > 0) {
+      newTokens.splice(index, 1, {
+        ...changedItem,
+        ...token,
+        amount: otherItem!.amount! / 1.51,
+      });
+    }
+
     onChange?.(newTokens);
     setTokenModal(null);
   };
 
   const onAddToken = () => {
-    dispatch(addUnknownToken(filter));
+    dispatch(addNewToken(filter));
     setFilter('');
   };
+
+  const { error, message } = (() => {
+    if (status !== 'connected' || !address) {
+      return { error: true, message: `Provide wallet` };
+    }
+    if (!firstToken?.address || !secondToken?.address) {
+      return { error: true, message: 'Select a token' };
+    }
+    if (isInsufficientBalance) {
+      return { error: true, message: 'Insufficient amount' };
+    }
+
+    return { error: false, message: 'Swap' };
+  })();
 
   // Update available balance on account or first token change
   React.useEffect(() => {
@@ -197,14 +232,15 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
             )}
           </Button>
         </div>
-        <Button
-          disabled={isInsufficientBalance}
-          className="mt-2"
-          onClick={() => alert('l123')}
-        >
-          Swap
+        <Button disabled={error} className="mt-2">
+          {message}
         </Button>
-        <div className="w-full gap-4 flex justify-center text-blue">
+        <div
+          className={cn(
+            'w-full gap-4 flex justify-center',
+            error ? 'text-blue' : 'text-gray'
+          )}
+        >
           <Tooltip
             content={
               <div className="flex justify-center py-2 min-w-[11.5rem] px-4 bg-lightgray text-dark font-semibold rounded-md">
