@@ -8,7 +8,7 @@ const Loader = React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>(
     return (
       <svg
         ref={ref}
-        className={cn('animate-spin h-5 w-5 text-white', className)}
+        className={cn('animate-spin h-5 w-5', className)}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"

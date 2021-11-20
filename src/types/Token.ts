@@ -1,4 +1,4 @@
-export type Token = {
+export interface Token {
   /**
    * Raw token address in blockchain (ex: 0:F013fW2...)
    *
@@ -15,13 +15,15 @@ export type Token = {
   /**
    * Token ticker (ex: BTC, ETH, TONCOIN, etc.)
    */
-  ticker: string;
+  symbol: string;
 
   /**
    * Token's shardchain id
    */
   shardChainId: number;
+}
 
+export interface PricedToken extends Token {
   /**
    * Current price in USD
    */
@@ -41,4 +43,4 @@ export type Token = {
    * Amount of all trades over the past 24h
    */
   tradingVolume: number;
-};
+}

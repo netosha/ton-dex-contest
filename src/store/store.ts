@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 
 import { poolReducer } from './pool/poolReducer';
 import { tokenReducer } from './token/tokenReducer';
+// eslint-disable-next-line import/no-cycle
 import { walletReducer } from './wallet/walletReducer';
 
 export type RootState = ReturnType<typeof store.getState>;

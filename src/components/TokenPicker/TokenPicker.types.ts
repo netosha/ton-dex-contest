@@ -1,7 +1,10 @@
-export interface PickedToken {
-  address: string;
+import { Token } from '@src/types';
+
+export interface PickedToken extends Token {
+  /**
+   * Amount of tokens to trade
+   */
   amount: number;
-  ticker: string;
 }
 
 /**
@@ -18,4 +21,9 @@ export interface TokenPickerProps {
   tokens: PickedTokens;
 
   onChange?: (tokens: PickedTokens) => void;
+}
+
+export interface TokenRowProps {
+  token: Token;
+  onClick: () => void;
 }
