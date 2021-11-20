@@ -235,12 +235,7 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
         <Button disabled={error} className="mt-2">
           {message}
         </Button>
-        <div
-          className={cn(
-            'w-full gap-4 flex justify-center',
-            error ? 'text-blue' : 'text-gray'
-          )}
-        >
+        <div className={cn('w-full gap-4 flex justify-center text-blue')}>
           <Tooltip
             content={
               <div className="flex justify-center py-2 min-w-[11.5rem] px-4 bg-lightgray text-dark font-semibold rounded-md">
