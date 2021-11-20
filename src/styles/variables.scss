@@ -1,25 +1,23 @@
 @use "sass:map";
 
 $colors: (
-  'blue': #0088cc,
-  'darkblue': #0072aa,
+  "blue": #0088cc,
+  "darkblue": #0072aa,
   "violet": #303757,
-  "dark" : #1b243d,
+  "dark": #1b243d,
   "control": #f0f0f0,
-  "red": #EE4444,
-  "green": #66BB66,
-  "gray": #BBBBBB,
-  "lightgray": #DDDDDD,
+  "red": #ee4444,
+  "green": #66bb66,
+  "gray": #bbbbbb,
 );
 
 :root {
   @each $key, $value in $colors {
-    --#{$key} : #{$value};
+    --#{$key}: #{$value};
 
-    @for $i from 1 through 9{
+    @for $i from 1 through 9 {
       $tmp: rgba($value, $i * 0.1);
-      --#{$key}-#{$i * 10} : #{$tmp}
+      --#{$key}-#{$i * 10}: #{$tmp};
     }
   }
-
 }
