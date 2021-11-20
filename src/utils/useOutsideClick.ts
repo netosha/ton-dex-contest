@@ -2,17 +2,15 @@ import React from 'react';
 
 function useOutsideClick<T>(
   ref: React.RefObject<T>,
-  onClick: (e: MouseEvent) => void
+  onClick: ((e: MouseEvent) => void) | undefined
 ): void;
-
 function useOutsideClick<T>(
   ref: React.RefObject<T>[],
-  onClick: (e: MouseEvent) => void
+  onClick: ((e: MouseEvent) => void) | undefined
 ): void;
-
 function useOutsideClick<T extends Element>(
   ref: React.RefObject<T> | React.RefObject<T>[],
-  onClick: (e: MouseEvent) => void
+  onClick: ((e: MouseEvent) => void) | undefined
 ): void {
   React.useEffect(() => {
     // For multiple refs
