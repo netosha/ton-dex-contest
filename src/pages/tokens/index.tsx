@@ -7,7 +7,7 @@ import PriceChange from '@components/PriceChange';
 import Table, { Column, OrderBy } from '@components/Table';
 import useDispatch from '@hooks/useDispatch';
 import useSelector from '@hooks/useSelector';
-import { getTokensList, selectToken } from '@store/token';
+import { getTokensPrice, selectToken } from '@store/token';
 
 const columns = [
   { key: 'position', label: '' },
@@ -19,27 +19,27 @@ const columns = [
 ];
 
 const Tokens: NextPage = () => {
-  const { tokens, isLoading } = useSelector(selectToken);
+  const { pricedTokens, isPricedTokensLoading } = useSelector(selectToken);
   const dispatch = useDispatch();
 
   const [orderBy, setOrderBy] = React.useState<null | OrderBy>(null);
 
   // TODO: Make it as separate function
-  const rows = isLoading
+  const rows = isPricedTokensLoading
     ? []
-    : Object.values(tokens).map((t, i) => ({
+    : Object.values(pricedTokens).map((t, i) => ({
         id: t.address,
         position: i + 1,
         name: (
           <span className="flex gap-1">
-            {t.name} <span className="text-violet-50">{t.ticker}</span>
+            {t.name} <span className="text-violet-50">{t.symbol}</span>
           </span>
         ),
-        price: <span>${t.price}</span>,
+        price: <span>${t.price.toFixed(2)}</span>,
         priceChange: (
           <PriceChange type={t.priceChange.type} value={t.priceChange.amount} />
         ),
-        volume: `${t.tradingVolume}m`,
+        volume: `${t.tradingVolume.toFixed(2)}m`,
       }));
 
   const handleColumnClick = (c: Column) => {
@@ -56,8 +56,8 @@ const Tokens: NextPage = () => {
 
   React.useEffect(() => {
     // Todo: Replace with properly check of cached values
-    if (!Object.entries(tokens).length) {
-      dispatch(getTokensList({}));
+    if (!Object.entries(pricedTokens).length) {
+      dispatch(getTokensPrice({}));
     }
   }, []);
 
@@ -65,7 +65,7 @@ const Tokens: NextPage = () => {
     <Layout>
       <h1 className="text-4xl mt-4 font-black text-violet">Tokens list</h1>
       <Table
-        isLoading={isLoading}
+        isLoading={isPricedTokensLoading}
         columns={columns}
         rows={rows}
         layout="20px minmax(70px, 3fr) repeat(3, 1fr)"

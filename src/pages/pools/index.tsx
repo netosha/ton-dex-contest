@@ -33,7 +33,7 @@ const Pools: NextPage = () => {
         position: i + 1,
         pool: (
           <span>
-            {p.pair[0].ticker}/{p.pair[1].ticker}
+            {p.pair[0].symbol}/{p.pair[1].symbol}
           </span>
         ),
         total: <span>${p.totalPrice}m</span>,

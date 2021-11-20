@@ -1,6 +1,10 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
-import { sleep } from '@src/utils';
+import { TONRC20 } from '@src/contracts/TONRC20';
+import { WalletV4 } from '@src/contracts/Wallet';
+
+// eslint-disable-next-line import/no-cycle
+import store from '../store';
 
 /**
  * Connect wallet mock
@@ -8,11 +12,43 @@ import { sleep } from '@src/utils';
 export const connectWallet = createAsyncThunk(
   'wallet/connectWallet',
   async () => {
-    await sleep(1000);
+    const wallet = new WalletV4(
+      Buffer.from('pub', 'utf8'),
+      Buffer.from('priv', 'utf8')
+    );
+
+    const address = wallet.myAddress();
+    const balance = wallet.getBalance();
+
     return {
-      address: 'EQCP_Es4UsKIQdU2Hid4HVFA3f5YKls9tMzxQTJz9r7l3_nO',
-      balance: Math.random() * 10,
+      address: await address,
+      balance: await balance,
     };
+  }
+);
+
+/**
+ * Fetches token balance
+ *
+ * For example, wallet balance of ERC20-like token
+ */
+export const getTokenBalance = createAsyncThunk(
+  'wallet/tokenBalance',
+  async (tokenAddress: string) => {
+    // https://stackoverflow.com/a/35674575
+    const { wallet } = store.getState();
+
+    if (wallet.status !== 'connected' || !wallet.address) {
+      console.log('123');
+      throw new Error(
+        'Failed to fetch token balance, because wallet is not provided'
+      );
+    }
+
+    const tokenContract = new TONRC20(tokenAddress, 'provider');
+    const balance: number = await tokenContract.balanceOf(wallet.address);
+
+    return { balance, tokenAddress };
   }
 );
 

@@ -19,7 +19,6 @@ const Swap: NextPage = () => {
           <TokenPicker tokens={tokens} onChange={(t) => setTokens(t)} />
         </div>
       </div>
-      {/* <Modal isOpen></Modal> */}
     </Layout>
   );
 };

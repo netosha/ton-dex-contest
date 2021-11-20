@@ -1,21 +1,31 @@
 import React from 'react';
 
 import { XIcon } from '@heroicons/react/solid';
+import cn from 'clsx';
 import ReactDOM from 'react-dom';
 
 import { useOutsideClick } from '@src/utils';
 
 import { ModalProps } from './Modal.types';
 
-// eslint-disable-next-line react-hooks/rules-of-hooks
 const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref) => {
-  // Prevent Server Side Rendering
-  // https://github.com/reactjs/react-modal/issues/580
-
   const modalRef = React.useRef<HTMLDivElement>(null);
-  const { children, isOpen, onClose, onOutsideClick, heading } = props;
+  const { children, isOpen, onClose, onOutsideClick, heading, className } =
+    props;
   useOutsideClick(modalRef, onOutsideClick ?? onClose);
 
+  React.useEffect(() => {
+    const onEsc = (e: KeyboardEvent) => {
+      if (e.code === 'Escape') {
+        onClose?.();
+      }
+    };
+    document?.addEventListener('keydown', onEsc);
+    return () => document.removeEventListener('keydown', onEsc);
+  }, []);
+
+  // The modal uses React portals.
+  // Portals only work on the client-side, because they need a DOM element. For this reason, the modal is not rendered on the server.
   if (typeof window === 'undefined') {
     return null;
   }
@@ -33,19 +43,25 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref) => {
   return ReactDOM.createPortal(
     <div
       ref={ref}
-      className="fixed top-0 left-0 bg-overlay h-screen w-screen flex items-center justify-center"
+      className="flex fixed top-0 left-0 justify-center items-center py-4 w-screen h-screen bg-overlay"
     >
       <div
         ref={modalRef}
-        className="flex p-6 flex-col min-h-[20rem] min-w-[30rem] max-h-[80vh] overflow-y-auto bg-white rounded-lg relative"
+        className={cn(
+          className,
+          'flex p-6 flex-col min-h-[20rem] max-h-[80vh] overflow-y-auto bg-white rounded-lg relative',
+          'min-w-[90vw] md:min-w-[30rem]'
+        )}
       >
         {heading && (
-          <p className="text-2xl mb-2 font-extrabold text-violet">{heading}</p>
+          <p className="mb-2 text-2xl font-extrabold text-violet">{heading}</p>
         )}
         {children}
-        <button className="absolute right-7 top-7" onClick={onClose}>
-          <XIcon className="w-6 h-6" />
-        </button>
+        {onClose && (
+          <button className="absolute top-7 right-7" onClick={onClose}>
+            <XIcon className="w-6 h-6" />
+          </button>
+        )}
       </div>
     </div>,
     document.getElementById('modal-root')!

@@ -17,8 +17,9 @@ const Header: React.FC = () => {
       />
       <div
         className={cn(
-          'flex flex-1 gap-2 mx-4 font-extrabold text-violet',
-          'md:gap-8 md:ml-16'
+          'flex flex-1 mx-4 font-extrabold text-violet',
+          'gap-2 md:gap-8',
+          'md:ml-16'
         )}
       >
         <Link href="/swap">

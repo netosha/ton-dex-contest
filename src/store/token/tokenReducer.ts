@@ -1,35 +1,54 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { Token } from '@src/types';
+import { PricedToken, Token } from '@src/types';
+import { popularTokens } from '@src/utils';
 
 import * as actions from './tokenActions';
 
 export type TokenState = {
-  isLoading: boolean;
   tokens: {
     [address: string]: Token;
   };
+  pricedTokens: {
+    [address: string]: PricedToken;
+  };
+  isPricedTokensLoading: boolean;
 };
 
 export const initialState: TokenState = {
-  isLoading: false,
-  tokens: {},
+  isPricedTokensLoading: false,
+  tokens: popularTokens.reduce(
+    (prev, cur) => ({ ...prev, [cur.address]: cur }),
+    {}
+  ),
+  pricedTokens: {},
 };
 
 export const tokenReducer = createReducer(initialState, (builder) =>
   builder
-    /* Get tokens list flow */
-    .addCase(actions.getTokensList.pending, (state) => {
-      state.isLoading = true;
+    /* Get tokens list */
+    .addCase(actions.getTokensPrice.pending, (state) => {
+      state.isPricedTokensLoading = true;
     })
-    .addCase(actions.getTokensList.fulfilled, (state, action) => {
-      state.isLoading = false;
+    .addCase(actions.getTokensPrice.fulfilled, (state, action) => {
+      state.isPricedTokensLoading = false;
       // Load all tokens to local cache
       action.payload.forEach((x) => {
-        state.tokens[x.address] = x;
+        state.pricedTokens[x.address] = x;
       });
     })
-    .addCase(actions.getTokensList.rejected, (state) => {
-      state.isLoading = false;
+    .addCase(actions.getTokensPrice.rejected, (state) => {
+      state.isPricedTokensLoading = false;
+    })
+
+    /* Add unknown token */
+    .addCase(actions.addUnknownToken.fulfilled, (state, action) => {
+      const { name, symbol, shardChainId, address } = action.payload;
+      state.tokens[address] = {
+        name,
+        symbol,
+        shardChainId,
+        address,
+      };
     })
 );
