@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import cn from 'clsx';
+
 import styles from './Chart.module.scss';
 // @ts-ignore
 // eslint-disable-next-line import/extensions
@@ -36,7 +38,15 @@ const Chart: React.VFC<GraphProps> = ({ data }) => {
 
   if (isLoading) return <h1>Loading...</h1>;
 
-  return <div ref={containerRef} className={styles.wrapper} />;
+  return (
+    <div
+      ref={containerRef}
+      className={cn(
+        styles.wrapper,
+        'relative w-[840px] h-[320px] bg-control rounded-lg p-4'
+      )}
+    />
+  );
 };
 
 export default Chart;

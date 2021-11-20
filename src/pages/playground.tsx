@@ -7,7 +7,7 @@ import fakeData from '@components/Chart/fakeData';
 
 const Playground: NextPage = () => {
   return (
-    <div>
+    <div className="flex justify-center items-center h-screen">
       <Chart data={fakeData} />
     </div>
   );
