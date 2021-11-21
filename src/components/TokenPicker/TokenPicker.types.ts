@@ -26,4 +26,5 @@ export interface TokenPickerProps {
 export interface TokenRowProps {
   token: Token;
   onClick: () => void;
+  isActive: boolean;
 }

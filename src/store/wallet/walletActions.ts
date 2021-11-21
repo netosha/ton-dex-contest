@@ -4,7 +4,7 @@ import { TONRC20 } from '@src/contracts/TONRC20';
 import { WalletV4 } from '@src/contracts/Wallet';
 
 // eslint-disable-next-line import/no-cycle
-import store from '../store';
+import { WalletState } from './walletReducer';
 
 /**
  * Connect wallet mock
@@ -34,12 +34,10 @@ export const connectWallet = createAsyncThunk(
  */
 export const getTokenBalance = createAsyncThunk(
   'wallet/tokenBalance',
-  async (tokenAddress: string) => {
-    // https://stackoverflow.com/a/35674575
-    const { wallet } = store.getState();
+  async (tokenAddress: string, { getState }) => {
+    const { wallet } = getState() as { wallet: WalletState };
 
     if (wallet.status !== 'connected' || !wallet.address) {
-      console.log('123');
       throw new Error(
         'Failed to fetch token balance, because wallet is not provided'
       );

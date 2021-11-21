@@ -20,7 +20,7 @@ const columns = [
 
 const Pools: NextPage = () => {
   const wallet = useSelector(selectWallet);
-  const { items: pools, isLoading } = useSelector(selectPools);
+  const { pools, isPoolsLoading: isLoading } = useSelector(selectPools);
   const dispatch = useDispatch();
 
   // console.log(pools);

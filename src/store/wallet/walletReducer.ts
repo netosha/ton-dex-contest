@@ -1,6 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit';
 
 // eslint-disable-next-line import/no-cycle
+
+import { Transaction } from '@src/types';
+
+// eslint-disable-next-line import/no-cycle
 import * as actions from './walletActions';
 
 export type WalletState = {
@@ -18,6 +22,16 @@ export type WalletState = {
   balances: {
     [address: string]: number;
   };
+
+  /**
+   *  List of wallet transaction
+   */
+  transactions: { [address: string]: Transaction[] };
+
+  /**
+   * Status of fetching transaction
+   */
+  isTransactionsLoading: boolean;
 };
 
 export const initialState: WalletState = {
@@ -26,6 +40,8 @@ export const initialState: WalletState = {
   status: 'disconnected',
   error: null,
   balances: {},
+  transactions: {},
+  isTransactionsLoading: false,
 };
 
 export const walletReducer = createReducer(initialState, (builder) =>
@@ -44,7 +60,7 @@ export const walletReducer = createReducer(initialState, (builder) =>
       state.error = { message: 'Sample unexpected error' };
     })
 
-    /* Wallet fetching token balance  */
+    /* Fetching token balance  */
     .addCase(actions.getTokenBalance.fulfilled, (state, action) => {
       state.balances[action.payload.tokenAddress] = action.payload.balance;
     })

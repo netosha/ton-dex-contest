@@ -1,6 +1,6 @@
 export interface Token {
   /**
-   * Raw token address in blockchain (ex: 0:F013fW2...)
+   * Raw token transaction in blockchain (ex: 0:F013fW2...)
    *
    * TODO: should be refactored to something like this:
    * https://github.com/ex3ndr/ton/blob/4de39dd07aac35d60e3e6746c103b11a918d3218/src/address/Address.ts#L118

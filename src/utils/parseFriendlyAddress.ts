@@ -40,7 +40,9 @@ const parseFriendlyAddress = (src: string | Buffer) => {
 
   // 1byte tag + 1byte workchain + 32 bytes hash + 2 byte crc
   if (data.length !== 36) {
-    return { error: 'Unknown address type: byte length is not equal to 36' };
+    return {
+      error: 'Unknown transaction type: byte length is not equal to 36',
+    };
   }
 
   // Prepare data
@@ -62,7 +64,7 @@ const parseFriendlyAddress = (src: string | Buffer) => {
     tag ^= TEST_FLAG;
   }
   if (tag !== BOUNCEABLE_TAG && tag !== NON_BOUNCEABLE_TAG) {
-    return { error: 'Unknown address tag' };
+    return { error: 'Unknown transaction tag' };
   }
 
   isBounceable = tag === BOUNCEABLE_TAG;
