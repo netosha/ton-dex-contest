@@ -4069,6 +4069,11 @@ require-from-string@^2.0.2:
   resolved "https://registry.yarnpkg.com/require-from-string/-/require-from-string-2.0.2.tgz#89a7fdd938261267318eafe14f9c32e598c36909"
   integrity sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==
 
+reselect@^4.1.0-beta.2:
+  version "4.1.0-beta.2"
+  resolved "https://registry.yarnpkg.com/reselect/-/reselect-4.1.0-beta.2.tgz#cfeed82250c8dd19e24cbcccc0cf0fe65d885dcc"
+  integrity sha512-EHxFXNjVW+M/a64APnJmox1m2R4ywkFJ0GT/LqaVwSCUhk74z61xHn8dT/lquybX5qhbVzkRN0jSO4HS23L/kg==
+
 reselect@^4.1.2:
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/reselect/-/reselect-4.1.4.tgz#66df0aff41b6ee0f51e2cc17cfaf2c1995916f32"

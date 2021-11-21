@@ -17,7 +17,7 @@ export const getTokensPrice = createAsyncThunk(
 );
 
 /**
- * Adds token by address
+ * Adds token by transaction
  */
 export const addNewToken = createAsyncThunk(
   'token/addNewToken',
