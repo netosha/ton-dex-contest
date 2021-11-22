@@ -1,11 +1,13 @@
 import React from 'react';
 
 import cn from 'clsx';
+import { sortBy } from 'lodash';
 import { NextPage } from 'next';
+import Router from 'next/router';
 
 import Layout from '@components/Layout';
 import PoolCard from '@components/PoolCard';
-import Table from '@components/Table';
+import Table, { OrderBy, Row } from '@components/Table';
 import { useDispatch, useSelector } from '@src/hooks';
 import { Button } from '@src/ui';
 import { getPools, selectPools } from '@store/pool';
@@ -19,25 +21,37 @@ const columns = [
 ];
 
 const Pools: NextPage = () => {
-  const wallet = useSelector(selectWallet);
+  const { status } = useSelector(selectWallet);
   const { pools, isPoolsLoading: isLoading } = useSelector(selectPools);
+  const [orderBy, setOrderBy] = React.useState<null | OrderBy>(null);
+
   const dispatch = useDispatch();
 
-  // console.log(pools);
+  // Probably need useMemo in future
+  const orderedRows = orderBy
+    ? sortBy(Object.values(pools))
+    : Object.values(pools);
+
+  if (orderBy?.order === 'desc') {
+    orderedRows.reverse();
+  }
 
   // TODO: Make it as separate function
-  const rows = isLoading
+  const rows: Row[] = isLoading
     ? []
-    : Object.values(pools).map((p, i) => ({
+    : orderedRows.map((p, i) => ({
         id: p.id,
-        position: i + 1,
+        position: <span className="text-violet-40">{i + 1}</span>,
         pool: (
           <span>
             {p.pair[0].symbol}/{p.pair[1].symbol}
           </span>
         ),
-        total: <span>${p.totalPrice}m</span>,
-        volume: p.volume,
+        total: <span>${p.totalLocked}m</span>,
+        volume: <span>${p.volume}m</span>,
+        rowProps: {
+          onClick: () => Router.push(`/pool/${p.id}`),
+        },
       }));
 
   React.useEffect(() => {
@@ -51,13 +65,13 @@ const Pools: NextPage = () => {
     <Layout>
       <h1 className="text-4xl mt-4 font-black text-violet">Your pools</h1>
       <div>
-        {wallet.status !== 'connected' && (
+        {status !== 'connected' && (
           <span className="text-violet-60">
             Connect wallet to view your pools
           </span>
         )}
 
-        {wallet.status === 'connected' && (
+        {status === 'connected' && (
           <>
             <div
               className={cn(
@@ -78,7 +92,9 @@ const Pools: NextPage = () => {
         isLoading={isLoading}
         columns={columns}
         rows={rows}
-        layout="20px minmax(70px, 3fr) repeat(3, 1fr)"
+        layout="1rem minmax(70px, 4fr) minmax(70px, 1fr) minmax(70px, 1fr)"
+        orderBy={orderBy}
+        onOrderByChange={(o) => setOrderBy(o)}
       />
     </Layout>
   );

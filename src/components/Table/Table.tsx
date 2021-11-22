@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
 
-import { TableProps } from './Table.types';
+import { Column, TableProps } from './Table.types';
 
 // TODO: Make row as independent component
 const Table: React.VFC<TableProps> = (props) => {
@@ -12,22 +12,34 @@ const Table: React.VFC<TableProps> = (props) => {
     columns,
     layout = `repeat(auto, ${rows.length})`,
     orderBy,
-    onColumnClick,
+    onOrderByChange,
   } = props;
 
   if (isLoading) {
     return (
       <div className="flex flex-col gap-2 w-full">
-        <div className="h-9 animate-shine bg-control w-full rounded-lg" />
+        <div className="w-full h-9 rounded-lg animate-shine bg-control" />
         {Array.from({ length: 3 }).map((_r, i) => (
           <div
             key={i}
-            className="h-12 animate-shine bg-control w-full rounded-lg"
+            className="w-full h-12 rounded-lg animate-shine bg-control"
           />
         ))}
       </div>
     );
   }
+
+  const onColumnClick = (c: Column) => {
+    if (orderBy === null) {
+      onOrderByChange?.({ order: 'asc', column: c.key });
+    }
+    if (orderBy?.order === 'asc') {
+      onOrderByChange?.({ order: 'desc', column: c.key });
+    }
+    if (orderBy?.order === 'desc') {
+      onOrderByChange?.(null);
+    }
+  };
 
   return (
     <div className="flex flex-col w-full">
@@ -37,7 +49,7 @@ const Table: React.VFC<TableProps> = (props) => {
       >
         {columns.map((c) => (
           <div
-            className="flex gap-1 items-center cursor-pointer select-none"
+            className="gap-1 items-center cursor-pointer select-none flex	"
             onClick={() => onColumnClick?.(c)}
             key={c.key}
           >

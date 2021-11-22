@@ -1,6 +1,6 @@
 export interface Token {
   /**
-   * Raw token transaction in blockchain (ex: 0:F013fW2...)
+   * Token address in blockchain
    *
    * TODO: should be refactored to something like this:
    * https://github.com/ex3ndr/ton/blob/4de39dd07aac35d60e3e6746c103b11a918d3218/src/address/Address.ts#L118
@@ -43,4 +43,16 @@ export interface PricedToken extends Token {
    * Amount of all trades over the past 24h
    */
   tradingVolume: number;
+}
+
+/**
+ * Token with some known amount
+ *
+ * For example: {name: "WBTC", ..., amount: 0.5}
+ */
+export interface CountableToken extends Token {
+  /**
+   * Amount of tokens to trade
+   */
+  amount: number;
 }
