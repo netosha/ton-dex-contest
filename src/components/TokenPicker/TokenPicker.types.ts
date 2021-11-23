@@ -16,12 +16,22 @@ export interface TokenPickerProps {
   tokens: PickedTokens;
 
   /**
-   * Hoverable icon with some details.
+   * Type of showed icon and submit button
+   */
+  type: 'swap' | 'stake';
+
+  /**
+   * Show icon with details tooltip in misc button
    * Disabled when at least one token are not provided
    *
    * For example: conversion rate, fees, etc.
    */
   details?: ReactNode;
+
+  /**
+   * Show clickcable icon, that shows transactions modal
+   */
+  isTransactionsVisible?: boolean;
 
   onChange?: (tokens: PickedTokens) => void;
 }

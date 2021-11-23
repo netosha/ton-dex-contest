@@ -6,6 +6,7 @@ import {
   ClockIcon,
   CogIcon,
   InformationCircleIcon,
+  PlusIcon,
 } from '@heroicons/react/solid';
 import cn from 'clsx';
 
@@ -68,9 +69,11 @@ export const TokenRow: React.VFC<TokenRowProps> = ({
 
 // Todo: Decompose it)
 const TokenPicker: React.VFC<TokenPickerProps> = ({
+  type = 'swap',
   onChange,
   tokens,
   details,
+  isTransactionsVisible,
 }) => {
   // Index of selecting token
   const [tokenModal, setTokenModal] = React.useState<null | number>(null);
@@ -180,7 +183,7 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
       return { error: true, message: 'Insufficient amount' };
     }
 
-    return { error: false, message: 'Swap' };
+    return { error: false, message: type };
   })();
 
   // Update available balance on account or first token change
@@ -246,7 +249,8 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
         </div>
 
         <div className="w-full flex justify-center">
-          <ArrowDownIcon className="h-6 w-6 text-blue" />
+          {type === 'swap' && <ArrowDownIcon className="h-6 w-6 text-blue" />}
+          {type === 'stake' && <PlusIcon className="h-6 w-6 text-blue" />}
         </div>
 
         {otherTokens.map((t, index) => (
@@ -287,17 +291,17 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
             <CogIcon className="h-6 w-6 transition-colors hover:text-darkblue" />
           </Tooltip>
 
-          <button onClick={() => setTransactionsModal(true)}>
-            <ClockIcon className="h-6 w-6 transition-colors hover:text-darkblue" />
-          </button>
+          {isTransactionsVisible && (
+            <button onClick={() => setTransactionsModal(true)}>
+              <ClockIcon className="h-6 w-6 transition-colors hover:text-darkblue" />
+            </button>
+          )}
 
           {details && (
-            <Tooltip
-              disabled={tokens.some((t) => !t)}
-              content={details}
-              position="bottom"
-            >
-              <InformationCircleIcon className="h-6 w-6 transition-colors hover:text-darkblue" />
+            <Tooltip content={details} position="bottom">
+              <InformationCircleIcon
+                className={cn('h-6 w-6 transition-colors hover:text-darkblue')}
+              />
             </Tooltip>
           )}
         </div>
@@ -340,13 +344,15 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
         </div>
       </Modal>
 
-      <Modal
-        isOpen={transactionsModal}
-        onClose={() => setTransactionsModal(false)}
-        heading="Recent transactions"
-      >
-        <Transactions address={address} />
-      </Modal>
+      {isTransactionsVisible && (
+        <Modal
+          isOpen={transactionsModal}
+          onClose={() => setTransactionsModal(false)}
+          heading="Recent transactions"
+        >
+          <Transactions address={address} />
+        </Modal>
+      )}
     </>
   );
 };

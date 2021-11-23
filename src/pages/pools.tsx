@@ -3,6 +3,7 @@ import React from 'react';
 import cn from 'clsx';
 import { sortBy } from 'lodash';
 import { NextPage } from 'next';
+import Link from 'next/link';
 import Router from 'next/router';
 
 import Layout from '@components/Layout';
@@ -81,7 +82,9 @@ const Pools: NextPage = () => {
                 <PoolCard key={i} />
               ))}
             </div>
-            <Button>Create new pool</Button>
+            <Link href="/pool/create">
+              <Button>Create new pool</Button>
+            </Link>
           </>
         )}
       </div>
