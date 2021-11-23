@@ -9,7 +9,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   return (
     <input
       ref={ref}
-      placeholder={'lox'}
       className={cn(
         className,
         'py-1 px-4 leading-normal bg-control rounded-md outline-none',
