@@ -109,6 +109,7 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
     sourceToken &&
     typeof availableBalance === 'number' &&
     !Number.isNaN(availableBalance) &&
+    sourceToken.amount &&
     sourceToken.amount > availableBalance
   );
 
@@ -130,7 +131,7 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
     const newTokens = [...tokens] as PickedTokens;
     const changedItem = newTokens[index]!;
 
-    const parsedAmount = Number(amount);
+    const parsedAmount = amount ? Number(amount) : null;
 
     newTokens.splice(index, 1, {
       ...changedItem,
@@ -143,7 +144,7 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
     // Reset amount, because user can submit it with old convert rate
     const newTokens = tokens.map((t) => ({
       ...t,
-      amount: 0,
+      amount: null,
     })) as PickedTokens;
     const changedItem = newTokens[index]!;
 
@@ -194,7 +195,7 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
 
   React.useEffect(() => {
     setAmounts(() =>
-      tokens.map((t) => (t?.amount === 0 ? '' : t?.amount?.toString() ?? ''))
+      tokens.map((t) => (t?.amount === null ? '' : t?.amount?.toString() ?? ''))
     );
   }, [tokens]);
 

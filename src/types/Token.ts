@@ -54,5 +54,5 @@ export interface CountableToken extends Token {
   /**
    * Amount of tokens to trade
    */
-  amount: number;
+  amount: number | null;
 }
