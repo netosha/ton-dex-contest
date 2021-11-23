@@ -5,6 +5,7 @@ import {
   ChevronDownIcon,
   ClockIcon,
   CogIcon,
+  InformationCircleIcon,
 } from '@heroicons/react/solid';
 import cn from 'clsx';
 
@@ -291,9 +292,30 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
           >
             <CogIcon className="h-6 w-6 transition-colors hover:text-darkblue" />
           </Tooltip>
+
           <button onClick={() => setTransactionsModal(true)}>
             <ClockIcon className="h-6 w-6 transition-colors hover:text-darkblue" />
           </button>
+
+          <Tooltip
+            disabled={tokens.some((t) => !t)}
+            content={
+              <div className="bg-control flex flex-col gap-1 text-dark w-[15em] py-2 px-4 rounded-md">
+                <span className="text-violet leading-none mb-1 font-bold">
+                  Details
+                </span>
+                <span className="text-sm text-violet-60 leading-none">
+                  <b>1.51 {tokens[1]?.symbol}</b> per <b>{tokens[0]?.symbol}</b>
+                </span>
+                <span className="text-sm font-bold text-violet-60 leading-none">
+                  0.2% fees
+                </span>
+              </div>
+            }
+            position="bottom"
+          >
+            <InformationCircleIcon className="h-6 w-6 transition-colors hover:text-darkblue" />
+          </Tooltip>
         </div>
       </div>
 

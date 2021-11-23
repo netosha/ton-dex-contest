@@ -1,6 +1,9 @@
 import React from 'react';
 
+import { sortBy } from 'lodash';
+
 import Loader from '@components/Loader';
+import Table, { OrderBy, Row } from '@components/Table';
 import { useDispatch, useSelector } from '@src/hooks';
 import { Button } from '@src/ui';
 import {
@@ -10,10 +13,18 @@ import {
 
 const PAGE_SIZE = 10;
 
+const columns = [
+  { key: 'hash', label: 'Hash' },
+  { key: 'method', label: 'Method' },
+  { key: 'timestamp', label: 'Date' },
+];
 const Transactions: React.VFC<{ address: string | undefined | null }> = ({
   address,
 }) => {
   const [offset, setOffset] = React.useState(0);
+
+  const [orderBy, setOrderBy] = React.useState<null | OrderBy>(null);
+
   const { isTransactionsLoading, transactions } = useSelector((state) =>
     selectTransactionsByAddress(state, address)
   );
@@ -21,10 +32,6 @@ const Transactions: React.VFC<{ address: string | undefined | null }> = ({
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    if (offset === 0 && transactions?.length) {
-      setOffset(Object.entries(transactions).length);
-      return;
-    }
     if (address) {
       dispatch(getAddressTransactions({ address, offset, limit: PAGE_SIZE }));
     }
@@ -38,26 +45,41 @@ const Transactions: React.VFC<{ address: string | undefined | null }> = ({
     );
   }
 
+  const orderedTransactions = orderBy
+    ? sortBy(transactions, orderBy.column)
+    : transactions;
+
+  if (orderBy?.order === 'desc') {
+    orderedTransactions.reverse();
+  }
+
+  // Todo: Make it as separate function
+  const rows: Row[] = orderedTransactions.map((tx) => ({
+    id: tx.hash,
+    hash: <span className="font-bold">#{tx.hash.slice(0, 4)}..</span>,
+    method: <span className="text-violet-60 ">{tx.method}</span>,
+    timestamp: (
+      <span className="ml-auto text-sm text-violet-60">
+        {new Date(tx.timestamp).toLocaleString()}
+      </span>
+    ),
+    rowProps: {
+      href: 'https://ton.sh',
+      target: '_blank',
+    },
+  }));
+
   return (
     <div className="grid grid-flow-row gap-2">
-      {transactions.map((tx) => (
-        <a
-          key={tx.hash}
-          href="https://ton.sh/"
-          className="w-full items-center px-4 py-2 grid bg-control rounded-md"
-          style={{ gridTemplateColumns: '3.5rem 1fr auto' }}
-        >
-          <span className="font-bold">#{tx.hash.slice(0, 4)}..</span>
-          <span className="ml-4 text-violet-60">{tx.method}</span>
-          <span className="ml-auto text-sm text-violet-60">
-            {new Date(tx.timestamp).toLocaleString()}
-          </span>
-        </a>
-      ))}
-      {isTransactionsLoading &&
-        Array.from({ length: PAGE_SIZE }).map((_t, index) => (
-          <div key={index} className="h-8 rounded-md w-full animate-shine" />
-        ))}
+      <Table
+        layout="3.5rem repeat(2, 1fr)"
+        rows={rows}
+        orderBy={orderBy}
+        onOrderByChange={(o) => setOrderBy(o)}
+        columns={columns}
+        isLoading={isTransactionsLoading}
+        rowsProps={{ className: '!py-2 !px-4 !max-h-[2rem]' }}
+      />
       <Button
         className="bg-control flex justify-center"
         onClick={() => setOffset((v) => v + PAGE_SIZE)}
