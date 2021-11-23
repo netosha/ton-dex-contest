@@ -69,6 +69,9 @@ export const TokenRow: React.VFC<TokenRowProps> = ({
 const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
   // Index of selecting token
   const [tokenModal, setTokenModal] = React.useState<null | number>(null);
+  const [amounts, setAmounts] = React.useState<string[]>(
+    tokens.map((t) => t?.amount?.toString() ?? '')
+  );
 
   // Can be replaced with global hook, if transaction modal will be cross-page component
   const [transactionsModal, setTransactionsModal] =
@@ -90,22 +93,35 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
       )
     : knownTokens;
 
-  const firstToken = tokens[0];
+  const sourceToken = tokens[0];
   const otherTokens = tokens.slice(1);
 
-  const availableBalance: null | number | undefined = firstToken
-    ? balances[firstToken?.address]
+  const availableBalance: null | number | undefined = sourceToken
+    ? balances[sourceToken?.address]
     : null;
 
   const isInsufficientBalance = !!(
-    firstToken &&
+    sourceToken &&
     typeof availableBalance === 'number' &&
-    firstToken.amount > availableBalance
+    sourceToken.amount > availableBalance
   );
 
   const handleAmountChange = (index: number, amount: string) => {
+    const regEx = /^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)$/;
+    if (amount && !regEx.test(amount)) return;
+
+    setAmounts((v) => {
+      const x = [...v];
+      x.splice(index, 1, amount);
+      return x;
+    });
+
+    const lastChar = amount.slice(-1);
+    if (lastChar === '.' || lastChar === '0') return;
+
     const newTokens = [...tokens] as PickedTokens;
     const changedItem = newTokens[index]!;
+
     const otherItems = newTokens.filter(
       (t) => t?.address && t.address !== changedItem?.address
     );
@@ -114,8 +130,8 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
 
     const isSourceToken = index === 0;
 
-    // For testing purposes convertion rate are fixed
-    // Every firstToken gives 1.51 secondTokens
+    // For testing purposes conversion rate are fixed
+    // Every sourceToken gives 1.51 secondTokens
     // For ex: 1BNB = 1.51ETH, 7BTC = 10,57DAI and etc.
     // Not a production-ready solution
     otherItems.forEach((item) => {
@@ -129,8 +145,10 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
       });
     });
 
-    newTokens.splice(index, 1, { ...changedItem, amount: parsedAmount });
-
+    newTokens.splice(index, 1, {
+      ...changedItem,
+      amount: parsedAmount,
+    });
     onChange?.(newTokens);
   };
 
@@ -180,19 +198,27 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
 
   // Update available balance on account or first token change
   React.useEffect(() => {
-    if (firstToken && address) {
-      if (balances[firstToken.address] === undefined) {
-        console.log(firstToken.symbol, 'balance updated');
-        dispatch(getTokenBalance(firstToken.address));
+    if (sourceToken && address) {
+      if (balances[sourceToken.address] === undefined) {
+        console.log(sourceToken.symbol, 'balance updated');
+        dispatch(getTokenBalance(sourceToken.address));
       }
     }
-  }, [address, firstToken?.address]);
+  }, [address, sourceToken?.address]);
+
+  React.useEffect(() => {
+    setAmounts(() => {
+      return tokens.map((t) =>
+        t?.amount === 0 ? '' : t?.amount?.toString() ?? ''
+      );
+    });
+  }, [tokens]);
 
   return (
     <>
       <div className="flex gap-2 flex-col">
         <div className="flex flex-col">
-          {status === 'connected' && firstToken && (
+          {status === 'connected' && sourceToken && (
             <div className="w-full flex">
               <span className="mb-2 text-sm font-semibold text-violet-60">
                 Available: <span className="font-bold">{availableBalance}</span>
@@ -204,8 +230,7 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
             <Input
               className="font-bold"
               placeholder="0.0"
-              pattern="[0-9]*"
-              value={firstToken?.amount}
+              value={amounts[0]}
               error={isInsufficientBalance}
               onChange={(e) => handleAmountChange(0, e.target.value)}
             />
@@ -213,9 +238,9 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
               className="flex justify-center w-full font-bold gap-1 !text-violet !bg-control hover:!text-blue"
               onClick={() => setTokenModal(0)}
             >
-              {firstToken?.address ? (
+              {sourceToken?.address ? (
                 <>
-                  <span className="uppercase">{firstToken?.symbol}</span>
+                  <span className="uppercase">{sourceToken?.symbol}</span>
                   <ChevronDownIcon className="w-4 h-4" />
                 </>
               ) : (
@@ -233,7 +258,7 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
           <div className="flex gap-2 group" key={t?.address ?? index}>
             <Input
               className="font-bold"
-              value={t?.amount}
+              value={amounts[index + 1]}
               onChange={(e) => handleAmountChange(index + 1, e.target.value)}
               placeholder="0.0"
             />

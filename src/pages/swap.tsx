@@ -9,7 +9,7 @@ import { PickedTokens } from '@components/TokenPicker/TokenPicker.types';
 const Swap: NextPage = () => {
   const [tokens, setTokens] = React.useState<PickedTokens>([null, null]);
 
-  console.log(tokens);
+  // console.log(tokens);
 
   return (
     <Layout>
