@@ -9,10 +9,8 @@ import { PickedTokens } from '@components/TokenPicker/TokenPicker.types';
 const Swap: NextPage = () => {
   const [tokens, setTokens] = React.useState<PickedTokens>([null, null]);
 
-  // console.log(tokens);
-
-  // Convertion rate are hardcoded for now
-  const convertionRate = 1.51;
+  // Conversion rate are hardcoded for now
+  const conversionRate = 1.51;
 
   const handleTokensChange = (t: PickedTokens) => {
     const newTokens = [...t];
@@ -25,13 +23,16 @@ const Swap: NextPage = () => {
       tokens[0]?.amount !== sourceToken?.amount;
 
     if (isSourceTokenChanged) {
-      const changedTokens = newTokens
-        .splice(1)
-        .map((_t) =>
-          _t !== null
-            ? { ..._t, amount: (sourceToken?.amount ?? 0) * convertionRate }
-            : null
-        );
+      const changedTokens = newTokens.splice(1).map((_t) =>
+        _t !== null
+          ? {
+              ..._t,
+              amount: sourceToken?.amount
+                ? (sourceToken?.amount ?? 0) * conversionRate
+                : null,
+            }
+          : null
+      );
       console.log(changedTokens);
       return setTokens([sourceToken, ...changedTokens] as PickedTokens);
     }
@@ -39,7 +40,9 @@ const Swap: NextPage = () => {
     const otherItem = newTokens[1];
     newTokens.splice(0, 1, {
       ...sourceToken!,
-      amount: (otherItem?.amount ?? 0) / convertionRate,
+      amount: otherItem?.amount
+        ? (otherItem?.amount ?? 0) / conversionRate
+        : null,
     });
 
     return setTokens(newTokens as PickedTokens);
