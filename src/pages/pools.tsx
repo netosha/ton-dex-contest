@@ -37,22 +37,20 @@ const Pools: NextPage = () => {
   }
 
   // TODO: Make it as separate function
-  const rows: Row[] = isLoading
-    ? []
-    : orderedRows.map((p, i) => ({
-        id: p.id,
-        position: <span className="text-violet-40">{i + 1}</span>,
-        pool: (
-          <span>
-            {p.pair[0].symbol}/{p.pair[1].symbol}
-          </span>
-        ),
-        total: <span>${p.totalLocked}m</span>,
-        volume: <span>${p.volume}m</span>,
-        rowProps: {
-          onClick: () => Router.push(`/pool/${p.id}`),
-        },
-      }));
+  const rows: Row[] = orderedRows.map((p, i) => ({
+    id: p.id,
+    position: <span className="text-violet-40">{i + 1}</span>,
+    pool: (
+      <span>
+        {p.pair[0].symbol}/{p.pair[1].symbol}
+      </span>
+    ),
+    total: <span>${p.totalLocked}m</span>,
+    volume: <span>${p.volume}m</span>,
+    rowProps: {
+      onClick: () => Router.push(`/pool/${p.id}`),
+    },
+  }));
 
   React.useEffect(() => {
     // Todo: Replace with properly check of cached values

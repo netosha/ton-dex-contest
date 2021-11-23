@@ -8,8 +8,15 @@ export interface TooltipProps extends HTMLAttributes<HTMLDivElement> {
    */
   position?: 'top' | 'bottom' | 'left' | 'right';
 
-  // Force set tooltip visible
+  /**
+   *  Force set tooltip visible
+   */
   isOpen?: boolean;
+
+  /**
+   * Prevent from showing, even if it hovered
+   */
+  disabled?: boolean;
 
   content: ReactNode;
 }

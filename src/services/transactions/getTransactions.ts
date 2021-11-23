@@ -10,7 +10,7 @@ const getTransactions = async (address: string, offset = 0, limit = 20) => {
       timestamp: new Date(2021, 11, 31 - offset, 24 - i).getTime(),
       from: Math.random().toString(10).substring(2),
       to: address,
-      method: 'swap',
+      method: Math.random() > 0.5 ? 'swap' : 'transfer',
       misc: {
         swapFrom: address,
         swapTo: address,

@@ -1,6 +1,8 @@
 import React from 'react';
 
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
+import cn from 'clsx';
+import { omit } from 'lodash';
 
 import { Column, TableProps } from './Table.types';
 
@@ -13,21 +15,8 @@ const Table: React.VFC<TableProps> = (props) => {
     layout = `repeat(auto, ${rows.length})`,
     orderBy,
     onOrderByChange,
+    rowsProps,
   } = props;
-
-  if (isLoading) {
-    return (
-      <div className="flex flex-col gap-2 w-full">
-        <div className="w-full h-9 rounded-lg animate-shine bg-control" />
-        {Array.from({ length: 3 }).map((_r, i) => (
-          <div
-            key={i}
-            className="w-full h-12 rounded-lg animate-shine bg-control"
-          />
-        ))}
-      </div>
-    );
-  }
 
   const onColumnClick = (c: Column) => {
     if (orderBy === null) {
@@ -44,7 +33,7 @@ const Table: React.VFC<TableProps> = (props) => {
   return (
     <div className="flex flex-col w-full">
       <div
-        className="grid grid-flow-col gap-2 px-4 py-2 w-full font-extrabold text-violet-80 text-test"
+        className="grid grid-flow-col gap-2 px-4 py-2 w-full text-sm font-bold text-violet-60 text-test"
         style={{ gridTemplateColumns: layout }}
       >
         {columns.map((c) => (
@@ -69,17 +58,40 @@ const Table: React.VFC<TableProps> = (props) => {
       </div>
       <div className="flex font-bold text-sm text-dark flex-col gap-[0.625rem]">
         {rows.map((r) => (
-          <div
+          <a
             key={r.id}
-            className="grid grid-flow-col gap-2 p-4 w-full rounded-lg cursor-pointer bg-control"
-            style={{ gridTemplateColumns: layout }}
-            {...r?.rowProps}
+            className={cn(
+              'grid grid-flow-col gap-2 p-4 w-full rounded-lg cursor-pointer bg-control',
+              r?.rowProps?.className,
+              rowsProps?.className
+            )}
+            style={{
+              gridTemplateColumns: layout,
+              ...rowsProps?.style,
+              ...r?.rowProps,
+            }}
+            {...omit(r?.rowProps, 'className', 'style')}
+            {...omit(rowsProps, 'className', 'style')}
           >
             {columns.map((c) => (
               <div key={`${r.id}-${c.key}`}>{r[c.key]}</div>
             ))}
-          </div>
+          </a>
         ))}
+
+        {/* Loading rows */}
+        {isLoading &&
+          Array.from({ length: 3 }).map((_r, i) => (
+            <a
+              key={i}
+              className={cn(
+                'w-full h-12 rounded-lg animate-shine bg-control',
+                rowsProps?.className
+              )}
+              style={rowsProps?.style}
+              {...omit(rowsProps, 'className', 'style')}
+            />
+          ))}
       </div>
     </div>
   );

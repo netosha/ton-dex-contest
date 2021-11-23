@@ -28,16 +28,13 @@ export type OrderBy = {
 export interface Row {
   id: string | number;
   [key: Keys]: React.ReactNode;
-  rowProps?: React.HTMLAttributes<HTMLDivElement>;
+  rowProps?: React.HTMLProps<HTMLAnchorElement>;
 }
 
 export interface TableProps {
   rows: Row[];
   columns: Column[];
 
-  /**
-   * Show loader when table items is loading
-   */
   isLoading?: boolean;
 
   /**
@@ -50,6 +47,13 @@ export interface TableProps {
   layout?: string;
 
   onOrderByChange?: (ord: OrderBy) => void;
+
+  /**
+   * Pass props directly every row
+   *
+   * It's useful, when you want to style all table
+   */
+  rowsProps?: React.HTMLProps<HTMLAnchorElement>;
 
   /**
    * Show order column in header

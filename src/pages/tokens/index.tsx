@@ -47,25 +47,23 @@ const Tokens: NextPage = () => {
   }
 
   // TODO: Make it as separate function
-  const rows: Row[] = isPricedTokensLoading
-    ? []
-    : orderedRows.map((t) => ({
-        id: t.address,
-        position: (
-          <span className="text-violet-40">{positions[t.address]! + 1}</span>
-        ),
+  const rows: Row[] = orderedRows.map((t) => ({
+    id: t.address,
+    position: (
+      <span className="text-violet-40">{positions[t.address]! + 1}</span>
+    ),
 
-        name: (
-          <span className="flex gap-1">
-            {t.name} <span className="text-violet-50">{t.symbol}</span>
-          </span>
-        ),
-        price: <span>${t.price.toFixed(2)}</span>,
-        priceChange: (
-          <PriceChange type={t.priceChange.type} value={t.priceChange.amount} />
-        ),
-        tradingVolume: `${t.tradingVolume.toFixed(2)}m`,
-      }));
+    name: (
+      <span className="flex gap-1">
+        {t.name} <span className="text-violet-50">{t.symbol}</span>
+      </span>
+    ),
+    price: <span>${t.price.toFixed(2)}</span>,
+    priceChange: (
+      <PriceChange type={t.priceChange.type} value={t.priceChange.amount} />
+    ),
+    tradingVolume: `${t.tradingVolume.toFixed(2)}m`,
+  }));
 
   React.useEffect(() => {
     // Todo: Replace with properly check of cached values
