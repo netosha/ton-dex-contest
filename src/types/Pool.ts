@@ -1,6 +1,6 @@
-import { Token } from './Token';
+import { CountableToken, Token } from './Token';
 
-export type Pool = {
+export interface Pool {
   id: string;
 
   /**
@@ -9,9 +9,9 @@ export type Pool = {
   volume: number;
 
   /**
-   * Total USD locked in pool
+   * Overall USD locked in pool
    */
-  totalPrice: number;
+  totalLocked: number;
 
   /**
    * Array of 2 tokens
@@ -19,4 +19,19 @@ export type Pool = {
    * Note: it's simplified model of pair. It could significantly change in future
    */
   pair: [Token, Token];
-};
+}
+
+export interface WalletPool extends Pool {
+  ownerAddress: string;
+  fee: number;
+
+  /**
+   * Wallet's USD locked in pool
+   */
+  walletLocked: number;
+
+  /**
+   * Locked tokens pair
+   */
+  locked: [CountableToken, CountableToken];
+}

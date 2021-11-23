@@ -5,7 +5,7 @@ import cn from 'clsx';
 import { TooltipProps } from './Tooltip.types';
 
 const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
-  const { position = 'bottom', className, isOpen, content } = props;
+  const { position = 'bottom', className, isOpen, content, disabled } = props;
 
   // Force update
   const update = React.useReducer((x) => x + 1, 0)[1];
@@ -40,7 +40,7 @@ const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
       onMouseLeave={onMouseLeave}
     >
       {children}
-      {(visible || isOpen) && (
+      {(visible || isOpen) && !disabled && (
         <div
           ref={ref}
           onMouseEnter={onMouseEnter}

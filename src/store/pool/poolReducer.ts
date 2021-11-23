@@ -1,16 +1,18 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { Pool } from '@src/types';
+import { Pool, WalletPool } from '@src/types';
 
 import * as actions from './poolActions';
 
 export type PoolState = {
   pools: Pool[];
+  walletPools: WalletPool[];
   isPoolsLoading: boolean;
 };
 
 export const initialState: PoolState = {
   pools: [],
+  walletPools: [],
   isPoolsLoading: false,
 };
 

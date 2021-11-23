@@ -14,15 +14,19 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref) => {
     props;
   useOutsideClick(modalRef, onOutsideClick ?? onClose);
 
-  React.useEffect(() => {
-    const onEsc = (e: KeyboardEvent) => {
-      if (e.code === 'Escape') {
-        onClose?.();
-      }
-    };
-    document?.addEventListener('keydown', onEsc);
-    return () => document.removeEventListener('keydown', onEsc);
+  const onEsc = React.useCallback((e: KeyboardEvent) => {
+    if (e.code === 'Escape') {
+      onClose?.();
+    }
   }, []);
+
+  React.useEffect(() => {
+    if (isOpen) {
+      document?.addEventListener('keydown', onEsc);
+      return;
+    }
+    document.removeEventListener('keydown', onEsc);
+  }, [isOpen]);
 
   // The modal uses React portals.
   // Portals only work on the client-side, because they need a DOM element. For this reason, the modal is not rendered on the server.
@@ -38,8 +42,6 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref) => {
 
   if (!isOpen) return null;
 
-  document.body.style.overflow = 'hidden';
-
   return ReactDOM.createPortal(
     <div
       ref={ref}
@@ -49,7 +51,7 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref) => {
         ref={modalRef}
         className={cn(
           className,
-          'flex p-6 flex-col min-h-[20rem] max-h-[80vh] overflow-y-auto bg-white rounded-lg relative',
+          'flex p-6 flex-col min-h-[20rem] max-h-[60vh] md:max-h-[80vh] overflow-y-auto bg-white rounded-lg relative',
           'min-w-[90vw] md:min-w-[30rem]'
         )}
       >

@@ -1,18 +1,11 @@
-import { Token } from '@src/types';
-
-export interface PickedToken extends Token {
-  /**
-   * Amount of tokens to trade
-   */
-  amount: number;
-}
+import { CountableToken, Token } from '@src/types';
 
 /**
  * Note: Now it array of 2 tokens, but in future it would expanded.
  *
  * Not a production-ready solution
  */
-export type PickedTokens = [PickedToken | null, PickedToken | null];
+export type PickedTokens = [CountableToken | null, CountableToken | null];
 
 export interface TokenPickerProps {
   /**

@@ -36,11 +36,11 @@ module.exports = {
       },
       // Inset borders using to ensure that component have same dimensions
       boxShadow: {
-        'border-blue': `0 0 0 2px var(--blue) inset`,
-        'border-darkblue': `0 0 0 2px var(--darkblue) inset`,
-        'border-red': `0 0 0 2px var(--red) inset`,
-        'border-gray': `0 0 0 2px var(--gray) inset`,
-        'border-lightgray': `0 0 0 2px var(--lightgray) inset`,
+        'border-blue': `inset 0 0 0 2px var(--blue)`,
+        'border-darkblue': `inset 0 0 0 2px var(--darkblue)`,
+        'border-red': `inset 0 0 0 2px var(--red)`,
+        'border-gray': `inset 0 0 0 2px var(--gray)`,
+        'border-lightgray': `inset 0 0 0 2px var(--lightgray)`,
       },
       outline: {
         blue: '2px solid var(--blue)',

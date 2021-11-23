@@ -1,10 +1,11 @@
 import React from 'react';
 
+import { sortBy } from 'lodash';
 import { NextPage } from 'next';
 
 import Layout from '@components/Layout';
 import PriceChange from '@components/PriceChange';
-import Table, { Column, OrderBy } from '@components/Table';
+import Table, { OrderBy, Row } from '@components/Table';
 import useDispatch from '@hooks/useDispatch';
 import useSelector from '@hooks/useSelector';
 import { getTokensPrice, selectToken } from '@store/token';
@@ -15,8 +16,17 @@ const columns = [
   { key: 'price', label: 'Price' },
   { key: 'priceChange', label: 'Price Change' },
 
-  { key: 'volume', label: 'Volume' },
+  { key: 'tradingVolume', label: 'Volume' },
 ];
+
+// Todo: replace it when API comes in
+const positions: { [key: string]: number } = {
+  EQA6ogjFLp8cxwDJCwBwYeQsavqSRidthmPjMgRqBAqtmNoN: 2,
+  EQAdM77uArYBDwuscIE1oMs4HzWxjtBcg6z9waiL_7rkKfAc: 0,
+  'EQCA7OM1eWfrvDDD-O9VxxvpC4m3l-IUW4k7KEFxgBjtNih6': 4,
+  'EQCToqoCFszgWj420UX1evMX-ZulNzGqeDpLv-6ZB7yRTjCL': 1,
+  'kf-kkdY_B7p-77TLn2hUhM6QidWrrsl8FYWCIvBMpZKprBtN': 3,
+};
 
 const Tokens: NextPage = () => {
   const { pricedTokens, isPricedTokensLoading } = useSelector(selectToken);
@@ -24,35 +34,36 @@ const Tokens: NextPage = () => {
 
   const [orderBy, setOrderBy] = React.useState<null | OrderBy>(null);
 
-  // TODO: Make it as separate function
-  const rows = isPricedTokensLoading
-    ? []
-    : Object.values(pricedTokens).map((t, i) => ({
-        id: t.address,
-        position: i + 1,
-        name: (
-          <span className="flex gap-1">
-            {t.name} <span className="text-violet-50">{t.symbol}</span>
-          </span>
-        ),
-        price: <span>${t.price.toFixed(2)}</span>,
-        priceChange: (
-          <PriceChange type={t.priceChange.type} value={t.priceChange.amount} />
-        ),
-        volume: `${t.tradingVolume.toFixed(2)}m`,
-      }));
+  // Probably need useMemo in future
+  const orderedRows = orderBy
+    ? sortBy(
+        Object.values(pricedTokens),
+        orderBy.column === 'priceChange' ? 'priceChange.amount' : orderBy.column
+      )
+    : Object.values(pricedTokens);
 
-  const handleColumnClick = (c: Column) => {
-    if (orderBy === null) {
-      setOrderBy({ order: 'asc', column: c.key });
-    }
-    if (orderBy?.order === 'asc') {
-      setOrderBy({ order: 'desc', column: c.key });
-    }
-    if (orderBy?.order === 'desc') {
-      setOrderBy(null);
-    }
-  };
+  if (orderBy?.order === 'desc') {
+    orderedRows.reverse();
+  }
+
+  // TODO: Make it as separate function
+  const rows: Row[] = orderedRows.map((t) => ({
+    id: t.address,
+    position: (
+      <span className="text-violet-40">{positions[t.address]! + 1}</span>
+    ),
+
+    name: (
+      <span className="flex gap-1">
+        {t.name} <span className="text-violet-50">{t.symbol}</span>
+      </span>
+    ),
+    price: <span>${t.price.toFixed(2)}</span>,
+    priceChange: (
+      <PriceChange type={t.priceChange.type} value={t.priceChange.amount} />
+    ),
+    tradingVolume: `${t.tradingVolume.toFixed(2)}m`,
+  }));
 
   React.useEffect(() => {
     // Todo: Replace with properly check of cached values
@@ -70,7 +81,7 @@ const Tokens: NextPage = () => {
         rows={rows}
         layout="20px minmax(70px, 3fr) repeat(3, 1fr)"
         orderBy={orderBy}
-        onColumnClick={handleColumnClick}
+        onOrderByChange={(o) => setOrderBy(o)}
       />
     </Layout>
   );
