@@ -1,15 +1,11 @@
-export interface PickedToken {
-  address: string;
-  amount: number;
-  ticker: string;
-}
+import { CountableToken, Token } from '@src/types';
 
 /**
  * Note: Now it array of 2 tokens, but in future it would expanded.
  *
  * Not a production-ready solution
  */
-export type PickedTokens = [PickedToken | null, PickedToken | null];
+export type PickedTokens = [CountableToken | null, CountableToken | null];
 
 export interface TokenPickerProps {
   /**
@@ -18,4 +14,10 @@ export interface TokenPickerProps {
   tokens: PickedTokens;
 
   onChange?: (tokens: PickedTokens) => void;
+}
+
+export interface TokenRowProps {
+  token: Token;
+  onClick: () => void;
+  isActive: boolean;
 }

@@ -5,7 +5,11 @@ import { RootState } from '@store/store';
  */
 export const selectPool = ({ pool }: RootState) => pool;
 
+// TODO: Replace with createSelector
 /**
  * Selects pools state
  */
-export const selectPools = ({ pool }: RootState) => pool.pools;
+export const selectPools = ({ pool }: RootState) => ({
+  pools: pool.pools,
+  isPoolsLoading: pool.isPoolsLoading,
+});

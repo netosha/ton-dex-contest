@@ -1,3 +1,3 @@
-import getTokens from './getTokens';
+import getTokensPrice from './getTokensPrice';
 
-export { getTokens };
+export { getTokensPrice };

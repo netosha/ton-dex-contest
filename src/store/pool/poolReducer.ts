@@ -1,34 +1,32 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { Pool } from '@src/types';
+import { Pool, WalletPool } from '@src/types';
 
 import * as actions from './poolActions';
 
 export type PoolState = {
-  pools: {
-    items: Pool[];
-    isLoading: boolean;
-  };
+  pools: Pool[];
+  walletPools: WalletPool[];
+  isPoolsLoading: boolean;
 };
 
 export const initialState: PoolState = {
-  pools: {
-    items: [],
-    isLoading: false,
-  },
+  pools: [],
+  walletPools: [],
+  isPoolsLoading: false,
 };
 
 export const poolReducer = createReducer(initialState, (builder) =>
   /* Get pools list flow */
   builder
     .addCase(actions.getPools.pending, (state) => {
-      state.pools.isLoading = true;
+      state.isPoolsLoading = true;
     })
     .addCase(actions.getPools.fulfilled, (state, action) => {
-      state.pools.isLoading = false;
-      state.pools.items = action.payload;
+      state.isPoolsLoading = false;
+      state.pools = action.payload;
     })
     .addCase(actions.getPools.rejected, (state) => {
-      state.pools.isLoading = false;
+      state.isPoolsLoading = false;
     })
 );

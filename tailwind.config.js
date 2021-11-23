@@ -30,13 +30,20 @@ module.exports = {
       '5xl': '3rem',
       '6xl': '4rem',
     },
-
     extend: {
+      inset: {
+        'full+2': `calc(100% + 0.5rem)`,
+      },
       // Inset borders using to ensure that component have same dimensions
       boxShadow: {
-        'border-blue': `inset 0 0 0 2px var(--blue);`,
-        'border-darkblue': `inset 0 0 0 2px var(--darkblue);`,
-        'border-red': `inset 0 0 0 2px var(--red);`,
+        'border-blue': `inset 0 0 0 2px var(--blue)`,
+        'border-darkblue': `inset 0 0 0 2px var(--darkblue)`,
+        'border-red': `inset 0 0 0 2px var(--red)`,
+        'border-gray': `inset 0 0 0 2px var(--gray)`,
+        'border-lightgray': `inset 0 0 0 2px var(--lightgray)`,
+      },
+      outline: {
+        blue: '2px solid var(--blue)',
       },
       keyframes: {
         shine: {
@@ -80,6 +87,7 @@ module.exports = {
         },
 
         gray: 'var(--gray)',
+        lightgray: `var(--lightgray)`,
 
         control: `var(--control)`,
         overlay: `rgba(0,0,0, 0.5)`,
