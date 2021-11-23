@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import { CountableToken, Token } from '@src/types';
 
 /**
@@ -12,6 +14,14 @@ export interface TokenPickerProps {
    * Array of picked tokens
    */
   tokens: PickedTokens;
+
+  /**
+   * Hoverable icon with some details.
+   * Disabled when at least one token are not provided
+   *
+   * For example: conversion rate, fees, etc.
+   */
+  details?: ReactNode;
 
   onChange?: (tokens: PickedTokens) => void;
 }

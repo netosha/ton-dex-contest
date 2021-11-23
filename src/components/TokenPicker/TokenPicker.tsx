@@ -67,7 +67,11 @@ export const TokenRow: React.VFC<TokenRowProps> = ({
 };
 
 // Todo: Decompose it)
-const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
+const TokenPicker: React.VFC<TokenPickerProps> = ({
+  onChange,
+  tokens,
+  details,
+}) => {
   // Index of selecting token
   const [tokenModal, setTokenModal] = React.useState<null | number>(null);
   const [amounts, setAmounts] = React.useState<string[]>(
@@ -104,6 +108,7 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
   const isInsufficientBalance = !!(
     sourceToken &&
     typeof availableBalance === 'number' &&
+    !Number.isNaN(availableBalance) &&
     sourceToken.amount > availableBalance
   );
 
@@ -117,34 +122,15 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
       return x;
     });
 
+    // Handle case, if user want's to type decimal
     const lastChar = amount.slice(-1);
-    if (lastChar === '.' || lastChar === '0') return;
+    const floatDecimal = amount.split('.')[1]?.slice(-1);
+    if (lastChar === '.' || floatDecimal === '0') return;
 
     const newTokens = [...tokens] as PickedTokens;
     const changedItem = newTokens[index]!;
 
-    const otherItems = newTokens.filter(
-      (t) => t?.address && t.address !== changedItem?.address
-    );
-
     const parsedAmount = Number(amount);
-
-    const isSourceToken = index === 0;
-
-    // For testing purposes conversion rate are fixed
-    // Every sourceToken gives 1.51 secondTokens
-    // For ex: 1BNB = 1.51ETH, 7BTC = 10,57DAI and etc.
-    // Not a production-ready solution
-    otherItems.forEach((item) => {
-      const itemIndex = newTokens.findIndex(
-        (t) => t?.address === item?.address
-      );
-      const newItem = newTokens[itemIndex]!;
-      newTokens.splice(itemIndex, 1, {
-        ...newItem,
-        amount: isSourceToken ? 1.51 * parsedAmount : parsedAmount / 1.51,
-      });
-    });
 
     newTokens.splice(index, 1, {
       ...changedItem,
@@ -157,7 +143,7 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
     // Reset amount, because user can submit it with old convert rate
     const newTokens = tokens.map((t) => ({
       ...t,
-      amount: t?.amount ? 0 : t?.amount,
+      amount: 0,
     })) as PickedTokens;
     const changedItem = newTokens[index]!;
 
@@ -167,7 +153,6 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
     });
 
     onChange?.(newTokens);
-    // setTimeout(() => handleAmountChange(index, '0'));
     setTokenModal(null);
   };
 
@@ -208,11 +193,9 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
   }, [address, sourceToken?.address]);
 
   React.useEffect(() => {
-    setAmounts(() => {
-      return tokens.map((t) =>
-        t?.amount === 0 ? '' : t?.amount?.toString() ?? ''
-      );
-    });
+    setAmounts(() =>
+      tokens.map((t) => (t?.amount === 0 ? '' : t?.amount?.toString() ?? ''))
+    );
   }, [tokens]);
 
   return (
@@ -221,8 +204,18 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
         <div className="flex flex-col">
           {status === 'connected' && sourceToken && (
             <div className="w-full flex">
-              <span className="mb-2 text-sm font-semibold text-violet-60">
-                Available: <span className="font-bold">{availableBalance}</span>
+              <span className="flex mb-2 text-sm font-semibold text-violet-60">
+                Available:
+                {typeof availableBalance === 'number' && (
+                  <span
+                    className="ml-1 font-bold cursor-pointer"
+                    onClick={() =>
+                      handleAmountChange(0, availableBalance.toString())
+                    }
+                  >
+                    {availableBalance}
+                  </span>
+                )}
               </span>
             </div>
           )}
@@ -297,25 +290,15 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({ onChange, tokens }) => {
             <ClockIcon className="h-6 w-6 transition-colors hover:text-darkblue" />
           </button>
 
-          <Tooltip
-            disabled={tokens.some((t) => !t)}
-            content={
-              <div className="bg-control flex flex-col gap-1 text-dark w-[15em] py-2 px-4 rounded-md">
-                <span className="text-violet leading-none mb-1 font-bold">
-                  Details
-                </span>
-                <span className="text-sm text-violet-60 leading-none">
-                  <b>1.51 {tokens[1]?.symbol}</b> per <b>{tokens[0]?.symbol}</b>
-                </span>
-                <span className="text-sm font-bold text-violet-60 leading-none">
-                  0.2% fees
-                </span>
-              </div>
-            }
-            position="bottom"
-          >
-            <InformationCircleIcon className="h-6 w-6 transition-colors hover:text-darkblue" />
-          </Tooltip>
+          {details && (
+            <Tooltip
+              disabled={tokens.some((t) => !t)}
+              content={details}
+              position="bottom"
+            >
+              <InformationCircleIcon className="h-6 w-6 transition-colors hover:text-darkblue" />
+            </Tooltip>
+          )}
         </div>
       </div>
 
