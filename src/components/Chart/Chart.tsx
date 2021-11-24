@@ -10,10 +10,10 @@ import { GraphProps } from './Graph.types';
 
 const colors = {
   circleFill: '#ffffff',
-  line: '#f0f0f0',
-  zeroLine: '#ecf0f3',
-  selectLine: '#dfe6eb',
-  text: '#96a2aa',
+  line: '#dddddd',
+  zeroLine: '#bbbbbb',
+  selectLine: '#bbbbbb',
+  text: 'rgba(48, 55, 87, 0.5)',
 };
 
 const Chart: React.VFC<GraphProps> = ({ data }) => {
@@ -41,10 +41,7 @@ const Chart: React.VFC<GraphProps> = ({ data }) => {
   return (
     <div
       ref={containerRef}
-      className={cn(
-        styles.wrapper,
-        'relative w-[840px] h-[320px] bg-control rounded-lg p-4'
-      )}
+      className={cn(styles.wrapper, 'relative w-full h-full')}
     />
   );
 };

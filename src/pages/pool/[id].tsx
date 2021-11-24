@@ -3,6 +3,8 @@ import React from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
 
+import Chart from '@components/Chart';
+import fakeData from '@components/Chart/fakeData';
 import Layout from '@components/Layout';
 import PriceChange from '@components/PriceChange';
 
@@ -55,7 +57,9 @@ const Pool: NextPage = () => {
           </div>
         </div>
 
-        <div className="bg-control rounded-md col-span-1 md:col-span-2" />
+        <div className="bg-control rounded-md col-span-1 md:col-span-2 p-3 h-[20rem]">
+          <Chart data={fakeData} />
+        </div>
       </section>
 
       <section className="mb-2 flex flex-col gap-2">

@@ -17,7 +17,7 @@ const MONTH_NAMES = [
   'Dec',
 ];
 
-const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+// const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 export default function Chart(container) {
   let time;
@@ -25,9 +25,10 @@ export default function Chart(container) {
   // Todo: Make it as func file
   function formatDate(time, short) {
     const date = new Date(time);
-    const s = `${MONTH_NAMES[date.getMonth()]} ${date.getDate()}`;
+    // const s = `${MONTH_NAMES[date.getMonth()]} ${date.getDate()}`;
+    const s = `${date.getHours()}:${(date.getMinutes()<10?'0':'') + date.getMinutes()}`
     if (short) return s;
-    return `${DAY_NAMES[date.getDay()]}, ${s}`;
+    return `${MONTH_NAMES[date.getMonth()]} ${date.getDate()}, ${s}`;
   }
 
   // Todo: Make it as func file
@@ -101,7 +102,7 @@ export default function Chart(container) {
   const canvas = createElement(container, 'canvas');
 
   const context = canvas.getContext('2d');
-  const checksContainer = createElement(container, 'div', styles.checks);
+  // const checksContainer = createElement(container, 'div', styles.checks);
   const popup = createElement(container, 'div', styles.popup);
   popup.style.display = 'none';
   let popupTitle = null;
@@ -124,7 +125,7 @@ export default function Chart(container) {
   const TEXT_X_FADE_DURATION = 200;
 
   const pixelRatio = window.devicePixelRatio;
-  const previewMarginTop = 32 * pixelRatio;
+  const previewMarginTop = 16 * pixelRatio;
 
   // Changed to zero, because preview disabled
   // const previewHeight = 38 * pixelRatio;
@@ -138,11 +139,11 @@ export default function Chart(container) {
   const mainLineWidth = 3 * pixelRatio;
   const circleRadius = 3 * pixelRatio;
   const circleLineWidth = 4 * pixelRatio;
-  const font = `${10 * pixelRatio}px Arial`;
+  const font = `bold ${0.75 * pixelRatio}rem Mulish, --apple-system, Roboto, Ubuntu, sans-serif`;
   const textYMargin = -6 * pixelRatio;
   const textXMargin = 16 * pixelRatio;
-  const textXWidth = 30 * pixelRatio;
-  const textYHeight = 45 * pixelRatio;
+  const textXWidth = 32 * pixelRatio;
+  const textYHeight = 32 * pixelRatio;
   const mainPaddingTop = 0;
   const paddingHor = 0;
   const popupLeftMargin = -45;
@@ -324,7 +325,7 @@ export default function Chart(container) {
     popupValues = [];
     columns = [];
 
-    removeAllChild(checksContainer);
+    // removeAllChild(checksContainer);
     removeAllChild(popup);
     popupTitle = createElement(popup, 'div', styles.title);
 
@@ -362,17 +363,17 @@ export default function Chart(container) {
         // create checkbox
 
         if (data.columns.length > 2) {
-          const label = createElement(
-            checksContainer,
-            'label',
-            styles.checkbox
-          );
-          label.innerText = data.names[name];
+          // const label = createElement(
+          //   checksContainer,
+          //   'label',
+          //   styles.checkbox
+          // );
+          // label.innerText = data.names[name];
 
-          const input = createElement(label, 'input');
-          input.setAttribute('data-id', columns.length - 1);
-          input.checked = true;
-          input.type = 'checkbox';
+          // const input = createElement(label, 'input');
+          // input.setAttribute('data-id', columns.length - 1);
+          // input.checked = true;
+          // input.type = 'checkbox';
           addEventListener(input, 'change', function (e) {
             const id = e.currentTarget.getAttribute('data-id');
             const { checked } = e.currentTarget;
@@ -387,14 +388,14 @@ export default function Chart(container) {
 
             // needRedrawMain = needRedrawPreview = true;
             needRedrawMain = true;
-            updatePreviewRangeY();
+            // updatePreviewRangeY();
             updateMainRangeY();
           });
 
-          let span = createElement(label, 'span', styles.circle);
-          span.style.borderColor = data.colors[name];
-
-          span = createElement(label, 'span', styles.symbol);
+          // let span = createElement(label, 'span', styles.circle);
+          // span.style.borderColor = data.colors[name];
+          //
+          // span = createElement(label, 'span', styles.symbol);
         }
 
         // create popup column
@@ -419,7 +420,7 @@ export default function Chart(container) {
     onResize();
     previewRangeY.value = previewRangeY.toValue;
 
-    setMainMinMax(previewMaxX - previewRangeX / 4, previewMaxX);
+    setMainMinMax(previewMaxX - previewRangeX, previewMaxX);
     mainRangeY.value = mainRangeY.toValue;
     updateMainRangeY();
     // needRedrawMain = needRedrawPreview = true;
@@ -977,3 +978,5 @@ export default function Chart(container) {
     context.stroke();
   }
 }
+
+export {TChart} from './source'
