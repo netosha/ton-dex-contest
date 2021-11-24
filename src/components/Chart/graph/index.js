@@ -978,5 +978,3 @@ export default function Chart(container) {
     context.stroke();
   }
 }
-
-export {TChart} from './source'
