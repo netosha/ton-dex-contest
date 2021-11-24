@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import { CountableToken, Token } from '@src/types';
 
 /**
@@ -12,6 +14,24 @@ export interface TokenPickerProps {
    * Array of picked tokens
    */
   tokens: PickedTokens;
+
+  /**
+   * Type of showed icon and submit button
+   */
+  type: 'swap' | 'stake';
+
+  /**
+   * Show icon with details tooltip in misc button
+   * Disabled when at least one token are not provided
+   *
+   * For example: conversion rate, fees, etc.
+   */
+  details?: ReactNode;
+
+  /**
+   * Show clickcable icon, that shows transactions modal
+   */
+  isTransactionsVisible?: boolean;
 
   onChange?: (tokens: PickedTokens) => void;
 }
