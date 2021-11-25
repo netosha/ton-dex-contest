@@ -16,8 +16,6 @@ const Swap: NextPage = () => {
     const newTokens = [...t];
     const sourceToken = newTokens[0];
 
-    console.log(t, 'from pickers');
-
     const isSourceTokenChanged =
       tokens[0]?.address !== sourceToken?.address ||
       tokens[0]?.amount !== sourceToken?.amount;
@@ -33,9 +31,9 @@ const Swap: NextPage = () => {
             }
           : null
       );
-      console.log(changedTokens);
       return setTokens([sourceToken, ...changedTokens] as PickedTokens);
     }
+
     // In future it can be > 2, we have no warranty that is a changed item
     const otherItem = newTokens[1];
     newTokens.splice(0, 1, {
@@ -60,7 +58,7 @@ const Swap: NextPage = () => {
                 <span className="text-violet leading-none font-bold">
                   Details
                 </span>
-                {tokens.some((t) => !t) ? (
+                {tokens.some((t) => !t?.address) ? (
                   <span className="text-sm text-violet-60">
                     Select pair before getting rate
                   </span>
@@ -79,7 +77,6 @@ const Swap: NextPage = () => {
             }
             tokens={tokens}
             onChange={handleTokensChange}
-            isTransactionsVisible
           />
         </div>
       </div>

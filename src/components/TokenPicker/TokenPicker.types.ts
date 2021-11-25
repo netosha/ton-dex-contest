@@ -28,11 +28,6 @@ export interface TokenPickerProps {
    */
   details?: ReactNode;
 
-  /**
-   * Show clickcable icon, that shows transactions modal
-   */
-  isTransactionsVisible?: boolean;
-
   onChange?: (tokens: PickedTokens) => void;
 }
 
