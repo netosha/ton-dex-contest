@@ -1,13 +1,21 @@
 import React from 'react';
 
+import { uniqBy } from 'lodash';
 import { NextPage } from 'next';
 
 import Layout from '@components/Layout';
 import TokenPicker from '@components/TokenPicker';
-import { PickedTokens } from '@components/TokenPicker/TokenPicker.types';
+import {
+  PickedTokens,
+  TokenPickerStatus,
+} from '@components/TokenPicker/TokenPicker.types';
+import { useSelector } from '@src/hooks';
+import { Button } from '@src/ui';
+import { selectWallet } from '@store/wallet';
 
 const Swap: NextPage = () => {
   const [tokens, setTokens] = React.useState<PickedTokens>([null, null]);
+  const { balances, status, address } = useSelector(selectWallet);
 
   // Conversion rate are hardcoded for now
   const conversionRate = 1.51;
@@ -46,6 +54,55 @@ const Swap: NextPage = () => {
     return setTokens(newTokens as PickedTokens);
   };
 
+  const formStatus = ((): TokenPickerStatus => {
+    const sourceToken = tokens[0];
+    if (status !== 'connected' || !address) {
+      return {
+        buttonText: 'Provide wallet',
+        disabled: true,
+        inputErrors: null,
+      };
+    }
+
+    // If all tokens address are not provided
+    if (tokens.some((t) => !t?.address)) {
+      return { buttonText: 'Select tokens', disabled: true, inputErrors: {} };
+    }
+
+    // If some tokens are selected twice
+    if (uniqBy(tokens, (t) => t!.address).length !== tokens.length) {
+      return {
+        buttonText: 'Duplicated tokens',
+        disabled: true,
+        inputErrors: {},
+      };
+    }
+
+    // If all tokens address are not provided
+    if (!tokens.every((t) => !!t?.amount && t.amount > 0)) {
+      return {
+        buttonText: 'Invalid amount',
+        disabled: true,
+        inputErrors: {},
+      };
+    }
+
+    const sourceBalance = balances[sourceToken!.address];
+    if (sourceToken!.amount! > (sourceBalance ?? 0)) {
+      return {
+        buttonText: 'Insufficient amount',
+        disabled: true,
+        inputErrors: { 0: true },
+      };
+    }
+
+    return {
+      buttonText: 'Swap',
+      disabled: false,
+      inputErrors: {},
+    };
+  })();
+
   return (
     <Layout>
       <div className="flex h-auto my-auto flex-col gap-4 items-center justify-center w-full">
@@ -53,6 +110,13 @@ const Swap: NextPage = () => {
           <h1 className="text-2xl font-black text-violet">Exchange tokens</h1>
           <TokenPicker
             type="swap"
+            button={
+              <Button className="mt-2" disabled={formStatus.disabled}>
+                {formStatus.buttonText}
+              </Button>
+            }
+            disabled={formStatus.disabled}
+            inputErrors={formStatus.inputErrors}
             details={
               <div className="bg-control flex flex-col gap-1 text-dark w-[15em] py-2 px-4 rounded-md">
                 <span className="text-violet leading-none font-bold">

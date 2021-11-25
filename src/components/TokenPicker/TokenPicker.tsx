@@ -28,7 +28,11 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
   onChange,
   tokens,
   details,
+  button,
+  inputErrors = {},
 }) => {
+  const dispatch = useDispatch();
+
   // Index of selecting token
   const [tokenModal, setTokenModal] = React.useState<null | number>(null);
   const [amounts, setAmounts] = React.useState<string[]>(
@@ -39,10 +43,10 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
   const [transactionsModal, setTransactionsModal] =
     React.useState<boolean>(false);
 
+  // Tokens list filter
   const [filter, setFilter] = React.useState<string>('');
 
   const isFilterValidAddress = !!parseFriendlyAddress(filter).hashPart;
-  const dispatch = useDispatch();
 
   const knownTokens = Object.values(useSelector(selectTokens));
   const { balances, status, address } = useSelector(selectWallet);
@@ -58,18 +62,6 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
 
   const sourceToken = tokens[0];
   const otherTokens = tokens.slice(1);
-
-  const availableBalance: null | number | undefined = sourceToken
-    ? balances[sourceToken?.address]
-    : null;
-
-  const isInsufficientBalance = !!(
-    sourceToken &&
-    typeof availableBalance === 'number' &&
-    !Number.isNaN(availableBalance) &&
-    sourceToken.amount &&
-    sourceToken.amount > availableBalance
-  );
 
   const handleAmountChange = (index: number, amount: string) => {
     const regEx = /^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)$/;
@@ -120,27 +112,6 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
     setFilter('');
   };
 
-  const { error, message } = (() => {
-    if (status !== 'connected' || !address) {
-      return { error: true, message: `Provide wallet` };
-    }
-    if (tokens.some((t) => !t?.address)) {
-      return { error: true, message: 'Select a token' };
-    }
-    if (
-      tokens.some(
-        (t) => tokens.filter((_) => _?.address === t?.address).length > 1
-      )
-    ) {
-      return { error: true, message: 'Duplicated tokens' };
-    }
-    if (isInsufficientBalance) {
-      return { error: true, message: 'Insufficient amount' };
-    }
-
-    return { error: false, message: type };
-  })();
-
   // Update available source balance on account or first token change
   React.useEffect(() => {
     if (sourceToken && address && status === 'connected') {
@@ -165,7 +136,7 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
           {status === 'connected' && sourceToken?.address && (
             <BalanceRow
               onBalanceClick={(b) => handleAmountChange(0, b.toString())}
-              address={sourceToken.address}
+              token={sourceToken.address}
             />
           )}
 
@@ -174,7 +145,7 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
               className="font-bold"
               placeholder="0.0"
               value={amounts[0]}
-              error={isInsufficientBalance}
+              error={!!inputErrors?.[0]}
               onChange={(e) => handleAmountChange(0, e.target.value)}
             />
             <Button
@@ -205,20 +176,14 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
                 onBalanceClick={(b) =>
                   handleAmountChange(index + 1, b.toString())
                 }
-                address={t?.address}
+                token={t?.address}
               />
             )}
             <div className="flex gap-2">
               <Input
                 className="font-bold"
                 value={amounts[index + 1]}
-                error={
-                  type === 'stake' &&
-                  !!t?.address &&
-                  !!t?.amount &&
-                  !!balances[t.address] &&
-                  t.amount > balances[t.address]!
-                }
+                error={!!inputErrors?.[index + 1]}
                 onChange={(e) => handleAmountChange(index + 1, e.target.value)}
                 placeholder="0.0"
               />
@@ -238,9 +203,9 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
             </div>
           </div>
         ))}
-        <Button disabled={error} className="mt-2 capitalize">
-          {message}
-        </Button>
+
+        {button}
+
         <div className={cn('w-full gap-4 flex justify-center text-blue')}>
           <Tooltip
             content={

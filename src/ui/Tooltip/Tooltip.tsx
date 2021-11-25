@@ -47,7 +47,7 @@ const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
           onMouseLeave={onMouseLeave}
           className={cn(
             className,
-            'absolute transition-opacity transform',
+            'absolute transition-opacity transform z-10',
             lastOut.current && !isOpen && 'opacity-0',
             position === 'bottom' && 'top-full+2 left-1/2  -translate-x-1/2',
             position === 'top' && 'bottom-full+2  left-1/2  -translate-x-1/2',

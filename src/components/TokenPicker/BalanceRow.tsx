@@ -5,36 +5,28 @@ import { useDispatch, useSelector } from '@src/hooks';
 import { getTokenBalance, selectWallet } from '@store/wallet';
 
 export type BalanceRowProps = {
-  address: string;
+  token: string;
   onBalanceClick?: (balance: number) => void;
 };
 
 const BalanceRow: React.VFC<BalanceRowProps> = (props) => {
-  const { address, onBalanceClick } = props;
+  const { token, onBalanceClick } = props;
   const dispatch = useDispatch();
 
-  const {
-    balances,
-    address: walletAddress,
-    status,
-  } = useSelector(selectWallet);
+  const { balances, address, status } = useSelector(selectWallet);
 
   React.useEffect(() => {
-    if (
-      walletAddress &&
-      status === 'connected' &&
-      balances[address] === undefined
-    ) {
-      dispatch(getTokenBalance(address));
+    if (address && status === 'connected' && balances[token] === undefined) {
+      dispatch(getTokenBalance(token));
     }
-  }, [address, walletAddress]);
+  }, [token, address]);
 
   // Show nothing if token addres are not provided or wallet not connected
-  if (!walletAddress || status !== 'connected' || !address) {
+  if (!address || status !== 'connected' || !token) {
     return null;
   }
 
-  const availableBalance = balances[address];
+  const availableBalance = balances[token];
 
   return (
     <div className="w-full flex">

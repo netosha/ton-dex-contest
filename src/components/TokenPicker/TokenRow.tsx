@@ -13,10 +13,10 @@ import {
 
 const TokenRow: React.VFC<TokenRowProps> = ({ token, onClick, isActive }) => {
   const dispatch = useDispatch();
-  const wallet = useSelector(selectWallet);
+  const { address, status } = useSelector(selectWallet);
   const balances = useSelector(selectTokenBalances);
 
-  const isWalletProvided = wallet.address && wallet.status === 'connected';
+  const isWalletProvided = address && status === 'connected';
   const balance = balances[token.address];
 
   React.useEffect(() => {
@@ -24,7 +24,9 @@ const TokenRow: React.VFC<TokenRowProps> = ({ token, onClick, isActive }) => {
     if (isWalletProvided && balance === undefined) {
       dispatch(getTokenBalance(token.address));
     }
-  }, []);
+  }, [address]);
+
+  console.log(balance, 'tok balance');
 
   return (
     <button
@@ -38,7 +40,8 @@ const TokenRow: React.VFC<TokenRowProps> = ({ token, onClick, isActive }) => {
       <span>{token.name}</span>
       {isWalletProvided && (
         <span className="ml-auto">
-          {typeof balance === 'number' ? balance.toFixed(2) : <Loader />}
+          {typeof balance === 'number' && balance.toFixed(2)}
+          {balance === null && <Loader />}
         </span>
       )}
     </button>

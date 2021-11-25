@@ -1,13 +1,18 @@
 import React from 'react';
 
 import { QuestionMarkCircleIcon } from '@heroicons/react/solid';
+import { uniqBy } from 'lodash';
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
 
 import Layout from '@components/Layout';
 import TokenPicker from '@components/TokenPicker';
-import { PickedTokens } from '@components/TokenPicker/TokenPicker.types';
-import { Tooltip } from '@src/ui';
+import {
+  PickedTokens,
+  TokenPickerStatus,
+} from '@components/TokenPicker/TokenPicker.types';
+import { useSelector } from '@src/hooks';
+import { Button, Tooltip } from '@src/ui';
+import { selectWallet } from '@store/wallet';
 
 const FeeTooltip: React.VFC = () => {
   return (
@@ -27,20 +32,88 @@ const ShareTooltip: React.VFC<{ share: string }> = ({ share }) => {
 };
 
 const Create: NextPage = () => {
-  const { query } = useRouter();
+  // const { query } = useRouter();
   const [tokens, setTokens] = React.useState<PickedTokens>([null, null]);
+  const { balances, status, address } = useSelector(selectWallet);
 
-  console.log(query, tokens);
+  // console.log(query, tokens);
 
   // Conversion rate are hardcoded for now
   const conversionRate = 1.51;
+
+  const formStatus = ((): TokenPickerStatus => {
+    if (status !== 'connected' || !address) {
+      return {
+        buttonText: 'Provide wallet',
+        disabled: true,
+        inputErrors: null,
+      };
+    }
+
+    // If all tokens address are not provided
+    if (tokens.some((t) => !t?.address)) {
+      return { buttonText: 'Select tokens', disabled: true, inputErrors: {} };
+    }
+
+    // If some tokens are selected twice
+    if (uniqBy(tokens, (t) => t!.address).length !== tokens.length) {
+      return {
+        buttonText: 'Duplicated tokens',
+        disabled: true,
+        inputErrors: {},
+      };
+    }
+
+    // If some amount are invalid
+    if (!tokens.every((t) => !!t?.amount)) {
+      return {
+        buttonText: 'Provide all amounts',
+        disabled: true,
+        inputErrors: {},
+      };
+    }
+
+    // Check if some amount lower than balance
+    if (
+      tokens.some(
+        (t) => balances[t!.address] && balances[t!.address]! < t!.amount!
+      )
+    ) {
+      const inputErrors = tokens.reduce(
+        (prev, t, i) =>
+          balances[t!.address]! < t!.amount! ? { ...prev, [i]: true } : prev,
+        {}
+      );
+      return {
+        buttonText: 'Insufficient amount',
+        disabled: true,
+        inputErrors,
+      };
+    }
+
+    return {
+      buttonText: 'Swap',
+      disabled: false,
+      inputErrors: {},
+    };
+  })();
 
   return (
     <Layout>
       <div className="flex h-auto my-auto flex-col gap-4 items-center justify-center w-full">
         <div className="flex flex-col gap-3">
           <h1 className="text-2xl font-black text-violet">Add liquidity</h1>
-          <TokenPicker onChange={setTokens} tokens={tokens} type={'stake'} />
+          <TokenPicker
+            button={
+              <Button className="mt-2" disabled={formStatus.disabled}>
+                {formStatus.buttonText}
+              </Button>
+            }
+            inputErrors={formStatus.inputErrors}
+            onChange={setTokens}
+            tokens={tokens}
+            type={'stake'}
+          />
           {/* If every token are provided */}
           {tokens.every((t) => t?.address) && (
             <>
