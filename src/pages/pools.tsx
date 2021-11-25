@@ -11,7 +11,12 @@ import PoolCard from '@components/PoolCard';
 import Table, { OrderBy, Row } from '@components/Table';
 import { useDispatch, useSelector } from '@src/hooks';
 import { Button } from '@src/ui';
-import { getPools, selectPools } from '@store/pool';
+import {
+  getPools,
+  getWalletPools,
+  selectPools,
+  selectWalletPools,
+} from '@store/pool';
 import { selectWallet } from '@store/wallet';
 
 const columns = [
@@ -22,8 +27,9 @@ const columns = [
 ];
 
 const Pools: NextPage = () => {
-  const { status } = useSelector(selectWallet);
-  const { pools, isPoolsLoading: isLoading } = useSelector(selectPools);
+  const { status, address } = useSelector(selectWallet);
+  const { pools, isPoolsLoading } = useSelector(selectPools);
+  const { walletPools, isWalletPoolsLoading } = useSelector(selectWalletPools);
   const [orderBy, setOrderBy] = React.useState<null | OrderBy>(null);
 
   const dispatch = useDispatch();
@@ -60,6 +66,13 @@ const Pools: NextPage = () => {
     }
   }, []);
 
+  React.useEffect(() => {
+    // Todo: replace better nicer update rule
+    if (status === 'connected' && address) {
+      dispatch(getWalletPools({}));
+    }
+  }, [status, address]);
+
   return (
     <Layout>
       <h1 className="text-4xl mt-4 font-black text-violet">Your pools</h1>
@@ -74,13 +87,23 @@ const Pools: NextPage = () => {
           <>
             <div
               className={cn(
-                'grid grid-cols-2 gap-4 mb-4',
+                'grid auto-rows-max grid-cols-2  auto-rows-max gap-4 mb-4',
                 'md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6'
               )}
             >
-              {Array.from({ length: 5 }).map((_p, i) => (
-                <PoolCard key={i} />
-              ))}
+              {walletPools &&
+                Object.values(walletPools).map((p) => (
+                  <Link href={`/pool/${p.id}`} key={p.id}>
+                    <PoolCard pool={p} />
+                  </Link>
+                ))}
+              {isWalletPoolsLoading &&
+                Array.from({ length: 3 }).map((_p, i) => (
+                  <div
+                    key={i}
+                    className="w-full rounded-md animate-shine h-[7.5rem]"
+                  />
+                ))}
             </div>
             <Link href="/pool/create">
               <Button>Create new pool</Button>
@@ -90,7 +113,7 @@ const Pools: NextPage = () => {
       </div>
       <h1 className="text-4xl mt-4 font-black text-violet">All pools</h1>
       <Table
-        isLoading={isLoading}
+        isLoading={isPoolsLoading}
         columns={columns}
         rows={rows}
         layout="1rem minmax(70px, 4fr) minmax(70px, 1fr) minmax(70px, 1fr)"

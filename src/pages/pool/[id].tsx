@@ -58,14 +58,6 @@ const Pool: NextPage = () => {
         <div className="bg-control rounded-md col-span-1 md:col-span-2" />
       </section>
 
-      <section className="mb-2 flex flex-col gap-2">
-        <h2 className="text-3xl font-black text-violet">Your liquidity</h2>
-        <div className="w-full grid grid-cols-2 h-80">
-          <div className="w-full h-full bg-control rounded-md">c123</div>
-          <div>c123</div>
-        </div>
-      </section>
-
       <div className="w-full">
         <h2 className="text-3xl font-black text-violet">Transactions</h2>
       </div>

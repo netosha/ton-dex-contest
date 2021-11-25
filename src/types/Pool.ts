@@ -24,11 +24,7 @@ export interface Pool {
 export interface WalletPool extends Pool {
   ownerAddress: string;
   fee: number;
-
-  /**
-   * Wallet's USD locked in pool
-   */
-  walletLocked: number;
+  share: number;
 
   /**
    * Locked tokens pair

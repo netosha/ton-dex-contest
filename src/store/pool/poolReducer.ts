@@ -6,19 +6,23 @@ import * as actions from './poolActions';
 
 export type PoolState = {
   pools: Pool[];
-  walletPools: WalletPool[];
   isPoolsLoading: boolean;
+  walletPools: {
+    [poolId: string]: WalletPool;
+  };
+  isWalletPoolsLoading: boolean;
 };
 
 export const initialState: PoolState = {
   pools: [],
-  walletPools: [],
   isPoolsLoading: false,
+  walletPools: {},
+  isWalletPoolsLoading: false,
 };
 
 export const poolReducer = createReducer(initialState, (builder) =>
-  /* Get pools list flow */
   builder
+    /* Get pools list */
     .addCase(actions.getPools.pending, (state) => {
       state.isPoolsLoading = true;
     })
@@ -28,5 +32,24 @@ export const poolReducer = createReducer(initialState, (builder) =>
     })
     .addCase(actions.getPools.rejected, (state) => {
       state.isPoolsLoading = false;
+    })
+
+    /* Get wallet pools */
+    .addCase(actions.getWalletPools.pending, (state) => {
+      state.isWalletPoolsLoading = true;
+    })
+    .addCase(actions.getWalletPools.fulfilled, (state, action) => {
+      const reducedPools = action.payload.reduce(
+        (prev, cur) => ({ ...prev, [cur.id]: cur }),
+        {}
+      );
+      return {
+        ...state,
+        walletPools: { ...state.walletPools, ...reducedPools },
+        isWalletPoolsLoading: false,
+      };
+    })
+    .addCase(actions.getWalletPools.rejected, (state) => {
+      state.isWalletPoolsLoading = false;
     })
 );

@@ -11,3 +11,10 @@ export const getPools = createAsyncThunk(
     return services.pools.getPools(offset, limit);
   }
 );
+
+export const getWalletPools = createAsyncThunk(
+  'pool/getWalletPools',
+  async ({ offset = 0, limit = 20 }: { offset?: number; limit?: number }) => {
+    return services.pools.getWalletPools(offset, limit);
+  }
+);

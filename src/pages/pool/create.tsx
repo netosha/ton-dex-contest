@@ -65,7 +65,7 @@ const Create: NextPage = () => {
     }
 
     // If some amount are invalid
-    if (!tokens.every((t) => !!t?.amount)) {
+    if (!tokens.every((t) => typeof t?.amount === 'number')) {
       return {
         buttonText: 'Provide all amounts',
         disabled: true,
@@ -76,7 +76,7 @@ const Create: NextPage = () => {
     // Check if some amount lower than balance
     if (
       tokens.some(
-        (t) => balances[t!.address] && balances[t!.address]! < t!.amount!
+        (t) => balances[t!.address] === 0 || balances[t!.address]! < t!.amount!
       )
     ) {
       const inputErrors = tokens.reduce(
@@ -92,7 +92,7 @@ const Create: NextPage = () => {
     }
 
     return {
-      buttonText: 'Swap',
+      buttonText: 'Supply',
       disabled: false,
       inputErrors: {},
     };
@@ -105,7 +105,11 @@ const Create: NextPage = () => {
           <h1 className="text-2xl font-black text-violet">Add liquidity</h1>
           <TokenPicker
             button={
-              <Button className="mt-2" disabled={formStatus.disabled}>
+              <Button
+                onClick={() => console.log(balances, tokens)}
+                className="mt-2"
+                disabled={formStatus.disabled}
+              >
                 {formStatus.buttonText}
               </Button>
             }

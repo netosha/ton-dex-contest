@@ -1,4 +1,4 @@
-import { Pool, PricedToken } from '@src/types';
+import { Pool, PricedToken, WalletPool } from '@src/types';
 import { popularTokens } from '@src/utils';
 
 export const pricedTokens: PricedToken[] = popularTokens.map((t) => ({
@@ -35,5 +35,40 @@ export const pools: Pool[] = [
     volume: 2.7,
     totalLocked: 12,
     pair: [pricedTokens[0]!, pricedTokens[3]!],
+  },
+];
+
+export const walletPools: WalletPool[] = [
+  {
+    ...pools[0]!,
+    ownerAddress: 'EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N',
+    fee: 0.2,
+    share: 0.001,
+    locked: [
+      {
+        ...pools[0]!.pair[0]!,
+        amount: 15,
+      },
+      {
+        ...pools[0]!.pair[1]!,
+        amount: 200,
+      },
+    ],
+  },
+  {
+    ...pools[1]!,
+    ownerAddress: 'EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N',
+    fee: 0.1,
+    share: 0.0012,
+    locked: [
+      {
+        ...pools[1]!.pair[0]!,
+        amount: 321,
+      },
+      {
+        ...pools[1]!.pair[1]!,
+        amount: 100,
+      },
+    ],
   },
 ];

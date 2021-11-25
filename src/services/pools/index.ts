@@ -1,4 +1,4 @@
 import getPools from './getPools';
-import getUserPools from './getUserPools';
+import getWalletPools from './getWalletPools';
 
-export { getUserPools, getPools };
+export { getWalletPools, getPools };
