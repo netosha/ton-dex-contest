@@ -35,3 +35,11 @@ export interface WalletPool extends Pool {
    */
   locked: [CountableToken, CountableToken];
 }
+
+// Todo: Make types for other properties
+export interface PoolGraphData {
+  columns: Array<Array<string | Date | number>>;
+  types: any;
+  names: any;
+  colors: any;
+}

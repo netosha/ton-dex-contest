@@ -28,3 +28,11 @@ export const selectWalletPools = createSelector(
     isWalletPoolsLoading,
   })
 );
+
+/**
+ * Selects graph data for pool
+ */
+export const selectPoolGraphData =
+  (id: string) =>
+  ({ pool }: RootState) =>
+    pool.detailedPools[id]?.graphData;

@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { DetailedPool, Pool, WalletPool } from '@src/types';
+import { Pool, WalletPool, DetailedPool } from '@src/types';
 
 import * as actions from './poolActions';
 
@@ -35,6 +35,7 @@ export const initialState: PoolState = {
 };
 
 export const poolReducer = createReducer(initialState, (builder) =>
+  /* Get pools list flow */
   builder
     /* Get pools list */
     .addCase(actions.getPools.pending, (state) => {
@@ -46,6 +47,12 @@ export const poolReducer = createReducer(initialState, (builder) =>
     })
     .addCase(actions.getPools.rejected, (state) => {
       state.isPoolsLoading = false;
+    })
+
+    /* Get pool graph data */
+    .addCase(actions.getPoolGraphData.fulfilled, (state, action) => {
+      const { id, poolGraphData } = action.payload;
+      state.detailedPools[id]!.graphData = poolGraphData;
     })
 
     /* Get wallet pools */

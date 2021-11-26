@@ -1,0 +1,113 @@
+/* popup */
+
+.popup {
+  position: absolute;
+
+  max-width: 166px;
+  padding: 6px 2px 4px;
+  pointer-events: none;
+
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px 1px #d8d8d8;
+}
+
+.popup .title {
+  margin-right: 8px;
+  margin-left: 8px;
+  font-size: 12px;
+}
+
+.popup .column {
+  float: left;
+  margin-top: 8px;
+  margin-right: 8px;
+  margin-left: 8px;
+}
+
+.popup .value {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.popup .label {
+  margin-bottom: 1px;
+  font-size: 10px;
+}
+
+/* CHECK */
+
+.checks {
+  padding-right: 11px;
+  padding-left: 11px;
+}
+
+.checkbox {
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+  float: left;
+
+  padding: 9px 14px 8px 37px;
+  margin-top: 12px;
+
+  margin-right: 14px;
+  font-size: 13px;
+
+  color: #43484b;
+  cursor: pointer;
+  border: 1px solid #e6ecf0;
+  border-radius: 16px;
+}
+
+.checkbox input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.checkbox .circle {
+  position: absolute;
+  top: 6px;
+  left: 7px;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border: 1px solid #3cc23f;
+  border-radius: 50%;
+  transition: border-width 0.3s linear;
+}
+
+.checkbox input:checked ~ .circle {
+  border-width: 10px;
+}
+
+.checkbox .symbol {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: block;
+
+  width: 10px;
+  height: 10px;
+  background-repeat: no-repeat;
+
+  background-size: cover;
+
+  opacity: 0;
+  transition: opacity 0.3s linear, transform 0.3s linear;
+
+  -webkit-transform: scale(0.1, 0.1);
+  -ms-transform: scale(0.1, 0.1);
+  transform: scale(0.1, 0.1);
+}
+
+.checkbox input:checked ~ .symbol {
+  opacity: 1;
+  -webkit-transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  transform: scale(1, 1);
+}

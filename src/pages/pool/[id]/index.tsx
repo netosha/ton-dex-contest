@@ -4,13 +4,24 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import Chart from '@components/Chart';
 import Layout from '@components/Layout';
 import PriceChange from '@components/PriceChange';
+import { useDispatch, useSelector } from '@src/hooks';
+import { getPoolGraphData, selectPoolGraphData } from '@store/pool';
 import { Button } from '@src/ui';
 
 const Pool: NextPage = () => {
   const { query } = useRouter();
-  const { id } = query;
+  const { id } = query
+  const graphData = useSelector(selectPoolGraphData(id as string));
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    if (!graphData) {
+      dispatch(getPoolGraphData(id as string));
+    }
+  }, []);
+
   return (
     <Layout>
       <section className="text-4xl mt-4 font-black text-violet">
@@ -64,7 +75,9 @@ const Pool: NextPage = () => {
           </div>
         </div>
 
-        <div className="bg-control rounded-md col-span-1 md:col-span-2" />
+        <div className="bg-control rounded-md col-span-1 md:col-span-2 p-3 h-[20rem]">
+          <Chart data={graphData} />
+        </div>
       </section>
 
       <div className="w-full">
