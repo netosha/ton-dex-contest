@@ -11,3 +11,14 @@ export const getPools = createAsyncThunk(
     return services.pools.getPools(offset, limit);
   }
 );
+
+/**
+ * Fetch pool data for graph
+ */
+export const getPoolGraphData = createAsyncThunk(
+  'pool/getPoolGraphData',
+  async (id: string) => {
+    const poolGraphData = await services.pools.getPoolGraphData();
+    return { id, poolGraphData };
+  }
+);
