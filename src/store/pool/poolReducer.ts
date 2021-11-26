@@ -1,12 +1,25 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { Pool, WalletPool } from '@src/types';
+import { DetailedPool, Pool, WalletPool } from '@src/types';
 
 import * as actions from './poolActions';
 
 export type PoolState = {
+  /**
+   * Loaded pools from pools list
+   */
   pools: Pool[];
   isPoolsLoading: boolean;
+
+  /**
+   * Pool with additional info (like graphs, transactions, etc.)
+   *
+   * If detailed pool is null - it's loading
+   */
+  detailedPools: {
+    [id: string]: DetailedPool | null;
+  };
+
   walletPools: {
     [poolId: string]: WalletPool;
   };
@@ -18,6 +31,7 @@ export const initialState: PoolState = {
   isPoolsLoading: false,
   walletPools: {},
   isWalletPoolsLoading: false,
+  detailedPools: {},
 };
 
 export const poolReducer = createReducer(initialState, (builder) =>

@@ -2,11 +2,15 @@ import React from 'react';
 
 import { NextPage } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import Layout from '@components/Layout';
 import PriceChange from '@components/PriceChange';
+import { Button } from '@src/ui';
 
 const Pool: NextPage = () => {
+  const { query } = useRouter();
+  const { id } = query;
   return (
     <Layout>
       <section className="text-4xl mt-4 font-black text-violet">
@@ -16,6 +20,11 @@ const Pool: NextPage = () => {
         <span className="text-violet-30 mx-2">/</span>
         <Link href="/tokens">
           <a className="transition-colors hover:text-blue">WETH</a>
+        </Link>
+      </section>
+      <section className="py-2">
+        <Link href={`/pool/${id}/manage`}>
+          <Button className="font-bold">Manage liquidity</Button>
         </Link>
       </section>
       <section className="min-h-[20rem] w-full grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -6,7 +6,7 @@ import { ButtonProps } from './Button.types';
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (props, ref) => {
-    const { children, className, outline, disabled, round, error, ...rest } =
+    const { children, className, outline, disabled, round, danger, ...rest } =
       props;
     return (
       <button
@@ -17,7 +17,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             'bg-transparent transition-shadow !text-blue shadow-border-blue hover:bg-transparent hover:shadow-border-darkblue hover:!text-darkblue',
           disabled && 'bg-gray hover:bg-gray cursor-not-allowed',
           round && 'rounded-full',
-          error && `transition-shadow !shadow-border-red`,
+          danger && `transition-shadow !bg-red`,
           className
         )}
         disabled={disabled}

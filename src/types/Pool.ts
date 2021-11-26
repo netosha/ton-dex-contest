@@ -21,6 +21,10 @@ export interface Pool {
   pair: [Token, Token];
 }
 
+export interface DetailedPool extends Pool {
+  graphData?: any | null;
+}
+
 export interface WalletPool extends Pool {
   ownerAddress: string;
   fee: number;

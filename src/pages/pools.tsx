@@ -68,7 +68,11 @@ const Pools: NextPage = () => {
 
   React.useEffect(() => {
     // Todo: replace better nicer update rule
-    if (status === 'connected' && address) {
+    if (
+      status === 'connected' &&
+      address &&
+      !Object.entries(walletPools).length
+    ) {
       dispatch(getWalletPools({}));
     }
   }, [status, address]);
