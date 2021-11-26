@@ -2,13 +2,25 @@ import React from 'react';
 
 import { NextPage } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import Chart from '@components/Chart';
-import fakeData from '@components/Chart/fakeData';
 import Layout from '@components/Layout';
 import PriceChange from '@components/PriceChange';
+import { useDispatch, useSelector } from '@src/hooks';
+import { getPoolGraphData, selectPoolGraphData } from '@store/pool';
 
 const Pool: NextPage = () => {
+  const router = useRouter();
+  const { id } = router.query;
+  const graphData = useSelector(selectPoolGraphData(id as string));
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    if (!graphData) {
+      dispatch(getPoolGraphData(id as string));
+    }
+  }, []);
+
   return (
     <Layout>
       <section className="text-4xl mt-4 font-black text-violet">
@@ -58,7 +70,7 @@ const Pool: NextPage = () => {
         </div>
 
         <div className="bg-control rounded-md col-span-1 md:col-span-2 p-3 h-[20rem]">
-          <Chart data={fakeData} />
+          <Chart data={graphData} />
         </div>
       </section>
 

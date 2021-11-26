@@ -2,9 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import cn from 'clsx';
 
+import Loader from '@components/Loader';
+
 import styles from './Chart.module.scss';
+// TS is disabled because the external module is written in vanilla js
 // @ts-ignore
-// eslint-disable-next-line import/extensions
 import Graph from './graph';
 import { GraphProps } from './Graph.types';
 
@@ -19,30 +21,29 @@ const colors = {
 const Chart: React.VFC<GraphProps> = ({ data }) => {
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const chartRef = useRef<any>(null);
 
   useEffect(() => {
-    const chart = new Graph(containerRef.current);
-    chartRef.current = chart;
-    chart.setColors(colors);
-  }, []);
-
-  useEffect(() => {
+    const graph = new Graph(containerRef.current);
     if (data) {
-      chartRef.current.setData(data);
+      graph.setColors(colors);
+      graph.setData(data);
       setIsLoading(false);
     } else {
+      graph.destroy();
       setIsLoading(true);
     }
   }, [data]);
 
-  if (isLoading) return <h1>Loading...</h1>;
-
   return (
     <div
       ref={containerRef}
-      className={cn(styles.wrapper, 'relative w-full h-full')}
-    />
+      className={cn(
+        styles.wrapper,
+        'relative w-full h-full flex justify-center'
+      )}
+    >
+      {isLoading && <Loader className="my-auto" />}
+    </div>
   );
 };
 

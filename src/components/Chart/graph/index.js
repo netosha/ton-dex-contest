@@ -314,6 +314,7 @@ export default function Chart(container) {
   };
 
   this.setData = (newData) => {
+    destroyed = false;
     function findNameOfX(types) {
       for (const name in types) {
         if (types[name] === 'x') return name;
