@@ -29,6 +29,18 @@ export const selectWalletPools = createSelector(
   })
 );
 
+const selectItemId = (_st: any, itemId: any) => itemId;
+
+/**
+ * Select Detailed Pool data
+ */
+export const selectDetailedPool = createSelector(
+  [selectPool, selectItemId],
+  ({ detailedPools }, id: string) => {
+    return detailedPools[id];
+  }
+);
+
 /**
  * Selects graph data for pool
  */

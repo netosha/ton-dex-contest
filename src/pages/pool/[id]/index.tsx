@@ -4,79 +4,55 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import Chart from '@components/Chart';
 import Layout from '@components/Layout';
-import PriceChange from '@components/PriceChange';
+import ManageButton from '@components/ManageButton';
+import PoolInfo from '@components/PoolInfo';
 import { useDispatch, useSelector } from '@src/hooks';
-import { getPoolGraphData, selectPoolGraphData } from '@store/pool';
-import { Button } from '@src/ui';
+import { getPool, selectDetailedPool } from '@store/pool';
+import { selectWallet } from '@store/wallet';
 
 const Pool: NextPage = () => {
-  const { query } = useRouter();
-  const { id } = query
-  const graphData = useSelector(selectPoolGraphData(id as string));
   const dispatch = useDispatch();
+  const { query } = useRouter();
+  const { id } = query;
+  const { status, address } = useSelector(selectWallet);
+  const pool = useSelector((state) => selectDetailedPool(state, id as string));
+
   React.useEffect(() => {
-    if (!graphData) {
-      dispatch(getPoolGraphData(id as string));
-    }
+    dispatch(getPool(id as string));
   }, []);
 
   return (
     <Layout>
       <section className="text-4xl mt-4 font-black text-violet">
-        <Link href="/tokens">
-          <a className="transition-colors hover:text-blue">WBTC</a>
-        </Link>
-        <span className="text-violet-30 mx-2">/</span>
-        <Link href="/tokens">
-          <a className="transition-colors hover:text-blue">WETH</a>
-        </Link>
+        {pool ? (
+          <>
+            <Link href="/tokens">
+              <a className="transition-colors hover:text-blue">
+                {pool.pair[0].symbol}
+              </a>
+            </Link>
+            <span className="text-violet-30 mx-2">/</span>
+            <Link href="/tokens">
+              <a className="transition-colors hover:text-blue">
+                {pool.pair[1].symbol}
+              </a>
+            </Link>
+          </>
+        ) : (
+          <div className="h-10 my-1 w-64 animate-shine rounded-md" />
+        )}
       </section>
-      <section className="py-2">
-        <Link href={`/pool/${id}/manage`}>
-          <Button className="font-bold">Manage liquidity</Button>
-        </Link>
+      <section>
+        <ManageButton pool={pool} address={address} status={status} />
       </section>
+
       <section className="min-h-[20rem] w-full grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="w-full grid gap-4 col-span-1">
-          <div className="flex flex-col bg-control rounded-md w-full p-3 relative">
-            <span className="text-violet-50 z-20 font-bold	leading-none">
-              Total Liquidity
-            </span>
-            <span className="text-blue font text-3xl mt-auto leading-none font-extrabold">
-              $1 424 123
-            </span>
-            <div className="absolute right-3 bottom-3">
-              <PriceChange type={'rise'} value={5.12} />
-            </div>
-          </div>
-          <div className="flex flex-col bg-control rounded-md w-full p-3 relative">
-            <span className="text-violet-50 z-20 font-bold	leading-none">
-              Volume
-            </span>
-            <span className="text-blue font text-3xl mt-auto leading-none font-extrabold">
-              $412 124
-            </span>
-            <div className="absolute right-3 bottom-3">
-              <PriceChange type={'fall'} value={11.12} />
-            </div>
-          </div>
-          <div className="flex flex-col bg-control rounded-md w-full p-3 relative">
-            <span className="text-violet-50 z-20 font-bold	leading-none">
-              Fees
-            </span>
-            <span className="text-blue font text-3xl mt-auto leading-none font-extrabold">
-              $4 412
-            </span>
-            <div className="absolute right-3 bottom-3">
-              <PriceChange type={'rise'} value={5.12} />
-            </div>
-          </div>
+          <PoolInfo pool={pool} />
         </div>
-
         <div className="bg-control rounded-md col-span-1 md:col-span-2 p-3 h-[20rem]">
-          <Chart data={graphData} />
+          {/* <Chart  /> */}
         </div>
       </section>
 
@@ -86,5 +62,12 @@ const Pool: NextPage = () => {
     </Layout>
   );
 };
+
+// Little trick to pass query params in router without re-rendering
+// Check query logic before remove and remove, if needed
+// https://nextjs.org/docs/api-reference/next/router#router-object
+export async function getServerSideProps() {
+  return { props: {} };
+}
 
 export default Pool;

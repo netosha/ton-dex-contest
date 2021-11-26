@@ -1,0 +1,61 @@
+@mixin thumb_style {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: -8px;
+  background: white;
+  border: 0 transparent;
+  border-radius: 9999px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+
+}
+
+@mixin track_style {
+  width: 100%;
+  height: 0.5rem;
+  cursor: pointer;
+  background: linear-gradient(
+                  to right,
+                  var(--blue) var(--progress),
+                  var(--gray) var(--progress)
+  );
+  border: 0 transparent;
+  border-radius: 0.125rem;
+}
+
+.range {
+  height: 2rem;
+  margin: 0;
+
+  background-color: transparent;
+  -webkit-appearance: none;
+
+  &::-webkit-slider-runnable-track {
+    @include track_style;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+
+    @include thumb_style;
+  }
+
+  &::-moz-range-thumb {
+    -moz-appearance: none;
+
+    @include thumb_style;
+  }
+
+  &::-moz-range-track {
+    @include track_style;
+  }
+
+  &::-ms-track {
+    color: transparent;
+
+    /* Hides the slider so custom styles can be added */
+    background: transparent;
+    border-color: transparent;
+
+    @include track_style;
+  }
+}

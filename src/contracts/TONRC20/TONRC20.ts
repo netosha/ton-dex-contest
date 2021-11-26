@@ -26,7 +26,7 @@ export class TONRC20 implements TONRC20Methods {
   async balanceOf(address: string) {
     // 💫 Here should be magic interaction with blockchain instead
     await sleep(Math.random() * 1000);
-    const fetchedBalance = Math.random() > 0.7 ? Math.random() * 1000 : 0;
+    const fetchedBalance = Math.random() > 0.1 ? Math.random() * 1000 : 0;
 
     console.log(`[${this.contractAddress}] ${address}: ${fetchedBalance}`);
 

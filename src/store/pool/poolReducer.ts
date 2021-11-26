@@ -49,10 +49,17 @@ export const poolReducer = createReducer(initialState, (builder) =>
       state.isPoolsLoading = false;
     })
 
-    /* Get pool graph data */
-    .addCase(actions.getPoolGraphData.fulfilled, (state, action) => {
-      const { id, poolGraphData } = action.payload;
-      state.detailedPools[id]!.graphData = poolGraphData;
+    /* Get detailed pool's data */
+    .addCase(actions.getPool.pending, (state, action) => {
+      const id = action.meta.arg;
+      state.detailedPools[id] = null;
+    })
+    .addCase(actions.getPool.fulfilled, (state, action) => {
+      const { id, detailedPool } = action.payload;
+      state.detailedPools[id] = detailedPool;
+    })
+    .addCase(actions.getPool.rejected, () => {
+      console.log('wrong id');
     })
 
     /* Get wallet pools */

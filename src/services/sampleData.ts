@@ -1,4 +1,10 @@
-import { Pool, PricedToken, PoolGraphData, WalletPool } from '@src/types';
+import {
+  Pool,
+  PricedToken,
+  PoolGraphData,
+  WalletPool,
+  DetailedPool,
+} from '@src/types';
 import { popularTokens } from '@src/utils';
 
 export const pricedTokens: PricedToken[] = popularTokens.map((t) => ({
@@ -38,7 +44,7 @@ export const pools: Pool[] = [
   },
 ];
 
-export function getPoolGraphFakeData() {
+export function poolGraphData() {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   yesterday.setMinutes(0);
@@ -108,3 +114,13 @@ export const walletPools: WalletPool[] = [
     ],
   },
 ];
+
+export const detailedPools: {
+  [id: string]: DetailedPool;
+} = pools.reduce(
+  (prev, cur) => ({
+    ...prev,
+    [cur.id!]: { ...cur!, fees: Math.random() * 1000, graphData: null },
+  }),
+  {}
+);

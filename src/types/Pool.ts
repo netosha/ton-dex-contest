@@ -22,11 +22,19 @@ export interface Pool {
 }
 
 export interface DetailedPool extends Pool {
+  /**
+   * All reward fees for past 24h
+   */
+  fees: number;
   graphData?: any | null;
 }
 
 export interface WalletPool extends Pool {
   ownerAddress: string;
+
+  /**
+   * Pool's fee level
+   */
   fee: number;
   share: number;
 

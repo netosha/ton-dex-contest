@@ -2,17 +2,20 @@ import React from 'react';
 
 import cn from 'clsx';
 
-import { WalletPool } from '@src/types';
+import { PoolCardProps } from './PoolCard.types';
 
-const PoolCard: React.VFC<{ pool: WalletPool }> = ({ pool }) => {
+const PoolCard: React.VFC<PoolCardProps> = (props) => {
+  const { pool, className, ...rest } = props;
   const { pair, fee } = pool;
   const amount = 45123;
   return (
-    <button
+    <a
       className={cn(
         'group flex flex-col text-violet cursor-pointer bg-control transition-colors rounded-md h-[7.5rem] p-3',
-        'hover:bg-blue hover:text-white'
+        'hover:bg-blue hover:text-white',
+        className
       )}
+      {...rest}
     >
       <div className="flex gap-2">
         <span className="text-2xl transition-colors font-black text-violet group-hover:text-white">
@@ -29,7 +32,7 @@ const PoolCard: React.VFC<{ pool: WalletPool }> = ({ pool }) => {
         <span>{fee}%</span>
         <span>${amount.toLocaleString()}</span>
       </div>
-    </button>
+    </a>
   );
 };
 

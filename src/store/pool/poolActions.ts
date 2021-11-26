@@ -29,3 +29,8 @@ export const getPoolGraphData = createAsyncThunk(
     return { id, poolGraphData };
   }
 );
+
+export const getPool = createAsyncThunk('pool/getPool', async (id: string) => {
+  const detailedPool = await services.pools.getDetailedPool(id);
+  return { id, detailedPool };
+});

@@ -32,7 +32,6 @@ const ShareTooltip: React.VFC<{ share: string }> = ({ share }) => {
 };
 
 const Create: NextPage = () => {
-  // const { query } = useRouter();
   const [tokens, setTokens] = React.useState<PickedTokens>([null, null]);
   const { balances, status, address } = useSelector(selectWallet);
 
@@ -41,6 +40,7 @@ const Create: NextPage = () => {
   // Conversion rate are hardcoded for now
   const conversionRate = 1.51;
 
+  // Todo: Make it as separate function
   const formStatus = ((): TokenPickerStatus => {
     if (status !== 'connected' || !address) {
       return {
