@@ -12,6 +12,13 @@ export const getPools = createAsyncThunk(
   }
 );
 
+export const getWalletPools = createAsyncThunk(
+  'pool/getWalletPools',
+  async ({ offset = 0, limit = 20 }: { offset?: number; limit?: number }) => {
+    return services.pools.getWalletPools(offset, limit);
+  }
+);
+
 /**
  * Fetch pool data for graph
  */
@@ -22,3 +29,8 @@ export const getPoolGraphData = createAsyncThunk(
     return { id, poolGraphData };
   }
 );
+
+export const getPool = createAsyncThunk('pool/getPool', async (id: string) => {
+  const detailedPool = await services.pools.getDetailedPool(id);
+  return { id, detailedPool };
+});

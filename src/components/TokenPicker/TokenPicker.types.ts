@@ -11,6 +11,11 @@ export type PickedTokens = [CountableToken | null, CountableToken | null];
 
 export interface TokenPickerProps {
   /**
+   * Submit button
+   */
+  button: ReactNode;
+
+  /**
    * Array of picked tokens
    */
   tokens: PickedTokens;
@@ -29,15 +34,47 @@ export interface TokenPickerProps {
   details?: ReactNode;
 
   /**
-   * Show clickcable icon, that shows transactions modal
+   *
+   * @param {PickedTokens} tokens
    */
-  isTransactionsVisible?: boolean;
 
   onChange?: (tokens: PickedTokens) => void;
+
+  /**
+   * Disable submit button
+   */
+  disabled?: boolean;
+
+  /**
+   * Highlight wrong input line
+   */
+  inputErrors?: InputErrors;
 }
 
 export interface TokenRowProps {
   token: Token;
   onClick: () => void;
   isActive: boolean;
+}
+
+export type InputErrors =
+  | {
+      [index: number]: string | boolean;
+    }
+  | undefined
+  | null;
+
+export interface TokenPickerStatus {
+  /**
+   * Submit button
+   */
+  buttonText: string;
+
+  /**
+   * Input errors
+   *
+   * For example: {0: false, 1: "wrong balance", ...}
+   */
+  inputErrors: InputErrors;
+  disabled: boolean;
 }

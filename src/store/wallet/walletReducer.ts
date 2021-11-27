@@ -18,9 +18,11 @@ export type WalletState = {
 
   /**
    * Balances of ERC-20-like tokens
+   *
+   * If balance is null - it's loading
    */
   balances: {
-    [address: string]: number;
+    [address: string]: number | null;
   };
 
   /**
@@ -59,10 +61,16 @@ export const walletReducer = createReducer(initialState, (builder) =>
       state.status = 'error';
       state.error = { message: 'Sample unexpected error' };
     })
-
     /* Fetching token balance  */
+    .addCase(actions.getTokenBalance.pending, (state, action) => {
+      state.balances[action.meta.arg] = null;
+    })
     .addCase(actions.getTokenBalance.fulfilled, (state, action) => {
       state.balances[action.payload.tokenAddress] = action.payload.balance;
+    })
+    .addCase(actions.getTokenBalance.rejected, (state, action) => {
+      // TODO: Replace it with destructing object
+      delete state.balances[action.meta.arg];
     })
 
     /* Wallet reset  */

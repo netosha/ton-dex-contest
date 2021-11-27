@@ -18,6 +18,7 @@ const colors = {
   text: 'rgba(48, 55, 87, 0.5)',
 };
 
+// TODO: Replace with something else
 const Chart: React.VFC<GraphProps> = ({ data }) => {
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -32,6 +33,7 @@ const Chart: React.VFC<GraphProps> = ({ data }) => {
       graph.destroy();
       setIsLoading(true);
     }
+    return () => graph.destroy();
   }, [data]);
 
   return (

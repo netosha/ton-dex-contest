@@ -1,5 +1,6 @@
+import getDetailedPool from './getDetailedPool';
 import getPoolGraphData from './getPoolGraphData';
 import getPools from './getPools';
-import getUserPools from './getUserPools';
+import getWalletPools from './getWalletPools';
 
-export { getUserPools, getPools, getPoolGraphData };
+export { getWalletPools, getPools, getPoolGraphData, getDetailedPool };

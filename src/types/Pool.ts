@@ -21,14 +21,21 @@ export interface Pool {
   pair: [Token, Token];
 }
 
+export interface DetailedPool extends Pool {
+  /**
+   * All reward fees for past 24h
+   */
+  fees: number;
+}
+
 export interface WalletPool extends Pool {
   ownerAddress: string;
-  fee: number;
 
   /**
-   * Wallet's USD locked in pool
+   * Pool's fee level
    */
-  walletLocked: number;
+  fee: number;
+  share: number;
 
   /**
    * Locked tokens pair

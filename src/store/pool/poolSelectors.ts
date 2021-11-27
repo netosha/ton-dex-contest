@@ -1,3 +1,5 @@
+import { createSelector } from 'reselect';
+
 import { RootState } from '@store/store';
 
 /**
@@ -5,19 +7,46 @@ import { RootState } from '@store/store';
  */
 export const selectPool = ({ pool }: RootState) => pool;
 
-// TODO: Replace with createSelector
 /**
  * Selects pools state
  */
-export const selectPools = ({ pool }: RootState) => ({
-  pools: pool.pools,
-  isPoolsLoading: pool.isPoolsLoading,
-});
+export const selectPools = createSelector(
+  selectPool,
+  ({ pools, isPoolsLoading }) => ({
+    pools,
+    isPoolsLoading,
+  })
+);
 
 /**
- * Selects graph data for pool
+ * Selects pools state
  */
-export const selectPoolGraphData =
-  (id: string) =>
-  ({ pool }: RootState) =>
-    pool.poolGraphs[id];
+export const selectWalletPools = createSelector(
+  selectPool,
+  ({ walletPools, isWalletPoolsLoading }) => ({
+    walletPools,
+    isWalletPoolsLoading,
+  })
+);
+
+const selectItemId = (_st: any, itemId: any) => itemId;
+
+/**
+ * Select Detailed Pool data
+ */
+export const selectDetailedPool = createSelector(
+  [selectPool, selectItemId],
+  ({ detailedPools }, id: string) => {
+    return detailedPools[id];
+  }
+);
+
+/**
+ * Selects pool's graph data
+ */
+export const selectPoolGraphData = createSelector(
+  [selectPool, selectItemId],
+  ({ graphData }, id: string) => {
+    return graphData[id];
+  }
+);

@@ -1,4 +1,10 @@
-import { Pool, PoolGraphData, PricedToken } from '@src/types';
+import {
+  Pool,
+  PricedToken,
+  PoolGraphData,
+  WalletPool,
+  DetailedPool,
+} from '@src/types';
 import { popularTokens } from '@src/utils';
 
 export const pricedTokens: PricedToken[] = popularTokens.map((t) => ({
@@ -38,7 +44,8 @@ export const pools: Pool[] = [
   },
 ];
 
-export function getPoolGraphFakeData() {
+// Todo: replace with ok one
+export function poolGraphData() {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   yesterday.setMinutes(0);
@@ -73,3 +80,48 @@ export function getPoolGraphFakeData() {
   };
   return fakeData;
 }
+
+export const walletPools: WalletPool[] = [
+  {
+    ...pools[0]!,
+    ownerAddress: 'EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N',
+    fee: 0.2,
+    share: 0.001,
+    locked: [
+      {
+        ...pools[0]!.pair[0]!,
+        amount: 15,
+      },
+      {
+        ...pools[0]!.pair[1]!,
+        amount: 200,
+      },
+    ],
+  },
+  {
+    ...pools[1]!,
+    ownerAddress: 'EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N',
+    fee: 0.1,
+    share: 0.0012,
+    locked: [
+      {
+        ...pools[1]!.pair[0]!,
+        amount: 321,
+      },
+      {
+        ...pools[1]!.pair[1]!,
+        amount: 100,
+      },
+    ],
+  },
+];
+
+export const detailedPools: {
+  [id: string]: DetailedPool;
+} = pools.reduce(
+  (prev, cur) => ({
+    ...prev,
+    [cur.id!]: { ...cur!, fees: Math.random() * 1000, graphData: null },
+  }),
+  {}
+);

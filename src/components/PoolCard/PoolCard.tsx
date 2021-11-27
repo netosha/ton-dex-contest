@@ -2,30 +2,37 @@ import React from 'react';
 
 import cn from 'clsx';
 
-const PoolCard: React.VFC = () => {
+import { PoolCardProps } from './PoolCard.types';
+
+const PoolCard: React.VFC<PoolCardProps> = (props) => {
+  const { pool, className, ...rest } = props;
+  const { pair, fee } = pool;
+  const amount = 45123;
   return (
-    <button
+    <a
       className={cn(
         'group flex flex-col text-violet cursor-pointer bg-control transition-colors rounded-md h-[7.5rem] p-3',
-        'hover:bg-blue hover:text-white'
+        'hover:bg-blue hover:text-white',
+        className
       )}
+      {...rest}
     >
       <div className="flex gap-2">
         <span className="text-2xl transition-colors font-black text-violet group-hover:text-white">
-          WBTC
+          {pair[0].symbol}
         </span>
         <span className="text-2xl transition-colors font-black text-gray text-gray group-hover:text-white">
           /
         </span>
       </div>
       <span className="text-2xl transition-colors font-black text-violet group-hover:text-white">
-        USDT
+        {pair[1].symbol}
       </span>
       <div className="flex gap-2 mt-auto group-hover:text-white">
-        <span>0.3%</span>
-        <span>$15 123</span>
+        <span>{fee}%</span>
+        <span>${amount.toLocaleString()}</span>
       </div>
-    </button>
+    </a>
   );
 };
 

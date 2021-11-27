@@ -1,6 +1,6 @@
 import { sleep } from '@src/utils';
 
-import { getPoolGraphFakeData } from '../sampleData';
+import { poolGraphData } from '../sampleData';
 
 /**
  * Sample request for fetching pool data for graph
@@ -8,8 +8,8 @@ import { getPoolGraphFakeData } from '../sampleData';
  * @return {Promise<PoolGraphData>}
  */
 const getPoolGraphData = async () => {
-  await sleep(850);
-  return getPoolGraphFakeData();
+  await sleep(1200);
+  return poolGraphData();
 };
 
 export default getPoolGraphData;

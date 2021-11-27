@@ -10,62 +10,17 @@ import {
 } from '@heroicons/react/solid';
 import cn from 'clsx';
 
-import Loader from '@components/Loader';
+import BalanceRow from '@components/TokenPicker/BalanceRow';
 import Transactions from '@components/Transactions';
 import { useDispatch, useSelector } from '@src/hooks';
 import { Token } from '@src/types';
 import { Button, Input, Modal, Tooltip } from '@src/ui';
 import parseFriendlyAddress from '@src/utils/parseFriendlyAddress';
 import { addNewToken, selectTokens } from '@store/token';
-import {
-  getTokenBalance,
-  selectTokenBalances,
-  selectWallet,
-} from '@store/wallet';
+import { getTokenBalance, selectWallet } from '@store/wallet';
 
-import {
-  PickedTokens,
-  TokenPickerProps,
-  TokenRowProps,
-} from './TokenPicker.types';
-
-export const TokenRow: React.VFC<TokenRowProps> = ({
-  token,
-  onClick,
-  isActive,
-}) => {
-  const dispatch = useDispatch();
-  const wallet = useSelector(selectWallet);
-  const balances = useSelector(selectTokenBalances);
-
-  const isWalletProvided = wallet.address && wallet.status === 'connected';
-  const balance = balances[token.address];
-
-  React.useEffect(() => {
-    // Todo: replace with nicer update rule
-    if (isWalletProvided && balance === undefined) {
-      dispatch(getTokenBalance(token.address));
-    }
-  }, []);
-
-  return (
-    <button
-      className={cn(
-        'flex items-center py-2 px-4 rounded-md bg-control font-bold transition-colors hover:bg-blue hover:text-white',
-        isActive && '!bg-gray text-white cursor-not-allowed'
-      )}
-      disabled={isActive}
-      onClick={onClick}
-    >
-      <span>{token.name}</span>
-      {isWalletProvided && (
-        <span className="ml-auto">
-          {balance !== undefined ? balance.toFixed(2) : <Loader />}
-        </span>
-      )}
-    </button>
-  );
-};
+import { PickedTokens, TokenPickerProps } from './TokenPicker.types';
+import TokenRow from './TokenRow';
 
 // Todo: Decompose it)
 const TokenPicker: React.VFC<TokenPickerProps> = ({
@@ -73,8 +28,11 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
   onChange,
   tokens,
   details,
-  isTransactionsVisible,
+  button,
+  inputErrors = {},
 }) => {
+  const dispatch = useDispatch();
+
   // Index of selecting token
   const [tokenModal, setTokenModal] = React.useState<null | number>(null);
   const [amounts, setAmounts] = React.useState<string[]>(
@@ -85,10 +43,10 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
   const [transactionsModal, setTransactionsModal] =
     React.useState<boolean>(false);
 
+  // Tokens list filter
   const [filter, setFilter] = React.useState<string>('');
 
   const isFilterValidAddress = !!parseFriendlyAddress(filter).hashPart;
-  const dispatch = useDispatch();
 
   const knownTokens = Object.values(useSelector(selectTokens));
   const { balances, status, address } = useSelector(selectWallet);
@@ -97,24 +55,13 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
     ? knownTokens.filter(
         (t) =>
           t.address.toLowerCase().includes(filter.toLowerCase()) ||
-          t.name.toLowerCase().includes(filter.toLowerCase())
+          t.name.toLowerCase().includes(filter.toLowerCase()) ||
+          t.symbol.toLowerCase().includes(filter.toLowerCase())
       )
     : knownTokens;
 
   const sourceToken = tokens[0];
   const otherTokens = tokens.slice(1);
-
-  const availableBalance: null | number | undefined = sourceToken
-    ? balances[sourceToken?.address]
-    : null;
-
-  const isInsufficientBalance = !!(
-    sourceToken &&
-    typeof availableBalance === 'number' &&
-    !Number.isNaN(availableBalance) &&
-    sourceToken.amount &&
-    sourceToken.amount > availableBalance
-  );
 
   const handleAmountChange = (index: number, amount: string) => {
     const regEx = /^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)$/;
@@ -165,30 +112,9 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
     setFilter('');
   };
 
-  const { error, message } = (() => {
-    if (status !== 'connected' || !address) {
-      return { error: true, message: `Provide wallet` };
-    }
-    if (tokens.some((t) => !t?.address)) {
-      return { error: true, message: 'Select a token' };
-    }
-    if (
-      tokens.some(
-        (t) => tokens.filter((_) => _?.address === t?.address).length > 1
-      )
-    ) {
-      return { error: true, message: 'Duplicated tokens' };
-    }
-    if (isInsufficientBalance) {
-      return { error: true, message: 'Insufficient amount' };
-    }
-
-    return { error: false, message: type };
-  })();
-
-  // Update available balance on account or first token change
+  // Update available source balance on account or first token change
   React.useEffect(() => {
-    if (sourceToken && address) {
+    if (sourceToken && address && status === 'connected') {
       if (balances[sourceToken.address] === undefined) {
         console.log(sourceToken.symbol, 'balance updated');
         dispatch(getTokenBalance(sourceToken.address));
@@ -196,6 +122,7 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
     }
   }, [address, sourceToken?.address]);
 
+  // Change input value, if outer value changed
   React.useEffect(() => {
     setAmounts(() =>
       tokens.map((t) => (t?.amount === null ? '' : t?.amount?.toString() ?? ''))
@@ -206,22 +133,11 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
     <>
       <div className="flex gap-2 flex-col">
         <div className="flex flex-col">
-          {status === 'connected' && sourceToken && (
-            <div className="w-full flex">
-              <span className="flex mb-2 text-sm font-semibold text-violet-60">
-                Available:
-                {typeof availableBalance === 'number' && (
-                  <span
-                    className="ml-1 font-bold cursor-pointer"
-                    onClick={() =>
-                      handleAmountChange(0, availableBalance.toString())
-                    }
-                  >
-                    {availableBalance}
-                  </span>
-                )}
-              </span>
-            </div>
+          {status === 'connected' && sourceToken?.address && (
+            <BalanceRow
+              onBalanceClick={(b) => handleAmountChange(0, b.toString())}
+              token={sourceToken.address}
+            />
           )}
 
           <div className="flex gap-2">
@@ -229,7 +145,7 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
               className="font-bold"
               placeholder="0.0"
               value={amounts[0]}
-              error={isInsufficientBalance}
+              error={!!inputErrors?.[0]}
               onChange={(e) => handleAmountChange(0, e.target.value)}
             />
             <Button
@@ -254,48 +170,57 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
         </div>
 
         {otherTokens.map((t, index) => (
-          <div className="flex gap-2 group" key={t?.address ?? index}>
-            <Input
-              className="font-bold"
-              value={amounts[index + 1]}
-              onChange={(e) => handleAmountChange(index + 1, e.target.value)}
-              placeholder="0.0"
-            />
-            <Button
-              onClick={() => setTokenModal(1)}
-              className="flex justify-center w-full font-bold gap-1 !text-violet !bg-control hover:!text-blue"
-            >
-              {t?.address ? (
-                <>
-                  <span className="uppercase">{t?.symbol}</span>
+          <div className="flex flex-col" key={t?.address ?? index}>
+            {type === 'stake' && t?.address && (
+              <BalanceRow
+                onBalanceClick={(b) =>
+                  handleAmountChange(index + 1, b.toString())
+                }
+                token={t?.address}
+              />
+            )}
+            <div className="flex gap-2">
+              <Input
+                className="font-bold"
+                value={amounts[index + 1]}
+                error={!!inputErrors?.[index + 1]}
+                onChange={(e) => handleAmountChange(index + 1, e.target.value)}
+                placeholder="0.0"
+              />
+              <Button
+                onClick={() => setTokenModal(1)}
+                className="flex justify-center w-full font-bold gap-1 !text-violet !bg-control hover:!text-blue"
+              >
+                {t?.address ? (
+                  <>
+                    <span className="uppercase">{t?.symbol}</span>
+                    <ChevronDownIcon className="w-4 h-4" />
+                  </>
+                ) : (
                   <ChevronDownIcon className="w-4 h-4" />
-                </>
-              ) : (
-                <ChevronDownIcon className="w-4 h-4" />
-              )}
-            </Button>
+                )}
+              </Button>
+            </div>
           </div>
         ))}
-        <Button disabled={error} className="mt-2">
-          {message}
-        </Button>
+
+        {button}
+
         <div className={cn('w-full gap-4 flex justify-center text-blue')}>
           <Tooltip
             content={
-              <div className="flex justify-center py-2 min-w-[11.5rem] px-4 bg-lightgray text-dark font-semibold rounded-md">
+              <div className="flex justify-center py-2 min-w-[11.5rem] px-4 bg-control text-dark font-semibold rounded-md">
                 This will be the settings
               </div>
             }
-            position="bottom"
+            position="right"
           >
             <CogIcon className="h-6 w-6 transition-colors hover:text-darkblue" />
           </Tooltip>
 
-          {isTransactionsVisible && (
-            <button onClick={() => setTransactionsModal(true)}>
-              <ClockIcon className="h-6 w-6 transition-colors hover:text-darkblue" />
-            </button>
-          )}
+          <button onClick={() => setTransactionsModal(true)}>
+            <ClockIcon className="h-6 w-6 transition-colors hover:text-darkblue" />
+          </button>
 
           {details && (
             <Tooltip content={details} position="bottom">
@@ -344,15 +269,13 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
         </div>
       </Modal>
 
-      {isTransactionsVisible && (
-        <Modal
-          isOpen={transactionsModal}
-          onClose={() => setTransactionsModal(false)}
-          heading="Recent transactions"
-        >
-          <Transactions address={address} />
-        </Modal>
-      )}
+      <Modal
+        isOpen={transactionsModal}
+        onClose={() => setTransactionsModal(false)}
+        heading="Recent transactions"
+      >
+        <Transactions address={address} />
+      </Modal>
     </>
   );
 };

@@ -18,9 +18,11 @@ const columns = [
   { key: 'method', label: 'Method' },
   { key: 'timestamp', label: 'Date' },
 ];
+
 const Transactions: React.VFC<{ address: string | undefined | null }> = ({
   address,
 }) => {
+  const dispatch = useDispatch();
   const [offset, setOffset] = React.useState(0);
 
   const [orderBy, setOrderBy] = React.useState<null | OrderBy>(null);
@@ -28,8 +30,6 @@ const Transactions: React.VFC<{ address: string | undefined | null }> = ({
   const { isTransactionsLoading, transactions } = useSelector((state) =>
     selectTransactionsByAddress(state, address)
   );
-
-  const dispatch = useDispatch();
 
   React.useEffect(() => {
     if (address) {
@@ -70,7 +70,7 @@ const Transactions: React.VFC<{ address: string | undefined | null }> = ({
   }));
 
   return (
-    <div className="grid grid-flow-row gap-2">
+    <div className="flex flex-col gap-2">
       <Table
         layout="3.5rem repeat(2, 1fr)"
         rows={rows}

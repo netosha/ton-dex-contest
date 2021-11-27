@@ -67,6 +67,7 @@ module.exports = {
       colors: {
         blue: {
           DEFAULT: `var(--blue)`,
+          ...withOpacity('blue'),
         },
         darkblue: {
           DEFAULT: 'var(--darkblue)',
