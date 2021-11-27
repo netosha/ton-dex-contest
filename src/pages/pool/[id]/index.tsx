@@ -4,11 +4,17 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import Chart from '@components/Chart';
 import Layout from '@components/Layout';
 import ManageButton from '@components/ManageButton';
 import PoolInfo from '@components/PoolInfo';
 import { useDispatch, useSelector } from '@src/hooks';
-import { getPool, selectDetailedPool } from '@store/pool';
+import {
+  getPool,
+  getPoolGraphData,
+  selectDetailedPool,
+  selectPoolGraphData,
+} from '@store/pool';
 import { selectWallet } from '@store/wallet';
 
 const Pool: NextPage = () => {
@@ -17,9 +23,15 @@ const Pool: NextPage = () => {
   const { id } = query;
   const { status, address } = useSelector(selectWallet);
   const pool = useSelector((state) => selectDetailedPool(state, id as string));
+  const graphData = useSelector((state) =>
+    selectPoolGraphData(state, id as string)
+  );
+
+  console.log(graphData);
 
   React.useEffect(() => {
     dispatch(getPool(id as string));
+    dispatch(getPoolGraphData(id as string));
   }, []);
 
   return (
@@ -51,9 +63,13 @@ const Pool: NextPage = () => {
         <div className="w-full grid gap-4 col-span-1">
           <PoolInfo pool={pool} />
         </div>
-        <div className="bg-control rounded-md col-span-1 md:col-span-2 p-3 h-[20rem]">
-          {/* <Chart  /> */}
-        </div>
+        {graphData === null ? (
+          <div className=" animate-shine rounded-md col-span-1 md:col-span-2 p-3 h-[20rem]" />
+        ) : (
+          <div className="bg-control rounded-md col-span-1 md:col-span-2 p-3 h-[20rem]">
+            <Chart data={graphData} />
+          </div>
+        )}
       </section>
 
       <div className="w-full">

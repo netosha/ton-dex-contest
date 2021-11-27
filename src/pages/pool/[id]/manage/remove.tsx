@@ -4,12 +4,12 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 
 import Layout from '@components/Layout';
-import { Remove } from '@components/LiquidityManager';
+import { RemoveLiquidity } from '@components/LiquidityManager';
 import { useSelector } from '@src/hooks';
 import { selectWalletPools } from '@store/pool';
 import { selectWallet } from '@store/wallet';
 
-const RemoveLiquidity: NextPage = () => {
+const Remove: NextPage = () => {
   const { push, query } = useRouter();
   const { status, address } = useSelector(selectWallet);
   const { walletPools } = useSelector(selectWalletPools);
@@ -25,17 +25,22 @@ const RemoveLiquidity: NextPage = () => {
 
   // Todo: Implement loading info about pool, within walletPools
   if (!pool) {
-    push(`/pool/${query.id}/`);
+    if (typeof window !== 'undefined') {
+      push(`/pool/${query.id}/`);
+    }
     return null;
   }
 
   return (
     <Layout>
       <div className="flex h-auto my-auto gap-4 items-center justify-center w-full">
-        <Remove pool={pool} />
+        <RemoveLiquidity
+          onRemove={() => push(`/pool/${pool.id}/manage`)}
+          pool={pool}
+        />
       </div>
     </Layout>
   );
 };
 
-export default RemoveLiquidity;
+export default Remove;

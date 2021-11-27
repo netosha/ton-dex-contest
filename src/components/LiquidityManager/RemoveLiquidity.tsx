@@ -3,15 +3,16 @@ import React from 'react';
 import { ArrowSmLeftIcon } from '@heroicons/react/solid';
 import cn from 'clsx';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 import TokenCard from '@components/LiquidityManager/TokenCard';
 import { Button, Range } from '@src/ui';
 
 import { RemoveLiquidityProps } from './LiquidityManager.types';
 
-const Remove: React.VFC<RemoveLiquidityProps> = ({ pool }) => {
-  const { query } = useRouter();
+const RemoveLiquidity: React.VFC<RemoveLiquidityProps> = ({
+  pool,
+  onRemove,
+}) => {
   const { locked } = pool;
 
   const [removePercent, setRemovePercent] = React.useState<number>(0);
@@ -20,7 +21,7 @@ const Remove: React.VFC<RemoveLiquidityProps> = ({ pool }) => {
   return (
     <div className="flex min-h-[20rem] flex-col gap-3 max-w-[25rem] w-full">
       <div className="flex gap-2 items-center text-violet">
-        <Link passHref={true} href={`/pool/${query.id}/manage`}>
+        <Link passHref={true} href={`/pool/${pool.id}/manage`}>
           <ArrowSmLeftIcon className="h-6 w-6 hover:text-blue transition-colors cursor-pointer" />
         </Link>
         <h1 className="text-2xl font-black">Remove liquidity</h1>
@@ -99,9 +100,15 @@ const Remove: React.VFC<RemoveLiquidityProps> = ({ pool }) => {
         </div>
       </div>
 
-      <Button danger>Remove</Button>
+      <Button
+        onClick={onRemove}
+        danger={removePercent > 0}
+        disabled={removePercent === 0}
+      >
+        Remove
+      </Button>
     </div>
   );
 };
 
-export default Remove;
+export default RemoveLiquidity;

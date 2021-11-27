@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { Pool, WalletPool, DetailedPool } from '@src/types';
+import { Pool, WalletPool, DetailedPool, PoolGraphData } from '@src/types';
 
 import * as actions from './poolActions';
 
@@ -20,6 +20,15 @@ export type PoolState = {
     [id: string]: DetailedPool | null;
   };
 
+  /**
+   * Pool graph data
+   *
+   * If it's null - it's loading
+   */
+  graphData: {
+    [poolId: string]: PoolGraphData | null;
+  };
+
   walletPools: {
     [poolId: string]: WalletPool;
   };
@@ -32,6 +41,7 @@ export const initialState: PoolState = {
   walletPools: {},
   isWalletPoolsLoading: false,
   detailedPools: {},
+  graphData: {},
 };
 
 export const poolReducer = createReducer(initialState, (builder) =>
@@ -47,6 +57,19 @@ export const poolReducer = createReducer(initialState, (builder) =>
     })
     .addCase(actions.getPools.rejected, (state) => {
       state.isPoolsLoading = false;
+    })
+
+    /* Get pool's graph data */
+    .addCase(actions.getPoolGraphData.pending, (state, action) => {
+      state.graphData[action.meta.arg] = null;
+    })
+    .addCase(actions.getPoolGraphData.fulfilled, (state, action) => {
+      const { id, poolGraphData } = action.payload;
+      state.graphData[id] = poolGraphData;
+    })
+    .addCase(actions.getPoolGraphData.rejected, (state, action) => {
+      // TODO: Replace it with destructing object
+      delete state.graphData[action.meta.arg];
     })
 
     /* Get detailed pool's data */

@@ -44,6 +44,7 @@ export const pools: Pool[] = [
   },
 ];
 
+// Todo: replace with ok one
 export function poolGraphData() {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);

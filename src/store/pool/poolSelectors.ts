@@ -42,9 +42,11 @@ export const selectDetailedPool = createSelector(
 );
 
 /**
- * Selects graph data for pool
+ * Selects pool's graph data
  */
-export const selectPoolGraphData =
-  (id: string) =>
-  ({ pool }: RootState) =>
-    pool.detailedPools[id]?.graphData;
+export const selectPoolGraphData = createSelector(
+  [selectPool, selectItemId],
+  ({ graphData }, id: string) => {
+    return graphData[id];
+  }
+);

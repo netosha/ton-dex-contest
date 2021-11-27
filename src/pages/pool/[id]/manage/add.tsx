@@ -4,12 +4,12 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 
 import Layout from '@components/Layout';
-import { ViewLiquidity } from '@components/LiquidityManager';
+import AddLiquidity from '@components/LiquidityManager/AddLiquidity';
 import { useSelector } from '@src/hooks';
 import { selectWalletPools } from '@store/pool';
 import { selectWallet } from '@store/wallet';
 
-const View: NextPage = () => {
+const Add: NextPage = () => {
   const { push, query } = useRouter();
   const { status, address } = useSelector(selectWallet);
   const { walletPools } = useSelector(selectWalletPools);
@@ -34,17 +34,13 @@ const View: NextPage = () => {
   return (
     <Layout>
       <div className="flex h-auto my-auto gap-4 items-center justify-center w-full">
-        <ViewLiquidity pool={pool} />
+        <AddLiquidity
+          onAdd={() => push(`/pool/${pool.id}/manage`)}
+          pool={pool}
+        />
       </div>
     </Layout>
   );
 };
 
-// Little trick to pass query params in router without re-rendering
-// Check query logic before remove and remove, if needed
-// https://nextjs.org/docs/api-reference/next/router#router-object
-export async function getServerSideProps() {
-  return { props: {} };
-}
-
-export default View;
+export default Add;

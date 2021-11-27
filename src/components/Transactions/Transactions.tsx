@@ -21,6 +21,7 @@ const columns = [
 const Transactions: React.VFC<{ address: string | undefined | null }> = ({
   address,
 }) => {
+  const dispatch = useDispatch();
   const [offset, setOffset] = React.useState(0);
 
   const [orderBy, setOrderBy] = React.useState<null | OrderBy>(null);
@@ -28,8 +29,6 @@ const Transactions: React.VFC<{ address: string | undefined | null }> = ({
   const { isTransactionsLoading, transactions } = useSelector((state) =>
     selectTransactionsByAddress(state, address)
   );
-
-  const dispatch = useDispatch();
 
   React.useEffect(() => {
     if (address) {

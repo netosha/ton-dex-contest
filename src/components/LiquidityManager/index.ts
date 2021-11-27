@@ -1,4 +1,5 @@
-import Remove from './Remove';
-import View from './View';
+import AddLiquidity from './AddLiquidity';
+import RemoveLiquidity from './RemoveLiquidity';
+import ViewLiquidity from './ViewLiquidity';
 
-export { View, Remove };
+export { ViewLiquidity, RemoveLiquidity, AddLiquidity };

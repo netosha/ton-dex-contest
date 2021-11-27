@@ -1,20 +1,25 @@
 import React from 'react';
 
+import { ArrowSmLeftIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 import { ViewLiquidityProps } from '@components/LiquidityManager/LiquidityManager.types';
 import TokenCard from '@components/LiquidityManager/TokenCard';
 import { Button, Tooltip } from '@src/ui';
 
-const View: React.VFC<ViewLiquidityProps> = ({ pool }) => {
-  const { query } = useRouter();
+const ViewLiquidity: React.VFC<ViewLiquidityProps> = ({ pool }) => {
   const { locked, share } = pool;
 
   return (
-    <div className="flex min-h-[20rem] flex-col gap-3 max-w-[25rem] w-full">
-      <h1 className="text-2xl font-black text-violet">Manage liquidity</h1>
+    <div className="flex min-h-[20rem] flex-col gap-2 max-w-[25rem] w-full">
+      <Link href={`/pool/${pool.id}`}>
+        <span className="cursor-pointer text-violet-40 hover:text-violet transition-colors font-bold flex gap-1 items-center">
+          <ArrowSmLeftIcon className="w-4 h-4 " />
+          Back to pool
+        </span>
+      </Link>
 
+      <h1 className="text-2xl font-black text-violet">Manage liquidity</h1>
       <div className="grid grid-rows-2 gap-4 w-full ">
         <TokenCard symbol={locked[0].symbol} amount={locked[0].amount!} />
         <TokenCard symbol={locked[1].symbol} amount={locked[1].amount!} />
@@ -43,15 +48,17 @@ const View: React.VFC<ViewLiquidityProps> = ({ pool }) => {
         </span>
       </div>
       <div className="grid w-full grid-cols-2 mt-2 gap-4">
-        <Link href={`/pool/${query.id}/manage/remove`}>
+        <Link href={`/pool/${pool.id}/manage/remove`}>
           <Button className="w-full" danger>
             Remove
           </Button>
         </Link>
-        <Button className="w-full">Add</Button>
+        <Link href={`/pool/${pool.id}/manage/add`}>
+          <Button className="w-full">Add</Button>
+        </Link>
       </div>
     </div>
   );
 };
 
-export default View;
+export default ViewLiquidity;

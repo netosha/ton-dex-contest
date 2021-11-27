@@ -19,4 +19,10 @@ export interface ViewLiquidityProps {
 
 export interface RemoveLiquidityProps {
   pool: WalletPool;
+  onRemove?: () => void;
+}
+
+export interface AddLiquidityProps {
+  pool: WalletPool;
+  onAdd?: () => void;
 }

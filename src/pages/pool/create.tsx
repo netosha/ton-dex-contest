@@ -102,7 +102,9 @@ const Create: NextPage = () => {
     <Layout>
       <div className="flex h-auto my-auto flex-col gap-4 items-center justify-center w-full">
         <div className="flex flex-col gap-3">
-          <h1 className="text-2xl font-black text-violet">Add liquidity</h1>
+          <h1 className="text-2xl font-black text-violet">
+            Create liquidity pool
+          </h1>
           <TokenPicker
             button={
               <Button
@@ -118,7 +120,7 @@ const Create: NextPage = () => {
             tokens={tokens}
             type={'stake'}
           />
-          {/* If every token are provided */}
+          {/* If every token are provided show more info */}
           {tokens.every((t) => t?.address) && (
             <>
               <div className="my-2">
