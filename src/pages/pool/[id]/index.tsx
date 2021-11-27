@@ -43,7 +43,7 @@ const Pool: NextPage = () => {
           <div className="h-10 my-1 w-64 animate-shine rounded-md" />
         )}
       </section>
-      <section>
+      <section className="mb-4">
         <ManageButton pool={pool} address={address} status={status} />
       </section>
 

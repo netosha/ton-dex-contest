@@ -15,7 +15,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           'py-2 px-4 font-extrabold transition-colors leading-none bg-blue text-white rounded-md hover:bg-darkblue',
           outline &&
             'bg-transparent transition-shadow !text-blue shadow-border-blue hover:bg-transparent hover:shadow-border-darkblue hover:!text-darkblue',
-          disabled && 'bg-gray hover:bg-gray cursor-not-allowed',
+          disabled && '!bg-gray cursor-not-allowed',
           round && 'rounded-full',
           danger && `transition-shadow !bg-red`,
           className

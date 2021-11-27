@@ -2,7 +2,7 @@ import React from 'react';
 
 import cn from 'clsx';
 
-import { TokenCardProps } from './LiquidityPicker.types';
+import { TokenCardProps } from './LiquidityManager.types';
 
 const TokenCard: React.VFC<TokenCardProps> = (props) => {
   const { symbol, amount, className, available = 1, ...rest } = props;
