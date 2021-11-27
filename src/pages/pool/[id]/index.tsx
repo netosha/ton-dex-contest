@@ -1,38 +1,101 @@
 import React from 'react';
 
+import { sortBy } from 'lodash';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import Chart from '@components/Chart';
 import Layout from '@components/Layout';
+import Loader from '@components/Loader';
 import ManageButton from '@components/ManageButton';
 import PoolInfo from '@components/PoolInfo';
+import Table, { OrderBy, Row } from '@components/Table';
 import { useDispatch, useSelector } from '@src/hooks';
+import { Button } from '@src/ui';
 import {
   getPool,
   getPoolGraphData,
   selectDetailedPool,
   selectPoolGraphData,
 } from '@store/pool';
+import {
+  getAddressTransactions,
+  selectTransactionsByAddress,
+} from '@store/transaction';
 import { selectWallet } from '@store/wallet';
+
+const columns = [
+  { key: 'hash', label: 'Hash' },
+  { key: 'method', label: 'Method' },
+  { key: 'from', label: 'From' },
+  { key: 'to', label: 'To' },
+  { key: 'timestamp', label: 'Date' },
+];
+
+const PAGE_SIZE = 20;
 
 const Pool: NextPage = () => {
   const dispatch = useDispatch();
   const { query } = useRouter();
   const { id } = query;
   const { status, address } = useSelector(selectWallet);
+
+  // Transactions table offset
+  const [offset, setOffset] = React.useState<number>(0);
+
   const pool = useSelector((state) => selectDetailedPool(state, id as string));
   const graphData = useSelector((state) =>
     selectPoolGraphData(state, id as string)
   );
+  const { isTransactionsLoading, transactions } = useSelector((state) =>
+    selectTransactionsByAddress(state, id as string)
+  );
 
-  console.log(graphData);
+  const [orderBy, setOrderBy] = React.useState<null | OrderBy>(null);
+
+  const orderedTransactions = orderBy
+    ? sortBy(transactions, orderBy.column)
+    : transactions;
+
+  if (orderBy?.order === 'desc') {
+    orderedTransactions.reverse();
+  }
+
+  // Todo: Make it as separate function
+  const rows: Row[] = orderedTransactions.map((tx) => ({
+    id: tx.hash,
+    hash: <span className="font-bold">#{tx.hash.slice(0, 4)}..</span>,
+    from: <span className="font-bold">{tx.from.slice(0, 20)}..</span>,
+    to: <span className="font-bold">{tx.to.slice(0, 20)}..</span>,
+    method: <span className="text-violet-60 ">{tx.method}</span>,
+    timestamp: (
+      <span className="ml-auto text-sm text-violet-60">
+        {new Date(tx.timestamp).toLocaleString()}
+      </span>
+    ),
+    rowProps: {
+      href: 'https://ton.sh',
+      target: '_blank',
+    },
+  }));
 
   React.useEffect(() => {
     dispatch(getPool(id as string));
     dispatch(getPoolGraphData(id as string));
   }, []);
+
+  // Fetch transactions
+  React.useEffect(() => {
+    // TODO: Replace address from pool's id to contract address
+    dispatch(
+      getAddressTransactions({
+        address: id as string,
+        offset,
+        limit: PAGE_SIZE,
+      })
+    );
+  }, [offset]);
 
   return (
     <Layout>
@@ -72,8 +135,24 @@ const Pool: NextPage = () => {
         )}
       </section>
 
-      <div className="w-full">
+      <div className="w-full mt-2">
         <h2 className="text-3xl font-black text-violet">Transactions</h2>
+        <div className="flex flex-col gap-2">
+          <Table
+            layout="3.5rem 5rem minmax(5rem, 1fr) minmax(5rem, 1fr) minmax(5rem, 1fr)"
+            rows={rows}
+            orderBy={orderBy}
+            onOrderByChange={(o) => setOrderBy(o)}
+            columns={columns}
+            isLoading={isTransactionsLoading}
+          />
+          <Button
+            className="bg-control flex justify-center"
+            onClick={() => setOffset((v) => v + PAGE_SIZE)}
+          >
+            {isTransactionsLoading ? <Loader /> : 'Load more'}
+          </Button>
+        </div>
       </div>
     </Layout>
   );
