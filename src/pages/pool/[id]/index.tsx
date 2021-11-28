@@ -13,6 +13,7 @@ import PoolInfo from '@components/PoolInfo';
 import Table, { OrderBy, Row } from '@components/Table';
 import { useDispatch, useSelector } from '@src/hooks';
 import { Button } from '@src/ui';
+import { useMediaQuery } from '@src/utils';
 import {
   getPool,
   getPoolGraphData,
@@ -25,18 +26,31 @@ import {
 } from '@store/transaction';
 import { selectWallet } from '@store/wallet';
 
-const columns = [
-  { key: 'hash', label: 'Hash' },
-  { key: 'method', label: 'Method' },
-  { key: 'from', label: 'From' },
-  { key: 'to', label: 'To' },
-  { key: 'timestamp', label: 'Date' },
-];
-
 const PAGE_SIZE = 20;
 
 const Pool: NextPage = () => {
   const dispatch = useDispatch();
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
+  // Todo: Replace it with more elegant way
+  const tableLayout = isMobile
+    ? '3.5rem 5rem minmax(5rem, 1fr)'
+    : '3.5rem 5rem minmax(5rem, 1fr) minmax(5rem, 1fr) minmax(5rem, 1fr)';
+
+  const columns = isMobile
+    ? [
+        { key: 'hash', label: 'Hash' },
+        { key: 'method', label: 'Method' },
+        { key: 'timestamp', label: 'Date' },
+      ]
+    : [
+        { key: 'hash', label: 'Hash' },
+        { key: 'method', label: 'Method' },
+        { key: 'from', label: 'From' },
+        { key: 'to', label: 'To' },
+        { key: 'timestamp', label: 'Date' },
+      ];
+
   const { query } = useRouter();
   const { id } = query;
   const { status, address } = useSelector(selectWallet);
@@ -139,7 +153,7 @@ const Pool: NextPage = () => {
         <h2 className="text-3xl font-black text-violet">Transactions</h2>
         <div className="flex flex-col gap-2">
           <Table
-            layout="3.5rem 5rem minmax(5rem, 1fr) minmax(5rem, 1fr) minmax(5rem, 1fr)"
+            layout={tableLayout}
             rows={rows}
             orderBy={orderBy}
             onOrderByChange={(o) => setOrderBy(o)}

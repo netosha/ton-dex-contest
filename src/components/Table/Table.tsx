@@ -61,7 +61,7 @@ const Table: React.VFC<TableProps> = (props) => {
           <a
             key={r.id}
             className={cn(
-              'grid grid-flow-col gap-2 p-4 w-full rounded-lg cursor-pointer bg-control',
+              'grid grid-flow-col gap-2 p-4 w-full rounded-lg bg-control',
               r?.rowProps?.className,
               rowsProps?.className
             )}

@@ -79,7 +79,7 @@ const Tokens: NextPage = () => {
         isLoading={isPricedTokensLoading}
         columns={columns}
         rows={rows}
-        layout="20px minmax(70px, 3fr) repeat(3, 1fr)"
+        layout="20px minmax(4.5rem, 3fr) repeat(3, 1fr)"
         orderBy={orderBy}
         onOrderByChange={(o) => setOrderBy(o)}
       />
