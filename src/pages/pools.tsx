@@ -56,6 +56,7 @@ const Pools: NextPage = () => {
     volume: <span>${p.volume}m</span>,
     rowProps: {
       onClick: () => Router.push(`/pool/${p.id}`),
+      className: 'cursor-pointer',
     },
   }));
 

@@ -10,11 +10,13 @@ import logo from 'assets/logo.svg';
 const Header: React.FC = () => {
   return (
     <header className="flex justify-between items-center py-2 w-full text-primary">
-      <Image
-        className="transition-all hover:rotate-[120deg] tr"
-        src={logo}
-        alt="logo"
-      />
+      <Link href="/">
+        <Image
+          className="cursor-pointer transition-all hover:rotate-[120deg] tr"
+          src={logo}
+          alt="logo"
+        />
+      </Link>
       <div
         className={cn(
           'flex flex-1 mx-4 font-extrabold text-violet',
