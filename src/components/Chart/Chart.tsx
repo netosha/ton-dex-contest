@@ -1,8 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-
-import cn from 'clsx';
-
-import Loader from '@components/Loader';
+import React, { useEffect, useRef } from 'react';
 
 import styles from './Chart.module.scss';
 // TS is disabled because the external module is written in vanilla js
@@ -20,7 +16,6 @@ const colors = {
 
 // TODO: Replace with something else
 const Chart: React.VFC<GraphProps> = ({ data }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -28,25 +23,12 @@ const Chart: React.VFC<GraphProps> = ({ data }) => {
     if (data) {
       graph.setColors(colors);
       graph.setData(data);
-      setIsLoading(false);
     } else {
       graph.destroy();
-      setIsLoading(true);
     }
-    return () => graph.destroy();
   }, [data]);
 
-  return (
-    <div
-      ref={containerRef}
-      className={cn(
-        styles.wrapper,
-        'relative w-full h-full flex justify-center'
-      )}
-    >
-      {isLoading && <Loader className="my-auto" />}
-    </div>
-  );
+  return <div ref={containerRef} className={styles.wrapper} />;
 };
 
 export default Chart;

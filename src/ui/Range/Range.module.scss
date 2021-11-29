@@ -6,7 +6,6 @@
   border: 0 transparent;
   border-radius: 9999px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
-
 }
 
 @mixin track_style {
@@ -14,9 +13,9 @@
   height: 0.5rem;
   cursor: pointer;
   background: linear-gradient(
-                  to right,
-                  var(--blue) var(--progress),
-                  var(--gray) var(--progress)
+    to right,
+    var(--blue) var(--progress),
+    var(--gray) var(--progress)
   );
   border: 0 transparent;
   border-radius: 0.125rem;
