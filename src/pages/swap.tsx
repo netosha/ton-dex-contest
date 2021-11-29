@@ -30,7 +30,7 @@ const Swap: NextPage = () => {
 
     if (isSourceTokenChanged) {
       const changedTokens = newTokens.splice(1).map((_t) =>
-        _t !== null
+        _t !== null && _t?.address
           ? {
               ..._t,
               amount: sourceToken?.amount
@@ -46,9 +46,10 @@ const Swap: NextPage = () => {
     const otherItem = newTokens[1];
     newTokens.splice(0, 1, {
       ...sourceToken!,
-      amount: otherItem?.amount
-        ? (otherItem?.amount ?? 0) / conversionRate
-        : null,
+      amount:
+        otherItem?.amount && otherItem?.address
+          ? (otherItem?.amount ?? 0) / conversionRate
+          : null,
     });
 
     return setTokens(newTokens as PickedTokens);

@@ -80,8 +80,10 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
 
     const newTokens = [...tokens] as PickedTokens;
     const changedItem = newTokens[index]!;
-
     const parsedAmount = amount ? Number(amount) : null;
+
+    // Handle case when the dot was erased, but the value has not changed
+    if (changedItem?.amount === parsedAmount) return;
 
     newTokens.splice(index, 1, {
       ...changedItem,
