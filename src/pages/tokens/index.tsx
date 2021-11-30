@@ -8,6 +8,7 @@ import PriceChange from '@components/PriceChange';
 import Table, { OrderBy, Row } from '@components/Table';
 import useDispatch from '@hooks/useDispatch';
 import useSelector from '@hooks/useSelector';
+import { formatNumber } from '@src/utils';
 import { getTokensPrice, selectToken } from '@store/token';
 
 const columns = [
@@ -58,11 +59,11 @@ const Tokens: NextPage = () => {
         {t.name} <span className="text-violet-50">{t.symbol}</span>
       </span>
     ),
-    price: <span>${t.price.toFixed(2)}</span>,
+    price: <span>${formatNumber(t.price)}</span>,
     priceChange: (
       <PriceChange type={t.priceChange.type} value={t.priceChange.amount} />
     ),
-    tradingVolume: `${t.tradingVolume.toFixed(2)}m`,
+    tradingVolume: <span>${formatNumber(t.tradingVolume)}</span>,
   }));
 
   React.useEffect(() => {

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import PriceChange from '@components/PriceChange';
+import { formatNumber } from '@src/utils';
 
 import { PoolInfoProps } from './PoolInfo.types';
 
@@ -22,7 +23,7 @@ const PoolInfo: React.VFC<PoolInfoProps> = ({ pool }) => {
           Total Liquidity
         </span>
         <span className="text-blue font text-3xl mt-auto leading-none font-extrabold">
-          {pool!.totalLocked}
+          {formatNumber(pool!.totalLocked)}
         </span>
         <div className="absolute right-3 bottom-3">
           <PriceChange type={'rise'} value={5.12} />
@@ -33,7 +34,7 @@ const PoolInfo: React.VFC<PoolInfoProps> = ({ pool }) => {
           Volume
         </span>
         <span className="text-blue font text-3xl mt-auto leading-none font-extrabold">
-          {pool!.volume}
+          {formatNumber(pool!.volume)}
         </span>
         <div className="absolute right-3 bottom-3">
           <PriceChange type={'fall'} value={11.12} />
@@ -42,7 +43,7 @@ const PoolInfo: React.VFC<PoolInfoProps> = ({ pool }) => {
       <div className="flex flex-col bg-control rounded-md w-full p-3 relative">
         <span className="text-violet-50 z-20 font-bold	leading-none">Fees</span>
         <span className="text-blue font text-3xl mt-auto leading-none font-extrabold">
-          $ {pool.fees.toLocaleString()}
+          ${formatNumber(pool.fees)}
         </span>
         <div className="absolute right-3 bottom-3">
           <PriceChange type={'rise'} value={5.12} />
