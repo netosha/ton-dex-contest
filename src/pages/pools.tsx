@@ -11,6 +11,7 @@ import PoolCard from '@components/PoolCard';
 import Table, { OrderBy, Row } from '@components/Table';
 import { useDispatch, useSelector } from '@src/hooks';
 import { Button } from '@src/ui';
+import { formatNumber } from '@src/utils';
 import {
   getPools,
   getWalletPools,
@@ -52,8 +53,8 @@ const Pools: NextPage = () => {
         {p.pair[0].symbol}/{p.pair[1].symbol}
       </span>
     ),
-    total: <span>${p.totalLocked}m</span>,
-    volume: <span>${p.volume}m</span>,
+    total: <span>${formatNumber(p.totalLocked)}</span>,
+    volume: <span>${formatNumber(p.volume)}</span>,
     rowProps: {
       onClick: () => Router.push(`/pool/${p.id}`),
       className: 'cursor-pointer',
