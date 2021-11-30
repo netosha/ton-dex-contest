@@ -8,7 +8,7 @@ import { poolGraphData } from '../sampleData';
  * @return {Promise<PoolGraphData>}
  */
 const getPoolGraphData = async () => {
-  await sleep(1200);
+  await sleep(850);
   return poolGraphData();
 };
 
