@@ -3,23 +3,34 @@ import React from 'react';
 import { uniqBy } from 'lodash';
 import { NextPage } from 'next';
 
+import Confirmation from '@components/Confirmation';
 import Layout from '@components/Layout';
 import TokenPicker from '@components/TokenPicker';
 import {
   PickedTokens,
   TokenPickerStatus,
+  TransactionSettings,
 } from '@components/TokenPicker/TokenPicker.types';
 import { useSelector } from '@src/hooks';
-import { Button } from '@src/ui';
+import { DEFAULT_TRANSACTIONS_SETTINGS } from '@src/services/sampleData';
+import { CountableToken } from '@src/types';
+import { Button, Modal } from '@src/ui';
 import { selectWallet } from '@store/wallet';
 
 const Swap: NextPage = () => {
   const [tokens, setTokens] = React.useState<PickedTokens>([null, null]);
+  const [settings, setSettings] = React.useState<TransactionSettings>(
+    DEFAULT_TRANSACTIONS_SETTINGS
+  );
+  const [confirmationModal, setConfirmationModal] =
+    React.useState<boolean>(false);
+
   const { balances, status, address } = useSelector(selectWallet);
 
   // Conversion rate are hardcoded for now
   const conversionRate = 1.51;
 
+  // Process new tokens from TokenPicker
   const handleTokensChange = (t: PickedTokens) => {
     const newTokens = [...t];
     const sourceToken = newTokens[0];
@@ -54,6 +65,7 @@ const Swap: NextPage = () => {
     return setTokens(newTokens as PickedTokens);
   };
 
+  // TODO: Replace with separate function
   const formStatus = ((): TokenPickerStatus => {
     const sourceToken = tokens[0];
     if (status !== 'connected' || !address) {
@@ -111,10 +123,16 @@ const Swap: NextPage = () => {
           <TokenPicker
             type="swap"
             button={
-              <Button className="mt-2" disabled={formStatus.disabled}>
+              <Button
+                className="mt-2"
+                onClick={() => setConfirmationModal(true)}
+                disabled={formStatus.disabled}
+              >
                 {formStatus.buttonText}
               </Button>
             }
+            transactionSettings={settings}
+            onTransactionSettingsChange={setSettings}
             disabled={formStatus.disabled}
             inputErrors={formStatus.inputErrors}
             details={
@@ -144,6 +162,24 @@ const Swap: NextPage = () => {
           />
         </div>
       </div>
+
+      <Modal
+        isOpen={confirmationModal}
+        onClose={() => setConfirmationModal(false)}
+      >
+        <Confirmation
+          onCancel={() => setConfirmationModal(false)}
+          inputs={[tokens[0]!]}
+          outputs={tokens.slice(1) as CountableToken[]}
+          type="swap"
+          onConfirm={() => setConfirmationModal(false)}
+          info={{
+            Fees: `1.25$`,
+            Slippage: `${settings.slippage}%`,
+            Deadline: `${settings.deadline} min.`,
+          }}
+        />
+      </Modal>
     </Layout>
   );
 };

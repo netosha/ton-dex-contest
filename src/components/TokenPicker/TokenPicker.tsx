@@ -11,6 +11,7 @@ import {
 import cn from 'clsx';
 
 import BalanceRow from '@components/TokenPicker/BalanceRow';
+import Settings from '@components/TokenPicker/Settings';
 import Transactions from '@components/Transactions';
 import { useDispatch, useSelector } from '@src/hooks';
 import { Token } from '@src/types';
@@ -30,6 +31,8 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
   details,
   button,
   inputErrors = {},
+  transactionSettings,
+  onTransactionSettingsChange,
 }) => {
   const dispatch = useDispatch();
 
@@ -42,6 +45,8 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
   // Can be replaced with global hook, if transaction modal will be cross-page component
   const [transactionsModal, setTransactionsModal] =
     React.useState<boolean>(false);
+
+  const [settingsModal, setSettingsModal] = React.useState<boolean>(false);
 
   // Tokens list filter
   const [filter, setFilter] = React.useState<string>('');
@@ -207,21 +212,14 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
         {button}
 
         <div className={cn('w-full gap-4 flex justify-center text-blue')}>
-          <Tooltip
-            content={
-              <div className="flex justify-center py-2 min-w-[11.5rem] px-4 bg-control text-dark font-semibold rounded-md">
-                This will be the settings
-              </div>
-            }
-            position="right"
-          >
-            <CogIcon className="h-6 w-6 transition-colors hover:text-darkblue" />
-          </Tooltip>
-
+          {!!transactionSettings && (
+            <button onClick={() => setSettingsModal(true)}>
+              <CogIcon className="h-6 w-6 transition-colors hover:text-darkblue" />
+            </button>
+          )}
           <button onClick={() => setTransactionsModal(true)}>
             <ClockIcon className="h-6 w-6 transition-colors hover:text-darkblue" />
           </button>
-
           {details && (
             <Tooltip content={details} position="bottom">
               <InformationCircleIcon
@@ -276,6 +274,24 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
       >
         <Transactions address={address} />
       </Modal>
+
+      {transactionSettings && (
+        <Modal
+          isOpen={settingsModal}
+          onClose={() => {
+            setSettingsModal(false);
+          }}
+          heading="Settings"
+        >
+          <Settings
+            settings={transactionSettings}
+            onSubmit={(newSettings) => {
+              setSettingsModal(false);
+              onTransactionSettingsChange?.(newSettings);
+            }}
+          />
+        </Modal>
+      )}
     </>
   );
 };

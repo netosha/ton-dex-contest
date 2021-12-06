@@ -89,6 +89,7 @@ module.exports = {
 
         gray: 'var(--gray)',
         lightgray: `var(--lightgray)`,
+        darkgray: 'var(--darkgray)',
 
         control: `var(--control)`,
         overlay: `rgba(0,0,0, 0.5)`,

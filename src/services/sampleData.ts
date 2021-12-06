@@ -1,3 +1,4 @@
+import { TransactionSettings } from '@components/TokenPicker/TokenPicker.types';
 import {
   Pool,
   PricedToken,
@@ -6,6 +7,11 @@ import {
   DetailedPool,
 } from '@src/types';
 import { popularTokens } from '@src/utils';
+
+export const DEFAULT_TRANSACTIONS_SETTINGS: TransactionSettings = {
+  slippage: 2,
+  deadline: 5,
+};
 
 export const pricedTokens: PricedToken[] = popularTokens.map((t) => ({
   ...t,
