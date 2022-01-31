@@ -1,5 +1,9 @@
-/* eslint-disable */
+/**
+ * https://coding.studio/tchart/
+ * (c) CODING.STUDIO
+ */
 
+/* eslint-disable */
 import styles from './Graph.module.scss';
 
 const MONTH_NAMES = [

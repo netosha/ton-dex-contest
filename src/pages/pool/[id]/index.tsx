@@ -98,8 +98,8 @@ const Pool: NextPage = () => {
 
   React.useEffect(() => {
     if (id) {
-      dispatch(getPool(id as string));
-      dispatch(getPoolGraphData(id as string));
+      if (!pool) dispatch(getPool(id as string));
+      if (!graphData) dispatch(getPoolGraphData(id as string));
     }
   }, [id]);
 
@@ -146,12 +146,12 @@ const Pool: NextPage = () => {
         <div className="w-full grid gap-4 col-span-1">
           <PoolInfo pool={pool} />
         </div>
-        {graphData === null ? (
-          <div className=" animate-shine rounded-md col-span-1 md:col-span-2 p-3 h-[20rem]" />
-        ) : (
+        {graphData ? (
           <div className="bg-control rounded-md col-span-1 md:col-span-2 p-3 h-[20rem]">
             <Chart data={graphData} />
           </div>
+        ) : (
+          <div className=" animate-shine rounded-md col-span-1 md:col-span-2 p-3 h-[20rem]" />
         )}
       </section>
 
