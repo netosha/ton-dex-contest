@@ -142,16 +142,16 @@ const Pool: NextPage = () => {
         <ManageButton pool={pool} address={address} status={status} />
       </section>
 
-      <section className="min-h-[20rem] w-full grid grid-cols-1 md:grid-cols-3 gap-4">
+      <section className="min-hh-[20rem] md:min-hh-[25rem] w-full grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="w-full grid gap-4 col-span-1">
           <PoolInfo pool={pool} />
         </div>
         {graphData ? (
-          <div className="bg-control rounded-md col-span-1 md:col-span-2 p-3 h-[20rem]">
+          <div className="bg-control rounded-md col-span-1 md:col-span-2 p-3 h-[20rem] md:h-[25rem]">
             <Chart data={graphData} />
           </div>
         ) : (
-          <div className=" animate-shine rounded-md col-span-1 md:col-span-2 p-3 h-[20rem]" />
+          <div className=" animate-shine rounded-md col-span-1 md:col-span-2 p-3 h-[20rem] md:h-[25rem]" />
         )}
       </section>
 

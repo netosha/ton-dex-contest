@@ -1,6 +1,5 @@
 import { TransactionSettings } from '@components/TokenPicker/TokenPicker.types';
 import {
-  Pool,
   PricedToken,
   PoolGraphData,
   WalletPool,
@@ -23,30 +22,50 @@ export const pricedTokens: PricedToken[] = popularTokens.map((t) => ({
   tradingVolume: Math.random() * 100000000,
 }));
 
-export const pools: Pool[] = [
+export const pools: DetailedPool[] = [
   {
     id: 'cb7286c3-f71e-4cdc-a34b-1d0bed5c4506',
     volume: Math.random() * 10000000,
     totalLocked: Math.random() * 1000000000,
+    fees: Math.random() * 10000,
     pair: [pricedTokens[0]!, pricedTokens[2]!],
+    tokensLocked: [
+      { ...pricedTokens[0]!, amount: Math.random() * 100000000 },
+      { ...pricedTokens[2]!, amount: Math.random() * 1000000 },
+    ],
   },
   {
     id: '5eba28cb-0976-425f-bbcb-38e5c69b4f58',
     volume: Math.random() * 10000000,
     totalLocked: Math.random() * 1000000000,
+    fees: Math.random() * 10000,
     pair: [pricedTokens[0]!, pricedTokens[1]!],
+    tokensLocked: [
+      { ...pricedTokens[0]!, amount: Math.random() * 100000000 },
+      { ...pricedTokens[1]!, amount: Math.random() * 1000000 },
+    ],
   },
   {
     id: 'ef4bf1aa-e695-4919-b76c-5c0ad8c1cb85',
     volume: Math.random() * 10000000,
+    fees: Math.random() * 10000,
     totalLocked: Math.random() * 1000000000,
     pair: [pricedTokens[0]!, pricedTokens[3]!],
+    tokensLocked: [
+      { ...pricedTokens[0]!, amount: Math.random() * 100000000 },
+      { ...pricedTokens[3]!, amount: Math.random() * 1000000 },
+    ],
   },
   {
     id: '018b16f7-1715-4dbc-867e-6d11399daf8e',
     volume: Math.random() * 10000000,
     totalLocked: Math.random() * 1000000000,
-    pair: [pricedTokens[0]!, pricedTokens[3]!],
+    fees: Math.random() * 10000,
+    pair: [pricedTokens[1]!, pricedTokens[3]!],
+    tokensLocked: [
+      { ...pricedTokens[1]!, amount: Math.random() * 100000000 },
+      { ...pricedTokens[3]!, amount: Math.random() * 1000000 },
+    ],
   },
 ];
 
