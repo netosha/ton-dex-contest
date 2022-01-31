@@ -51,42 +51,20 @@ const RemoveLiquidity: React.VFC<RemoveLiquidityProps> = ({
         />
       </div>
       <div className="grid gap-4 grid-cols-4">
-        <Button
-          outline
-          onClick={() => setRemovePercent(25)}
-          className={cn(
-            removePercent !== 25 && 'shadow-border-gray !text-gray'
-          )}
-        >
-          25%
-        </Button>
-        <Button
-          outline
-          onClick={() => setRemovePercent(50)}
-          className={cn(
-            removePercent !== 50 && 'shadow-border-gray !text-gray'
-          )}
-        >
-          50%
-        </Button>
-        <Button
-          outline
-          onClick={() => setRemovePercent(75)}
-          className={cn(
-            removePercent !== 75 && 'shadow-border-gray !text-gray'
-          )}
-        >
-          75%
-        </Button>
-        <Button
-          outline
-          onClick={() => setRemovePercent(100)}
-          className={cn(
-            removePercent !== 100 && 'shadow-border-gray !text-gray'
-          )}
-        >
-          100%
-        </Button>
+        {[25, 50, 75, 100].map((percent) => (
+          <button
+            key={percent}
+            onClick={() => setRemovePercent(percent)}
+            className={cn(
+              'py-2 px-4 font-extrabold transition-colors leading-none rounded-md bg-transparent',
+              removePercent === percent
+                ? 'bg-transparent shadow-border-blue  text-blue'
+                : 'shadow-border-lightgray  text-gray '
+            )}
+          >
+            {percent}%
+          </button>
+        ))}
       </div>
       <div className="flex flex-col gap-2">
         <span className="font-extrabold text-violet">Removed amount</span>

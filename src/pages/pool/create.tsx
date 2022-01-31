@@ -4,14 +4,18 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/solid';
 import { uniqBy } from 'lodash';
 import { NextPage } from 'next';
 
+import Confirmation from '@components/Confirmation';
 import Layout from '@components/Layout';
 import TokenPicker from '@components/TokenPicker';
 import {
   PickedTokens,
   TokenPickerStatus,
+  TransactionSettings,
 } from '@components/TokenPicker/TokenPicker.types';
 import { useSelector } from '@src/hooks';
-import { Button, Tooltip } from '@src/ui';
+import { DEFAULT_TRANSACTIONS_SETTINGS } from '@src/services/sampleData';
+import { CountableToken } from '@src/types';
+import { Button, Modal, Tooltip } from '@src/ui';
 import { selectWallet } from '@store/wallet';
 
 const FeeTooltip: React.VFC = () => {
@@ -33,6 +37,13 @@ const ShareTooltip: React.VFC<{ share: string }> = ({ share }) => {
 
 const Create: NextPage = () => {
   const [tokens, setTokens] = React.useState<PickedTokens>([null, null]);
+  const [settings, setSettings] = React.useState<TransactionSettings>(
+    DEFAULT_TRANSACTIONS_SETTINGS
+  );
+
+  const [confirmationModal, setConfirmationModal] =
+    React.useState<boolean>(false);
+
   const { balances, status, address } = useSelector(selectWallet);
 
   // console.log(query, tokens);
@@ -108,7 +119,7 @@ const Create: NextPage = () => {
           <TokenPicker
             button={
               <Button
-                onClick={() => console.log(balances, tokens)}
+                onClick={() => setConfirmationModal(true)}
                 className="mt-2"
                 disabled={formStatus.disabled}
               >
@@ -119,6 +130,8 @@ const Create: NextPage = () => {
             onChange={setTokens}
             tokens={tokens}
             type={'stake'}
+            transactionSettings={settings}
+            onTransactionSettingsChange={(s) => setSettings(s)}
           />
           {/* If every token are provided show more info */}
           {tokens.every((t) => t?.address) && (
@@ -165,6 +178,24 @@ const Create: NextPage = () => {
           )}
         </div>
       </div>
+
+      <Modal
+        isOpen={confirmationModal}
+        onClose={() => setConfirmationModal(false)}
+      >
+        <Confirmation
+          onCancel={() => setConfirmationModal(false)}
+          inputs={[tokens[0]!]}
+          outputs={tokens.slice(1) as CountableToken[]}
+          type="stake"
+          onConfirm={() => setConfirmationModal(false)}
+          info={{
+            Fees: `1.25$`,
+            Slippage: `${settings.slippage}%`,
+            Deadline: `${settings.deadline} min.`,
+          }}
+        />
+      </Modal>
     </Layout>
   );
 };

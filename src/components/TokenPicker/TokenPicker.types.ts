@@ -34,10 +34,21 @@ export interface TokenPickerProps {
   details?: ReactNode;
 
   /**
+   * Action transaction's settings
+   */
+  transactionSettings?: TransactionSettings;
+
+  /**
+   * Change event with new settings
+   * @param {TransactionSettings} settings
+   */
+  onTransactionSettingsChange?: (settings: TransactionSettings) => void;
+
+  /**
+   * Change event with new tokens
    *
    * @param {PickedTokens} tokens
    */
-
   onChange?: (tokens: PickedTokens) => void;
 
   /**
@@ -55,6 +66,11 @@ export interface TokenRowProps {
   token: Token;
   onClick: () => void;
   isActive: boolean;
+}
+
+export interface SettingsProps {
+  settings: TransactionSettings;
+  onSubmit?: (s: TransactionSettings) => void;
 }
 
 export type InputErrors =
@@ -77,4 +93,16 @@ export interface TokenPickerStatus {
    */
   inputErrors: InputErrors;
   disabled: boolean;
+}
+
+export interface TransactionSettings {
+  /**
+   * Slippage in percents
+   */
+  slippage: number;
+
+  /**
+   * After the transaction is created, it will still be active provided time
+   */
+  deadline: number;
 }

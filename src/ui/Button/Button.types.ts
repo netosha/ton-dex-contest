@@ -4,5 +4,6 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   outline?: boolean;
   round?: boolean;
+  secondary?: boolean;
   danger?: boolean;
 }

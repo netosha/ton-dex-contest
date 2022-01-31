@@ -25,7 +25,7 @@ const Wallet: React.VFC = () => {
       <Button
         onClick={handleReset}
         outline
-        className="w-[9rem] h-[2rem] whitespace-nowrap "
+        className="w-[9rem] h-[2rem] whitespace-nowrap"
       >
         {`${wallet.address?.slice(0, 4)} ... ${wallet.address?.slice(-4)}`}
       </Button>
