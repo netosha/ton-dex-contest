@@ -5,6 +5,8 @@ import { ArrowDownIcon, PlusIcon } from '@heroicons/react/solid';
 import { ConfirmationProps } from '@components/Confirmation/Confirmation.types';
 import { Button } from '@src/ui';
 
+import TokenRow from './TokenRow';
+
 const Confirmation: React.VFC<ConfirmationProps> = (props) => {
   const {
     inputs,
@@ -21,37 +23,29 @@ const Confirmation: React.VFC<ConfirmationProps> = (props) => {
       </h2>
 
       <div className="flex flex-col gap-2 mt-4">
-        {inputs.map((input) => (
-          <div
-            key={input.address}
-            className="py-2 px-4 text-dark font-bold rounded-md bg-control"
-          >
-            {input.symbol} - {input.amount}
-          </div>
+        {inputs.map((token) => (
+          <TokenRow key={token.address} token={token} />
         ))}
       </div>
 
-      <div className="w-full my-4">
-        {type === 'swap' && <ArrowDownIcon className="w-4 h-4 mx-auto" />}
-        {type === 'stake' && <PlusIcon className="w-4 h-4 mx-auto" />}
+      <div className="w-full my-2 text-blue">
+        {type === 'swap' && <ArrowDownIcon className="w-6 h-6 mx-auto" />}
+        {type === 'stake' && <PlusIcon className="w-6 h-6 mx-auto" />}
       </div>
 
       <div className="flex flex-col gap-2">
-        {outputs.map((input) => (
-          <div
-            key={input.address}
-            className="py-2 px-4 text-dark font-bold rounded-md bg-control"
-          >
-            {input.symbol} - {input.amount}
-          </div>
+        {outputs.map((token) => (
+          <TokenRow key={token.address} token={token} />
         ))}
       </div>
 
       <div className="w-full mt-4 flex flex-col gap-3">
         {Object.entries(info).map(([title, content]) => (
           <div className="flex items-center" key={title}>
-            <span className="leading-none font-extrabold">{title}:</span>
-            <span className="text-violet-60 ml-2 leading-none">{content}</span>
+            <span className="leading-none text-darkgray">{title}:</span>
+            <span className="text-violet ml-1 leading-none font-extrabold">
+              {content}
+            </span>
           </div>
         ))}
       </div>

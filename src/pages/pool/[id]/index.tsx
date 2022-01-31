@@ -59,11 +59,13 @@ const Pool: NextPage = () => {
   const [offset, setOffset] = React.useState<number>(0);
 
   const pool = useSelector((state) => selectDetailedPool(state, id as string));
+
   const graphData = useSelector((state) =>
     selectPoolGraphData(state, id as string)
   );
+
   const { isTransactionsLoading, transactions } = useSelector((state) =>
-    selectTransactionsByAddress(state, id as string)
+    selectTransactionsByAddress(state, id)
   );
 
   const [orderBy, setOrderBy] = React.useState<null | OrderBy>(null);
@@ -95,21 +97,25 @@ const Pool: NextPage = () => {
   }));
 
   React.useEffect(() => {
-    if (!pool) dispatch(getPool(id as string));
-    if (!graphData) dispatch(getPoolGraphData(id as string));
-  }, []);
+    if (id) {
+      if (!pool) dispatch(getPool(id as string));
+      if (!graphData) dispatch(getPoolGraphData(id as string));
+    }
+  }, [id]);
 
   // Fetch transactions
   React.useEffect(() => {
     // TODO: Replace address from pool's id to contract address
-    dispatch(
-      getAddressTransactions({
-        address: id as string,
-        offset,
-        limit: PAGE_SIZE,
-      })
-    );
-  }, [offset]);
+    if (id) {
+      dispatch(
+        getAddressTransactions({
+          address: id as string,
+          offset,
+          limit: PAGE_SIZE,
+        })
+      );
+    }
+  }, [id, offset]);
 
   return (
     <Layout>
@@ -149,7 +155,7 @@ const Pool: NextPage = () => {
         )}
       </section>
 
-      <div className="w-full mt-2">
+      <div className="w-full mt-4">
         <h2 className="text-3xl font-black text-violet">Transactions</h2>
         <div className="flex flex-col gap-2">
           <Table
@@ -171,12 +177,5 @@ const Pool: NextPage = () => {
     </Layout>
   );
 };
-
-// Little trick to pass query params in router without re-rendering
-// Check query logic before remove and remove, if needed
-// https://nextjs.org/docs/api-reference/next/router#router-object
-export async function getServerSideProps() {
-  return { props: {} };
-}
 
 export default Pool;

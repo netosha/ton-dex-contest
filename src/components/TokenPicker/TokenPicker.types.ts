@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, MouseEvent } from 'react';
 
 import { CountableToken, Token } from '@src/types';
 
@@ -50,6 +50,13 @@ export interface TokenPickerProps {
    * @param {PickedTokens} tokens
    */
   onChange?: (tokens: PickedTokens) => void;
+
+  /**
+   * Execute when user clicks on permute button
+   *
+   * @param {React.MouseEvent<HTMLButtonElement>} e
+   */
+  onPermute?: (e: MouseEvent<HTMLButtonElement>) => void;
 
   /**
    * Disable submit button

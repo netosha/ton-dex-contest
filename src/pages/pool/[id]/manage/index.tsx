@@ -11,6 +11,7 @@ import { selectWallet } from '@store/wallet';
 
 const View: NextPage = () => {
   const { push, query } = useRouter();
+  const { id } = query;
   const { status, address } = useSelector(selectWallet);
   const { walletPools } = useSelector(selectWalletPools);
 
@@ -19,14 +20,14 @@ const View: NextPage = () => {
   React.useEffect(() => {
     // Redirect to pool page, if wallet not provided or walletPools not includes this pool
     if (status !== 'connected' || !address) {
-      push(`/pool/${query.id}/`);
+      push(`/pool/${id}/`);
     }
   }, [status, address]);
 
   // Todo: Implement loading info about pool, within walletPools
   if (!pool) {
     if (typeof window !== 'undefined') {
-      push(`/pool/${query.id}/`);
+      push(`/pool/${id}/`);
     }
     return null;
   }
@@ -39,12 +40,5 @@ const View: NextPage = () => {
     </Layout>
   );
 };
-
-// Little trick to pass query params in router without re-rendering
-// Check query logic before remove and remove, if needed
-// https://nextjs.org/docs/api-reference/next/router#router-object
-export async function getServerSideProps() {
-  return { props: {} };
-}
 
 export default View;

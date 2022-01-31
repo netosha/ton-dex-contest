@@ -27,6 +27,7 @@ import TokenRow from './TokenRow';
 const TokenPicker: React.VFC<TokenPickerProps> = ({
   type = 'swap',
   onChange,
+  onPermute,
   tokens,
   details,
   button,
@@ -171,10 +172,10 @@ const TokenPicker: React.VFC<TokenPickerProps> = ({
           </div>
         </div>
 
-        <div className="w-full flex justify-center">
+        <button onClick={onPermute} className="w-full flex justify-center">
           {type === 'swap' && <ArrowDownIcon className="h-6 w-6 text-blue" />}
           {type === 'stake' && <PlusIcon className="h-6 w-6 text-blue" />}
-        </div>
+        </button>
 
         {otherTokens.map((t, index) => (
           <div className="flex flex-col" key={t?.address ?? index}>

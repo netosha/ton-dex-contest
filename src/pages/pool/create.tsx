@@ -18,6 +18,8 @@ import { CountableToken } from '@src/types';
 import { Button, Modal, Tooltip } from '@src/ui';
 import { selectWallet } from '@store/wallet';
 
+import permutePickedTokens from '../../utils/permutePickedTokens';
+
 const FeeTooltip: React.VFC = () => {
   return (
     <div className="bg-control text-sm font-semibold flex flex-col w-[15em] py-2 px-4 rounded-md">
@@ -46,7 +48,9 @@ const Create: NextPage = () => {
 
   const { balances, status, address } = useSelector(selectWallet);
 
-  // console.log(query, tokens);
+  const handlePermuteTokens = () => {
+    setTokens(permutePickedTokens(tokens));
+  };
 
   // Conversion rate are hardcoded for now
   const conversionRate = 1.51;
@@ -132,6 +136,7 @@ const Create: NextPage = () => {
             type={'stake'}
             transactionSettings={settings}
             onTransactionSettingsChange={(s) => setSettings(s)}
+            onPermute={handlePermuteTokens}
           />
           {/* If every token are provided show more info */}
           {tokens.every((t) => t?.address) && (
@@ -199,12 +204,5 @@ const Create: NextPage = () => {
     </Layout>
   );
 };
-
-// Little trick to pass query params in router without re-rendering
-// Check query logic before remove and remove, if needed
-// https://nextjs.org/docs/api-reference/next/router#router-object
-export async function getServerSideProps() {
-  return { props: {} };
-}
 
 export default Create;
