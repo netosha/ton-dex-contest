@@ -26,6 +26,7 @@ export interface DetailedPool extends Pool {
    * All reward fees for past 24h
    */
   fees: number;
+  tokensLocked: [CountableToken, CountableToken];
 }
 
 export interface WalletPool extends Pool {
