@@ -17,6 +17,30 @@ import { CountableToken } from '@src/types';
 import { Button, Modal } from '@src/ui';
 import { selectWallet } from '@store/wallet';
 
+import permutePickedTokens from '../utils/permutePickedTokens';
+
+const SwapDetails: React.VFC<{ tokens: PickedTokens }> = ({ tokens }) => {
+  return (
+    <div className="bg-control flex flex-col gap-1 text-dark w-[15em] py-2 px-4 rounded-md">
+      <span className="text-violet leading-none font-bold">Details</span>
+      {tokens.some((t) => !t?.address) ? (
+        <span className="text-sm text-violet-60">
+          Select pair before getting rate
+        </span>
+      ) : (
+        <>
+          <span className="text-sm text-violet-60 leading-none">
+            <b>1.51 {tokens[1]?.symbol}</b> per <b>{tokens[0]?.symbol}</b>
+          </span>
+          <span className="text-sm font-bold text-violet-60 leading-none">
+            0.2% fees
+          </span>
+        </>
+      )}
+    </div>
+  );
+};
+
 const Swap: NextPage = () => {
   const [tokens, setTokens] = React.useState<PickedTokens>([null, null]);
   const [settings, setSettings] = React.useState<TransactionSettings>(
@@ -63,6 +87,10 @@ const Swap: NextPage = () => {
     });
 
     return setTokens(newTokens as PickedTokens);
+  };
+
+  const handlePermuteTokens = () => {
+    setTokens(permutePickedTokens(tokens));
   };
 
   // TODO: Replace with separate function
@@ -122,6 +150,7 @@ const Swap: NextPage = () => {
           <h1 className="text-2xl font-black text-violet">Exchange tokens</h1>
           <TokenPicker
             type="swap"
+            onPermute={handlePermuteTokens}
             button={
               <Button
                 className="mt-2"
@@ -135,28 +164,7 @@ const Swap: NextPage = () => {
             onTransactionSettingsChange={setSettings}
             disabled={formStatus.disabled}
             inputErrors={formStatus.inputErrors}
-            details={
-              <div className="bg-control flex flex-col gap-1 text-dark w-[15em] py-2 px-4 rounded-md">
-                <span className="text-violet leading-none font-bold">
-                  Details
-                </span>
-                {tokens.some((t) => !t?.address) ? (
-                  <span className="text-sm text-violet-60">
-                    Select pair before getting rate
-                  </span>
-                ) : (
-                  <>
-                    <span className="text-sm text-violet-60 leading-none">
-                      <b>1.51 {tokens[1]?.symbol}</b> per{' '}
-                      <b>{tokens[0]?.symbol}</b>
-                    </span>
-                    <span className="text-sm font-bold text-violet-60 leading-none">
-                      0.2% fees
-                    </span>
-                  </>
-                )}
-              </div>
-            }
+            details={<SwapDetails tokens={tokens} />}
             tokens={tokens}
             onChange={handleTokensChange}
           />

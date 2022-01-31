@@ -89,7 +89,7 @@ const Settings: React.VFC<SettingsProps> = ({
           onSubmit?.(state);
         }}
         type="submit"
-        className="mt-2"
+        className="mt-auto"
       >
         Save
       </Button>

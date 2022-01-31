@@ -29,3 +29,7 @@ export interface ConfirmationProps {
 
   onCancel?: () => void;
 }
+
+export type TokenRowProps = {
+  token: CountableToken;
+};
