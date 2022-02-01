@@ -1,6 +1,6 @@
 # 💎 TON DEX Contest
 
-### [Preview](https://shwiwkfvsuqdjza.vercel.app)
+### [🖼 Preview](https://ton-dex.vercel.app)
 
 ## About
 
@@ -11,11 +11,11 @@ The interface was based on [Uniswap](https://app.uniswap.org/#/swap), [Pancakesw
 
 It contains:
 
-* [UI for exchanging one token for another token](https://shwiwkfvsuqdjza.vercel.app/swap)
-* [UI for creating a pool with two tokens](https://shwiwkfvsuqdjza.vercel.app/pool/create)
-* [UI with a list of pools](https://shwiwkfvsuqdjza.vercel.app/pools)
-* [UI with a pool statistics](https://shwiwkfvsuqdjza.vercel.app/pool/cb7286c3-f71e-4cdc-a34b-1d0bed5c4506)
-* [UI for adding and removing liquidity from a pool](https://shwiwkfvsuqdjza.vercel.app/pool/cb7286c3-f71e-4cdc-a34b-1d0bed5c4506/manage) **(wallet should be connected)**
+* [UI for exchanging one token for another token](https://ton-dex.vercel.app/swap)
+* [UI for creating a pool with two tokens](https://ton-dex.vercel.app/pool/create)
+* [UI with a list of pools](https://ton-dex.vercel.app/pools)
+* [UI with a pool statistics](https://ton-dex.vercel.app/pool/cb7286c3-f71e-4cdc-a34b-1d0bed5c4506)
+* [UI for adding and removing liquidity from a pool](https://ton-dex.vercel.app/pool/cb7286c3-f71e-4cdc-a34b-1d0bed5c4506/manage) **(wallet should be connected)**
 
 ⚠️ Please, **keep in mind**, that idea of the whole project was to **present the concept**. Some things may be **significantly different** in the future
 
